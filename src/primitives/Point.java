@@ -3,7 +3,7 @@ package primitives;
 public class Point {
 
     // Assuming a custom Double3 class exists to represent 3D coordinates
-    private final Double3 xyz;
+     final Double3 xyz;
 
     // Ctor
     public Point(double x, double y, double z) {
