@@ -16,8 +16,8 @@ public class Point {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Point point = (Point) o;
+        if (!(o instanceof Point point)) return false;
+
         return xyz.equals(point.xyz);
     }
 
@@ -28,14 +28,14 @@ public class Point {
 
     @Override
     public String toString() {
-        return "Point (" + xyz.getX() + ", " + xyz.getY() + ", " + xyz.getZ() + ")";
+        return "Point {" + xyz + '}';
     }
 
     public double distanceSquared(Point point) {
-        double dx = point.x - this.x;
-        double dy = point.y - this.y;
-        double dz = point.z - this.z;
-        return dx * dx + dy * dy + dz * dz;
+        double dx = xyz.d1 - point.xyz.d1;
+        double dy = xyz.d2 - point.xyz.d2;
+        double dz = xyz.d3 - point.xyz.d3;
+        return (dx * dx + dy * dy + dz * dz);
     }
 
     public double distance(Point point) {
@@ -43,7 +43,11 @@ public class Point {
     }
 
     public Point add(Vector vector) {
-        return new Point(x + vector.head.x, y + vector.head.y, z + vector.head.z);
+        return new Point(xyz.add(vector.xyz));
+    }
+
+    public Vector subtract(Point point) {
+        return new Vector(xyz.subtract(point.xyz));
     }
 }
 

@@ -1,5 +1,5 @@
 package primitives;
-/*blablassssss*/
+
 import static primitives.Util.alignZero;
 public class Vector extends Point{
     public Vector(double x, double y, double z) {
@@ -16,13 +16,14 @@ public class Vector extends Point{
 
     @Override
     public String toString() {
-        return "Vector (" + xyz + ")";
+        return "Vector {" + xyz + "}";
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Vector vector)) return false;
+
         return xyz.equals(vector.xyz);
     }
 
