@@ -1,65 +1,75 @@
 package geometries;
+
 import primitives.Point;
 import primitives.Vector;
 
 /**
- * Plane class represents a flat geometric surface defined by a point and a normal vector.
+ * Plane class represents a geometric plane in 3-dimensional space.
+ * It extends the `Geometry` class and adds specific methods related to planes.
+ * The plane is defined by a point and a normal vector.
  *
  * @author Shay and Asaf
  */
 public class Plane extends Geometry {
 
-    private Point q; // Reference point on the plane
-    private Vector normal; // Normal vector to the plane
+    // Instance variables
 
-    // Constructor with 3 points
-    public Plane(Point point1, Point point2, Point point3) {
-        // Calculate the normal vector using the formula for the normal vector of a triangle
-        this.normal = calculateNormal(point1, point2, point3);
+    /**
+     * A point on the plane.
+     */
+    private final Point point;
 
-        // Choose one of the points as the reference point
-        this.q = point1; // You can choose any of the three points here
-    }
+    /**
+     * The normal vector to the plane.
+     */
+    private final Vector normal;
 
-    // Constructor with a point and a normal vector
+    // Constructor
+
+    /**
+     * Constructor that creates a new plane given a point on the plane and a normal vector.
+     * @param point A point on the plane.
+     * @param normal The normal vector to the plane.
+     */
     public Plane(Point point, Vector normal) {
-        normal = normal.normalize(); // Normalize the normal vector
-
-        this.normal = normal;
-        this.q = point;
+        this.point = point;
+        this.normal = normal.normalize();
     }
 
-    // Private method to calculate the normal vector from three points
-    private Vector calculateNormal(Point point1, Point point2, Point point3) {
-        // Calculate vectors from the reference point to the other two points
-        Vector v1 = point2.subtract(point1);
-        Vector v2 = point3.subtract(point1);
+    // Getter methods
 
-        // Calculate the cross product of these vectors to get the normal vector
-        return v1.crossProduct(v2);
+    /**
+     * Returns a point on the plane.
+     * @return A point on the plane.
+     */
+    public Point getPoint() {
+        return this.point;
     }
 
-    // Getter for the reference point
-    public Point getQ() {
-        return q;
-    }
-
-    // Getter for the normal vector
+    /**
+     * Returns the normal vector to the plane.
+     * @return The normal vector to the plane.
+     */
     public Vector getNormal() {
-        return normal;
+        return this.normal;
     }
 
+    /**
+     * Calculates the normal vector to the plane at a given point.
+     * @param point The point on the plane at which to calculate the normal vector.
+     * @return The normal vector to the plane at the specified point.
+     */
     @Override
     public Vector getNormal(Point point) {
-        return null; // The normal vector of a plane is constant for all points on the plane
+        return this.normal;
     }
 
-    // Other methods (optional)
-    // - Check if a point lies on the plane
-    // - Calculate the intersection of a ray with the plane
-
+    /**
+     * Returns a string representation of the plane.
+     * @return A string that describes the plane.
+     */
     @Override
     public String toString() {
-        return String.format("Plane(q: %s, normal: %s)", q, normal);
+        return String.format("Plane(point: %s, normal: %s)", point, normal);
     }
 }
