@@ -1,7 +1,7 @@
 package geometries;
 
 /**
- * Cylinder class represents a geometric cylinder defined by a base circle, an axis, and a height.
+ * Cylinder class represents a geometric cylinder defined by a base tube, an axis, and a height.
  * It extends the `Tube` class and adds specific methods related to cylinders.
  *
  * @author Shay and Asaf
@@ -9,18 +9,18 @@ package geometries;
 public class Cylinder extends Tube {
 
     // Instance variables
-    private final Circle base;  // Base circle of the cylinder
+    private final Tube base;  // Base tube of the cylinder
     private final double height;   // Height of the cylinder
 
     // Constructor
-    public Cylinder(Circle base, double height) {
+    public Cylinder(Tube base, double height) {
         super(base.getAxis(), base.getRadius()); // Initialize Tube with base's axis and radius
         this.base = base;
         this.height = height;
     }
 
     // Getter methods
-    public Circle getBase() {
+    public Tube getBase() {
         return base;
     }
 

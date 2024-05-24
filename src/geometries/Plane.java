@@ -1,6 +1,7 @@
 package geometries;
 import primitives.Point;
 import primitives.Vector;
+
 /**
  * Plane class represents a flat geometric surface defined by a point and a normal vector.
  *
@@ -22,10 +23,7 @@ public class Plane extends Geometry {
 
     // Constructor with a point and a normal vector
     public Plane(Point point, Vector normal) {
-        // Check if the normal vector is normalized
-        if (!normal.normalize()) {
-            normal = normal.normalize(); // Normalize the normal vector if it's not already
-        }
+        normal = normal.normalize(); // Normalize the normal vector
 
         this.normal = normal;
         this.q = point;

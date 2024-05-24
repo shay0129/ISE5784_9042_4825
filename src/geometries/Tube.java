@@ -1,8 +1,7 @@
 package geometries;
 import primitives.Point;
-import primitives.Point;
 import primitives.Vector;
-import primitives.Vector;
+
 /**
  * Tube class represents a geometric tube defined by an axis and a radius.
  * It extends the `RadianGeometry` class and adds specific methods related to tubes.
@@ -12,18 +11,18 @@ import primitives.Vector;
 public class Tube extends RadianGeometry {
 
     // Instance variables
-    protected final Axis axis;    // Axis of the tube
+    protected final Vector axis;    // Axis of the tube
     protected final double radius;  // Radius of the tube
 
     // Constructor
-    public Tube(Axis axis, double radius) {
+    public Tube(Vector axis, double radius) {
         super(radius); // Initialize RadianGeometry with radius
         this.axis = axis;
         this.radius = radius;
     }
 
     // Getter methods
-    public Axis getAxis() {
+    public Vector getAxis() {
         return axis;
     }
 

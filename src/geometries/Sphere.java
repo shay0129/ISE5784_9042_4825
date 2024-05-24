@@ -1,6 +1,7 @@
 package geometries;
 import primitives.Point;
 import primitives.Vector;
+
 /**
  * Sphere class represents a geometric sphere defined by a center point and a radius.
  * It extends the `RadianGeometry` class and adds specific methods related to spheres.
@@ -42,7 +43,7 @@ public class Sphere extends RadianGeometry {
 
     public boolean containsPoint(Point point) {
         // Check if the distance between the center and the point is less than or equal to the radius
-        double distance = center.distanceTo(point);
+        double distance = center.distance(point);
         return distance <= radius;
     }
 

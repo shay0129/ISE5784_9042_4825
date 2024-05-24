@@ -12,9 +12,9 @@ public class Point {
 
     // Ctor
     public Point(double x, double y, double z) {
-        this.xyz = new Double3(x, y, z);
+        this(new Double3(x, y, z)); // Delegate to the other ctor
     }
-    public Point(Double3 xyz){
+    Point(Double3 xyz){
         this.xyz = xyz;
     }
 
