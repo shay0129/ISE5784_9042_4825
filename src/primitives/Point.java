@@ -1,9 +1,14 @@
 package primitives;
-
+/**
+ * Point class is the fundamental class, represents a location in 3D space,
+ * in the Cartesian coordinate system of Euclidean geometry.
+ * @author Shay and Asaf
+ */
 public class Point {
 
     // Assuming a custom Double3 class exists to represent 3D coordinates
-     final Double3 xyz;
+    //public static final Point ZERO = new Point(0,0,0);
+    protected final Double3 xyz;
 
     // Ctor
     public Point(double x, double y, double z) {

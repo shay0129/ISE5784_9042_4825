@@ -1,16 +1,12 @@
-/**
- * Vector class
- *
- * @author 2021
- */
 package primitives;
-
-import primitives.Point;
 /**
- * Vector class represents a vector in 3D Cartesian coordinate system
+ * Vector class is the basic class, represents a mathematical vector
+ * in the Cartesian 3-Dimensional coordinate system.
+ * @author Shay and Asaf
  */
-public class Vector extends Point {
+import primitives.Point;
 
+public class Vector extends Point {
     public Vector(double x, double y, double z) {
         super(x, y, z);
         if (xyz.equals(Double3.ZERO)) {
@@ -30,30 +26,14 @@ public class Vector extends Point {
     /**
      * @return the x coordinate of the point
      */
-    public double lengthSquared() {
-        double dx = xyz.d1 * xyz.d1;
-        double dy = xyz.d2 * xyz.d2;
-        double dz = xyz.d3 * xyz.d3;
-        return (dx + dy + dz);
-    }
-    /**
-     * @return the x coordinate of the point
-     */
-    public double length() {
-        return Math.sqrt(lengthSquared());
-    }
-    /**
-     * @return the x coordinate of the point
-     */
     public boolean equals(Object o) {
         if (this == o) return true;
         return (o instanceof Vector v) && xyz.equals(v.xyz);
     }
-    /**
-     * @return the x coordinate of the point
-     */
-    public Vector normalize() {
-        return new Vector(xyz.reduce(length()));
+    public String toString() {
+        return "Vector{" +
+                "xyz=" + xyz +
+                '}';
     }
     /**
      * @return the x coordinate of the point
@@ -81,10 +61,25 @@ public class Vector extends Point {
                 xyz.d3 * v.xyz.d1 - xyz.d1 * v.xyz.d3,
                 xyz.d1 * v.xyz.d2 - xyz.d2 * v.xyz.d1);
     }
-
-    public String toString() {
-        return "Vector{" +
-                "xyz=" + xyz +
-                '}';
+    /**
+     * @return the x coordinate of the point
+     */
+    public double lengthSquared() {
+        double dx = xyz.d1 * xyz.d1;
+        double dy = xyz.d2 * xyz.d2;
+        double dz = xyz.d3 * xyz.d3;
+        return (dx + dy + dz);
+    }
+    /**
+     * @return the x coordinate of the point
+     */
+    public double length() {
+        return Math.sqrt(lengthSquared());
+    }
+    /**
+     * @return the x coordinate of the point
+     */
+    public Vector normalize() {
+        return new Vector(xyz.reduce(length()));
     }
 }
