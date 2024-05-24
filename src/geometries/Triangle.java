@@ -1,29 +1,26 @@
 package geometries;
 import primitives.Point;
-import primitives.Ray;
 import primitives.Vector;
+
 /**
- * Triangle class represents a geometric triangle defined by three points.
- * It inherits from the `Polygon` class and doesn't have any additional fields.
+ * Triangle class represents a geometric shape in 3-dimensional space.
  *
  * @author Shay and Asaf
  */
 public class Triangle extends Polygon {
 
-    // Constructor with three points
-    public Triangle(Point point1, Point point2, Point point3) {
-        super(point1, point2, point3); // Initialize polygon with the three points
-    }
-
-    public boolean findIntersections(Ray ray) {
-        // Check for intersection using the intersection method for a plane
-        // (since a triangle can be represented by a plane)
-        Plane plane = new Plane(getQ(), getNormal());
-        return plane.findIntersections(ray);
+    /**
+     * Constructs a triangle with the given vertices.
+     * @param vertices The vertices of the triangle.
+     * @throws IllegalArgumentException if the number of vertices is not 3.
+     */
+    public Triangle(Point... vertices){
+        super(vertices);
     }
 
     @Override
-    public String toString() {
-        return String.format("Triangle(vertices: %s)", vertices);
+    public Vector getNormal(Point point) {
+    // Implementation of getNormal for Triangle (returns null for now)
+        return null;
     }
 }
