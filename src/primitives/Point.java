@@ -7,7 +7,7 @@ package primitives;
  */
 public class Point {
 
-    protected final Double3 xyz;
+    public final Double3 xyz;
 
     /**
      * Constructor that creates a new point given its x, y, and z coordinates.
