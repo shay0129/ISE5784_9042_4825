@@ -10,7 +10,7 @@ import primitives.Vector;
  *
  * @author Shay and Asaf
  */
-public class Tube extends RadianGeometry {
+public class Tube extends RadialGeometry {
     // Instance variables
 
     /**
@@ -68,7 +68,7 @@ public class Tube extends RadianGeometry {
      * @param point The point on the tube at which to calculate the normal vector.
      * @return The normal vector to the tube at the specified point.
      */
-    @Override
+
     public Vector getNormal(Point point) {
         return null;
     }

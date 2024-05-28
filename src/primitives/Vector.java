@@ -78,34 +78,16 @@ public class Vector extends Point {
     public double dotProduct(Vector v) {
         return (v.xyz.d1 * xyz.d1 + v.xyz.d2 * xyz.d2 + v.xyz.d3 * xyz.d3);
     }
-
-    /**
-     * Checks if this vector is parallel to another vector.
-     * @param v The vector to check for parallelism.
-     * @return true if the vectors are parallel, false otherwise.
-     */
-    public boolean isParallel(Vector v) {
-        double ratio1 = this.xyz.d1 / v.xyz.d1;
-        double ratio2 = this.xyz.d2 / v.xyz.d2;
-        double ratio3 = this.xyz.d3 / v.xyz.d3;
-
-        final double EPSILON = 0.0001;
-        return Math.abs(ratio1 - ratio2) < EPSILON && Math.abs(ratio1 - ratio3) < EPSILON;
-    }
-
+    
     /**
      * Calculates the cross product of this vector and another vector.
      * @param v The vector to calculate the cross product with.
      * @return A new vector that is the cross product of the two vectors.
      */
     public Vector crossProduct(Vector v) {
-        if (this.isParallel(v)) {
-            throw new IllegalArgumentException("Cannot calculate cross product of parallel vectors");
-        }
-
-        return new Vector(new Double3(xyz.d2 * v.xyz.d3 - xyz.d3 * v.xyz.d2,
+        return new Vector(xyz.d2 * v.xyz.d3 - xyz.d3 * v.xyz.d2,
                 xyz.d3 * v.xyz.d1 - xyz.d1 * v.xyz.d3,
-                xyz.d1 * v.xyz.d2 - xyz.d2 * v.xyz.d1));
+                xyz.d1 * v.xyz.d2 - xyz.d2 * v.xyz.d1);
     }
 
     /**

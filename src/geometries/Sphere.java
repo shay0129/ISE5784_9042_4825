@@ -10,9 +10,8 @@ import primitives.Vector;
  *
  * @author Shay and Asaf
  */
-public class Sphere extends RadianGeometry {
+public class Sphere  {
 
-    // Instance variables
 
     /**
      * The center point of the sphere.
@@ -32,7 +31,6 @@ public class Sphere extends RadianGeometry {
      * @param radius The radius of the sphere.
      */
     public Sphere(Point center, double radius) {
-        super(radius); // Initialize RadianGeometry with radius
         this.center = center;
         this.radius = radius;
     }
@@ -88,7 +86,7 @@ public class Sphere extends RadianGeometry {
      * @param point The point on the sphere at which to calculate the normal vector.
      * @return The normal vector to the sphere at the specified point.
      */
-    @Override
+
     public Vector getNormal(Point point) {
         return null;
     }

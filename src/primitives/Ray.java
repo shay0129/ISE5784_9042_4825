@@ -1,12 +1,11 @@
 package primitives;
-
 /**
  * Ray class represents a directed line segment in Euclidean space.
  * It is defined by a starting point (head) and a direction vector.
  * @author Shay and Asaf
  */
 public class Ray {
-    private final Double3 head;
+    private final Point head;
     private final Vector direction;
 
     /**
@@ -14,7 +13,7 @@ public class Ray {
      * @param head The starting point of the ray.
      * @param dir The direction vector of the ray.
      */
-    public Ray(Double3 head, Vector dir) {
+    public Ray(Point head, Vector dir) {
         this.head = head;
         this.direction = dir.normalize();
     }

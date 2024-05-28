@@ -10,9 +10,8 @@ import primitives.Vector;
  *
  * @author Shay and Asaf
  */
-public class Plane extends Geometry {
+public class Plane  {
 
-    // Instance variables
 
     /**
      * A point on the plane.
@@ -42,6 +41,24 @@ public class Plane extends Geometry {
      * Returns a point on the plane.
      * @return A point on the plane.
      */
+    /**
+     * constructor for Plane
+     * @param x
+     * @param y
+     * @param z
+     */
+    public Plane(Point x, Point y, Point z) {
+        Point point1;
+        point1 = x;
+        Vector U = x.subtract(y);
+        Vector V = x.subtract(z);
+        Vector N = U.crossProduct(V);
+        point1 = x;
+        this.point = point1;
+        this.normal = null;
+    }
+
+
     public Point getPoint() {
         return this.point;
     }
@@ -59,7 +76,6 @@ public class Plane extends Geometry {
      * @param point The point on the plane at which to calculate the normal vector.
      * @return The normal vector to the plane at the specified point.
      */
-    @Override
     public Vector getNormal(Point point) {
         return this.normal;
     }

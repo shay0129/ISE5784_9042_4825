@@ -10,7 +10,7 @@ import primitives.Vector;
  *
  * @author Shay and Asaf
  */
-public class Cylinder extends RadianGeometry {
+public class Cylinder extends RadialGeometry {
 
     // Instance variables
 
@@ -61,7 +61,7 @@ public class Cylinder extends RadianGeometry {
      * @param point The point on the cylinder at which to calculate the normal vector.
      * @return The normal vector to the cylinder at the specified point.
      */
-    @Override
+
     public Vector getNormal(Point point) {
         // Implementation of getNormal for Cylinder (returns null for now)
         return null;

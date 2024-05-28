@@ -10,7 +10,7 @@ import primitives.Vector;
  *
  * @author Shay and Asaf
  */
-public abstract class RadianGeometry {
+public abstract class RadialGeometry {
 
     /**
      * The radius of the geometric shape.
@@ -21,7 +21,7 @@ public abstract class RadianGeometry {
      * Constructor that creates a new geometric shape given its radius.
      * @param radius The radius of the geometric shape.
      */
-    public RadianGeometry(double radius) {
+    public RadialGeometry(double radius) {
         this.radius = radius;
     }
 
@@ -33,11 +33,5 @@ public abstract class RadianGeometry {
         return radius;
     }
 
-    /**
-     * Calculates the normal vector to the geometric shape at a given point.
-     * This method is abstract and must be implemented by subclasses.
-     * @param point The point on the geometric shape at which to calculate the normal vector.
-     * @return The normal vector to the geometric shape at the specified point.
-     */
-    public abstract Vector getNormal(Point point);
+
 }
