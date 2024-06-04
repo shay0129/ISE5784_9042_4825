@@ -88,7 +88,10 @@ public class Sphere  {
      */
 
     public Vector getNormal(Point point) {
-        return null;
+        if (point.equals(center)) {
+            throw new IllegalArgumentException("Cannot calculate normal to a point on the sphere's center");
+        }
+        return point.subtract(center).normalize();
     }
 
     /**

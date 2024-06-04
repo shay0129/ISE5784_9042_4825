@@ -48,14 +48,11 @@ public class Plane  {
      * @param z
      */
     public Plane(Point x, Point y, Point z) {
-        Point point1;
-        point1 = x;
         Vector U = x.subtract(y);
         Vector V = x.subtract(z);
         Vector N = U.crossProduct(V);
-        point1 = x;
-        this.point = point1;
-        this.normal = null;
+        this.point = x;
+        this.normal = N.normalize();
     }
 
 
