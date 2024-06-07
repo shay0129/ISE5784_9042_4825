@@ -10,7 +10,7 @@ import java.util.List;
  */
 public abstract class Intersectable {
 
-    public  static class  GeoPoint{
+    public static class GeoPoint{
 
         public final Geometry geometry;
         public final Point point;
@@ -51,7 +51,7 @@ public abstract class Intersectable {
     /**
      *
      * @param ray ray intersecting the geometry
-     * @param maxDistance maxximum distance to loook for intersections geometries
+     * @param maxDistance maximum distance to look for intersections geometries
      * @return list of intersection points
      */
     protected abstract List<GeoPoint> findGeoIntersectionsHelper(Ray ray, double maxDistance);

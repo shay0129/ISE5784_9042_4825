@@ -1,12 +1,19 @@
 package primitives;
+
+import geometries.Intersectable;
+
+import java.util.List;
+
+import static primitives.Util.isZero;
+
 /**
  * Ray class represents a directed line segment in Euclidean space.
  * It is defined by a starting point (head) and a direction vector.
  * @author Shay and Asaf
  */
 public class Ray {
-    private final Point head;
-    private final Vector direction;
+    private final Point P0;
+    private final Vector dir;
 
     /**
      * Constructor that creates a new ray given its head point and direction vector.
@@ -14,16 +21,16 @@ public class Ray {
      * @param dir The direction vector of the ray.
      */
     public Ray(Point head, Vector dir) {
-        this.head = head;
-        this.direction = dir.normalize();
+        this.P0 = head;
+        this.dir = dir.normalize();
     }
 
     public Point getP0() {
-        return head;
+        return P0;
     }
 
     public Vector getDir() {
-        return direction;
+        return dir;
     }
     /**
      * Checks if this ray is equal to another object.
@@ -35,7 +42,7 @@ public class Ray {
         if (this == o) return true;
         if (!(o instanceof Ray ray)) return false;
 
-        return head.equals(ray.head) && direction.equals(ray.direction);
+        return P0.equals(ray.P0) && dir.equals(ray.direction);
     }
 
     /**
@@ -44,8 +51,8 @@ public class Ray {
      */
     @Override
     public int hashCode() {
-        int result = head.hashCode();
-        result = 31 * result + direction.hashCode();
+        int result = P0.hashCode();
+        result = 31 * result + dir.hashCode();
         return result;
     }
 
@@ -56,9 +63,31 @@ public class Ray {
     @Override
     public String toString() {
         return "Ray{" +
-                "head=" + head +
-                ", direction=" + direction +
+                "head=" + P0 +
+                ", direction=" + dir +
                 '}';
     }
 
+
+    public Point getPoint(double delta) {
+        if (isZero(delta)) {
+            return P0;
+        }
+        return P0.add(dir.scale(delta));
+    }
+
+    public Intersectable.GeoPoint findClosestGeoPoint(List<Intersectable.GeoPoint> intersections) {
+        Intersectable.GeoPoint closestpoint = null;
+        double minDistance = Double.MAX_VALUE;
+        double ptDistance;
+
+        for (Intersectable.GeoPoint geoPoint : intersections) {
+            ptDistance = geoPoint.point.distanceSquared(p0);
+            if (ptDistance < minDistance) {
+                minDistance = ptDistance;
+                closestpoint = geoPoint;
+            }
+        }
+        return closestpoint;
+    }
 }

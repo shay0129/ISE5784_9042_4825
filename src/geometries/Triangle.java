@@ -6,6 +6,7 @@ import primitives.Vector;
 
 import java.util.List;
 
+import static primitives.Util.alignZero;
 import static primitives.Util.isZero;
 
 /**
@@ -16,7 +17,9 @@ import static primitives.Util.isZero;
  * @author Shay and Asaf
  */
 public class Triangle extends Polygon {
-
+    final Point p0;
+    final Point p1;
+    final Point p2;
     /**
      * Constructs a triangle with the given vertices.
      *
@@ -25,6 +28,17 @@ public class Triangle extends Polygon {
      */
     public Triangle(Point... vertices) {
         super(vertices);
+        if (vertices.length != 3) {
+            throw new IllegalArgumentException("A triangle must have exactly 3 vertices.");
+        }
+        this.p0 = vertices[0];
+        this.p1 = vertices[1];
+        this.p2 = vertices[2];
+    }
+
+    @Override
+    public String toString() {
+        return "Triangle {" + p0 + "," + p1 + "," + p2 + "}";
     }
 
     //exe3 change
@@ -57,5 +71,4 @@ public class Triangle extends Polygon {
         }
         return null;
     }
-
 }
