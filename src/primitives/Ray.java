@@ -18,6 +18,13 @@ public class Ray {
         this.direction = dir.normalize();
     }
 
+    public Point getP0() {
+        return head;
+    }
+
+    public Vector getDir() {
+        return direction;
+    }
     /**
      * Checks if this ray is equal to another object.
      * @param o The object to compare with this ray.
@@ -53,4 +60,5 @@ public class Ray {
                 ", direction=" + direction +
                 '}';
     }
+
 }

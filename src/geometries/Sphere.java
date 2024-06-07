@@ -15,7 +15,7 @@ import static primitives.Util.alignZero;
  *
  * @author Shay and Asaf
  */
-public class Sphere  {
+public class Sphere extends Geometry{
 
 
     /**
@@ -32,6 +32,7 @@ public class Sphere  {
 
     /**
      * Constructor that creates a new sphere given its center point and radius.
+     *
      * @param center The center point of the sphere.
      * @param radius The radius of the sphere.
      */
@@ -44,6 +45,7 @@ public class Sphere  {
 
     /**
      * Returns the center point of the sphere.
+     *
      * @return The center point of the sphere.
      */
     public Point getCenter() {
@@ -52,6 +54,7 @@ public class Sphere  {
 
     /**
      * Returns the radius of the sphere.
+     *
      * @return The radius of the sphere.
      */
     public double getRadius() {
@@ -62,6 +65,7 @@ public class Sphere  {
 
     /**
      * Calculates and returns the surface area of the sphere.
+     *
      * @return The surface area of the sphere.
      */
     public double getSurfaceArea() {
@@ -70,6 +74,7 @@ public class Sphere  {
 
     /**
      * Calculates and returns the volume of the sphere.
+     *
      * @return The volume of the sphere.
      */
     public double getVolume() {
@@ -78,6 +83,7 @@ public class Sphere  {
 
     /**
      * Checks if a given point is inside the sphere.
+     *
      * @param point The point to check.
      * @return true if the point is inside the sphere, false otherwise.
      */
@@ -88,6 +94,7 @@ public class Sphere  {
 
     /**
      * Calculates the normal vector to the sphere at a given point.
+     *
      * @param point The point on the sphere at which to calculate the normal vector.
      * @return The normal vector to the sphere at the specified point.
      */
@@ -101,10 +108,63 @@ public class Sphere  {
 
     /**
      * Returns a string representation of the sphere.
+     *
      * @return A string that describes the sphere.
      */
     @Override
     public String toString() {
         return String.format("Sphere(center: %s, radius: %.2f)", center, radius);
+    }
+    //change
+    @Override
+    public List<Intersectable.GeoPoint> findGeoIntersectionsHelper(Ray ray, double maxDistance) {
+        Point P0 = ray.getP0();
+        Vector v = ray.getDir();
+
+        if (P0.equals(center)) {
+            if(alignZero(radius - maxDistance) > 0){
+                return null;
+            }
+            return List.of(new Intersectable.GeoPoint(this, center.add(v.scale(radius))));
+        }
+
+        Vector U = center.subtract(P0);
+
+        double tm = alignZero(v.dotProduct(U));
+        double d = alignZero(Math.sqrt(U.lengthSquared() - tm * tm));
+
+        // no intersections : the ray direction is above the sphere
+        if (d >= radius) {
+            return null;
+        }
+
+        double th = alignZero(Math.sqrt(radius * radius - d * d));
+
+        double t1 = alignZero(tm - th);
+        double t2 = alignZero(tm + th);
+
+        if(t1 <=0 && t2 <= 0){
+            return null;
+        }
+
+        if (t1 > 0 && t2 > 0 && alignZero(t1 - maxDistance) <= 0 && alignZero(t2 - maxDistance) <= 0) {
+//            Point P1 = P0.add(v.scale(t1));
+//            Point P2 = P0.add(v.scale(t2));
+            Point P1 =ray.getPoint(t1);
+            Point P2 =ray.getPoint(t2);
+            return List.of(new Intersectable.GeoPoint(this,P1), new Intersectable.GeoPoint(this,P2));
+        }
+        if (t1 > 0  && alignZero(t1 - maxDistance) <= 0) {
+//            Point P1 = P0.add(v.scale(t1));
+            Point P1 =ray.getPoint(t1);
+            return List.of(new Intersectable.GeoPoint(this,P1));
+        }
+        if (t2 > 0 && alignZero(t2 - maxDistance) <= 0) {
+//            Point P2 = P0.add(v.scale(t2));
+            Point P2 =ray.getPoint(t2);
+            return List.of(new Intersectable.GeoPoint(this,P2));
+        }
+        return null;
+    }
     }
 }
