@@ -24,7 +24,6 @@ class SphereTest {
         assertEquals(new Vector(0, 0, 1), sph.getNormal(new Point(0, 0, 2)), "Bad normal to sphere");
     }
 
-    //change exe 3
     /**
      * Test method for {@link geometries.Sphere#findIntersections(primitives.Ray)}.
      */
@@ -33,19 +32,15 @@ class SphereTest {
         Sphere sphere = new Sphere(new Point(1, 0, 0), 1d);
 
         // ============ Equivalence Partitions Tests ==============
-        final Point gp1 = new Point(0.0651530771650466, 0.355051025721682, 0);
-        final Point gp2 = new Point(1.53484692283495, 0.844948974278318, 0);
-        final List<Point> exp = List.of(gp1, gp2);
-        final Point p01 = new Point(-1, 0, 0);
-
-        // ============ Equivalence Partitions Tests ==============
+        Point gp1 = new Point(0.0651530771650466, 0.355051025721682, 0);
+        Point gp2 = new Point(1.53484692283495, 0.844948974278318, 0);
+        List<Point> exp = List.of(gp1, gp2);
         // TC01: Ray's line is outside the sphere (0 points)
         assertNull(sphere.findIntersections(new Ray(new Point(-1, 0, 0), new Vector(1, 1, 0))),
                 "Ray's line out of sphere");
-
         // TC02: Ray starts before and crosses the sphere (2 points)
-        assertEquals(2, result.size(), "Wrong number of points");
         List<Point> result = sphere.findIntersections(new Ray(new Point(-1, 0, 0), new Vector(3, 1, 0)));
+        assertEquals(2, result.size(), "Wrong number of points");
         if (result.get(0).getX() > result.get(1).getX())
             result = List.of(result.get(1), result.get(0));
         assertEquals(exp, result, "Ray crosses sphere");
@@ -113,11 +108,10 @@ class SphereTest {
                 "Tangent line, ray after sphere");
 
         // **** Group: Special cases
-        // TC22: Ray's line is outside, ray is orthogonal to ray start to sphere's center line
+        // TC19: Ray's line is outside, ray is orthogonal to ray start to sphere's
+        // center line
         assertNull(sphere.findIntersections(new Ray(new Point(-1, 0, 0), new Vector(0, 0, 1))),
                 "Ray orthogonal to ray head -> O line");
 
     }
-
-
 }

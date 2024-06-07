@@ -16,18 +16,17 @@ import static primitives.Util.isZero;
  *
  * @author Shay and Asaf
  */
-public class Plane  {
+public class Plane extends  FlatGeometry {
 
-    private final Point point;
-    private final Vector normal;
+    final Point q0;
 
     /**
      * Constructor that creates a new plane given a point on the plane and a normal vector.
-     * @param point A point on the plane.
+     * @param q0 A point on the plane.
      * @param normal The normal vector to the plane.
      */
     public Plane(Point point, Vector normal) {
-        this.point = point;
+        this.q0 = point;
         this.normal = normal.normalize();
     }
 
@@ -78,6 +77,6 @@ public class Plane  {
      */
     @Override
     public String toString() {
-        return String.format("Plane(point: %s, normal: %s)", point, normal);
+        return String.format("Plane(point: %s, normal: %s)", q0, normal);
     }
 }
