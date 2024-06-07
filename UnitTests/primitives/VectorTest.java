@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import static primitives.Util.isZero;
 
-class VectorTests {
+class VectorTest {
     /**
      * Test method for {@link primitives.Vector#normalize()}.
      */

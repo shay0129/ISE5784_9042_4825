@@ -1,7 +1,13 @@
 package geometries;
 
 import primitives.Point;
+import primitives.Ray;
 import primitives.Vector;
+
+import java.util.List;
+
+import static primitives.Util.alignZero;
+import static primitives.Util.isZero;
 
 /**
  * Plane class represents a geometric plane in 3-dimensional space.
@@ -12,18 +18,8 @@ import primitives.Vector;
  */
 public class Plane  {
 
-
-    /**
-     * A point on the plane.
-     */
     private final Point point;
-
-    /**
-     * The normal vector to the plane.
-     */
     private final Vector normal;
-
-    // Constructor
 
     /**
      * Constructor that creates a new plane given a point on the plane and a normal vector.
@@ -34,8 +30,6 @@ public class Plane  {
         this.point = point;
         this.normal = normal.normalize();
     }
-
-    // Getter methods
 
     /**
      * Returns a point on the plane.
@@ -48,10 +42,10 @@ public class Plane  {
      * @param z
      */
     public Plane(Point x, Point y, Point z) {
-        Vector U = x.subtract(y);
-        Vector V = x.subtract(z);
-        Vector N = U.crossProduct(V);
-        this.point = x;
+        Vector U = x.subtract(y); // x->y
+        Vector V = x.subtract(z); // x->z
+        Vector N = U.crossProduct(V); // x->y X x->z
+
         this.normal = N.normalize();
     }
 
@@ -73,6 +67,7 @@ public class Plane  {
      * @param point The point on the plane at which to calculate the normal vector.
      * @return The normal vector to the plane at the specified point.
      */
+    @Override
     public Vector getNormal(Point point) {
         return this.normal;
     }

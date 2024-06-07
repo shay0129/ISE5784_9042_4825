@@ -12,7 +12,12 @@ import static primitives.Util.isZero;
  * @author Shay and Asaf
  */
 public class Ray {
-    private final Point P0;
+    /**
+     * DELTA value to move the point away from original point
+     */
+    private static final double DELTA = 0.1;
+
+    private final Point p0;
     private final Vector dir;
 
     /**
@@ -21,12 +26,12 @@ public class Ray {
      * @param dir The direction vector of the ray.
      */
     public Ray(Point head, Vector dir) {
-        this.P0 = head;
+        this.p0 = head;
         this.dir = dir.normalize();
     }
 
     public Point getP0() {
-        return P0;
+        return p0;
     }
 
     public Vector getDir() {
@@ -42,7 +47,7 @@ public class Ray {
         if (this == o) return true;
         if (!(o instanceof Ray ray)) return false;
 
-        return P0.equals(ray.P0) && dir.equals(ray.direction);
+        return p0.equals(ray.p0) && dir.equals(ray.dir);
     }
 
     /**
@@ -51,7 +56,7 @@ public class Ray {
      */
     @Override
     public int hashCode() {
-        int result = P0.hashCode();
+        int result = p0.hashCode();
         result = 31 * result + dir.hashCode();
         return result;
     }
@@ -63,7 +68,7 @@ public class Ray {
     @Override
     public String toString() {
         return "Ray{" +
-                "head=" + P0 +
+                "head=" + p0 +
                 ", direction=" + dir +
                 '}';
     }
@@ -71,9 +76,9 @@ public class Ray {
 
     public Point getPoint(double delta) {
         if (isZero(delta)) {
-            return P0;
+            return p0;
         }
-        return P0.add(dir.scale(delta));
+        return p0.add(dir.scale(delta));
     }
 
     public Intersectable.GeoPoint findClosestGeoPoint(List<Intersectable.GeoPoint> intersections) {

@@ -7,13 +7,12 @@ import primitives.Vector;
 import java.util.List;
 
 import static primitives.Util.alignZero;
+import static primitives.Util.isZero;
 
 /**
  * Cylinder class represents a geometric cylinder in 3-dimensional space.
- * It extends the `RadianGeometry` class and adds specific methods related to cylinders.
+ * It extends the `Tube` class and adds specific methods related to cylinders.
  * The cylinder is defined by a central axis (represented by a point and a direction vector) and a radius.
- *
- * @author Shay and Asaf
  */
 public class Cylinder extends Tube {
 
@@ -43,14 +42,38 @@ public class Cylinder extends Tube {
      * @param point The point on the cylinder at which to calculate the normal vector.
      * @return The normal vector to the cylinder at the specified point.
      */
-
+    @Override
     public Vector getNormal(Point point) {
-        // Implementation of getNormal for Cylinder (returns null for now)
-        return null;
+        Point p0 = axisRay.getP0();
+        Vector dir = axisRay.getDir();
+
+        // Calculate the projection of the point onto the axis ray
+        Vector v = point.subtract(p0);
+        double t = alignZero(v.dotProduct(dir));
+
+        // If the point is on one of the bases
+        if (t <= 0) {
+            return dir.scale(-1); // The point is on the base1
+        }
+        if (t >= height) {
+            return dir; // The point is on the base2
+        }
+
+        // The point is on the side surface
+        Point o = p0.add(dir.scale(t)); // The projection point on the axis ray
+        return point.subtract(o).normalize();
     }
 
-    //Bonus exe 3
-    public List<Intersectable.GeoPoint> findGeoIntersectionsHelper(Ray ray, double maxDistance) {
+    /**
+     * Finds the geometric intersections of a ray with the cylinder.
+     *
+     * @param ray         The ray for which to find intersections.
+     * @param maxDistance The maximum distance to consider for intersections.
+     * @return A list of GeoPoints representing the intersections.
+     * implemented by Dan zilberstein
+     */
+    @Override
+    public List<GeoPoint> findGeoIntersectionsHelper(Ray ray, double maxDistance) {
 //        //to do rethink the all thing
 //        List<Point3D> result = super.findIntersections(ray);
 //        if(result != null){
@@ -70,7 +93,7 @@ public class Cylinder extends Tube {
         Point p2;
 
         // intersections of the ray with infinite cylinder {without the bases)
-        List<Intersectable.GeoPoint> intersections = super.findGeoIntersectionsHelper(ray, maxDistance);
+        List<GeoPoint> intersections = super.findGeoIntersectionsHelper(ray, maxDistance);
 
         double vAxisV = alignZero(vAxis.dotProduct(v)); // cos(angle between ray directions)
 
@@ -88,7 +111,7 @@ public class Cylinder extends Tube {
             } catch (Exception e) { // the rays start at the same point
                 // check whether the ray goes into the cylinder
                 return vAxisV > 0 ? //
-                        List.of(new Intersectable.GeoPoint(this,ray.getPoint(height))) : null;
+                        List.of(new GeoPoint(this,ray.getPoint(height))) : null;
             }
 
             double t1 = alignZero(vP0PC.dotProduct(v)); // project Pc (O1) on the ray
@@ -104,11 +127,11 @@ public class Cylinder extends Tube {
             // the ray goes through the bases - test bases vs. ray head and return points
             // accordingly
             if (t1 > 0 && t2 > 0)
-                return List.of(new Intersectable.GeoPoint(this,p1), new Intersectable.GeoPoint(this,p2));
+                return List.of(new GeoPoint(this,p1), new GeoPoint(this,p2));
             if (t1 > 0)
-                return List.of(new Intersectable.GeoPoint(this,p1));
+                return List.of(new GeoPoint(this,p1));
             if (t2 > 0)
-                return List.of(new Intersectable.GeoPoint(this,p2));
+                return List.of(new GeoPoint(this,p2));
             return null;
         }
 
@@ -140,11 +163,11 @@ public class Cylinder extends Tube {
 
         // Check the points and return list of points accordingly
         if (p1 != null && p2 != null)
-            return List.of(new Intersectable.GeoPoint(this,p1), new Intersectable.GeoPoint(this,p2));
+            return List.of(new GeoPoint(this,p1), new GeoPoint(this,p2));
         if (p1 != null)
-            return List.of(new Intersectable.GeoPoint(this,p1));
+            return List.of(new GeoPoint(this,p1));
         if (p2 != null)
-            return List.of(new Intersectable.GeoPoint(this,p2));
+            return List.of(new GeoPoint(this,p2));
         return null;
     }
 }
