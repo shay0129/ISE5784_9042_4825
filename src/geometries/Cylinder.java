@@ -18,50 +18,23 @@ import static primitives.Util.alignZero;
 public class Cylinder extends Tube {
 
     // Instance variables
+    final double height;
+    final Plane base1;
+    final Plane base2;
 
     /**
-     * The base point of the cylinder's central axis.
-     */
-    private final Point base;
-
-    /**
-     * The direction vector of the cylinder's central axis.
-     */
-    private final Vector direction;
-
-    // Constructor
-
-    /**
-     * Constructor that creates a new cylinder given its base point, direction vector and radius.
+     * Constructor that creates a new cylinder given its axis ray, radius, and height.
      *
-     * @param base      The base point of the cylinder's central axis.
-     * @param direction The direction vector of the cylinder's central axis.
-     * @param radius    The radius of the cylinder.
+     * @param axisRay The central axis ray of the cylinder.
+     * @param radius  The radius of the cylinder.
+     * @param height  The height of the cylinder.
      */
-    public Cylinder(Point base, Vector direction, double radius) {
-        super(radius); // Initialize RadianGeometry with radius
-        this.base = base;
-        this.direction = direction.normalize();
-    }
-
-    // Getter methods
-
-    /**
-     * Returns the base point of the cylinder's central axis.
-     *
-     * @return The base point of the cylinder's central axis.
-     */
-    public Point getBase() {
-        return this.base;
-    }
-
-    /**
-     * Returns the direction vector of the cylinder's central axis.
-     *
-     * @return The direction vector of the cylinder's central axis.
-     */
-    public Vector getDirection() {
-        return this.direction;
+    public Cylinder(Ray axisRay, double radius, double height) {
+        super(axisRay, radius);
+        this.height = height;
+        Vector v = axisRay.getDir();
+        base1 = new Plane(axisRay.getP0(), v);
+        base2 = new Plane(axisRay.getPoint(this.height), v);
     }
 
     /**

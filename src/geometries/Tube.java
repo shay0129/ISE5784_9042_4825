@@ -3,7 +3,6 @@ package geometries;
 import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;
-
 import java.util.List;
 
 import static primitives.Util.alignZero;
@@ -60,7 +59,7 @@ public class Tube extends Geometry {
      */
     @Override
     public String toString() {
-        return String.format("Tube(axis: %s, radius: %.2f)", axis, radius);
+        return String.format("Tube(axis: %s, radius: %.2f)", axisRay, radius);
     }
 
     /**
