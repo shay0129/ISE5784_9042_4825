@@ -1,7 +1,12 @@
 package geometries;
 
 import primitives.Point;
+import primitives.Ray;
 import primitives.Vector;
+
+import java.util.List;
+
+import static primitives.Util.isZero;
 
 /**
  * Triangle class represents a geometric shape in 3-dimensional space.

@@ -1,7 +1,12 @@
 package geometries;
 
 import primitives.Point;
+import primitives.Ray;
 import primitives.Vector;
+
+import java.util.List;
+
+import static primitives.Util.alignZero;
 
 /**
  * Sphere class represents a geometric sphere defined by a center point and a radius.
