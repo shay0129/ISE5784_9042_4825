@@ -9,7 +9,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class PlaneTests {
+class PlaneTest {
 
     /**
      * Test method for {@link geometries.Plane#getNormal(primitives.Point)}.
