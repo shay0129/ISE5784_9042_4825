@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Unit tests for primitives.Point class
  * 
- * @author Tal and Avital
+ * @author Shay and Asaf
  */
 
 class PointTests {

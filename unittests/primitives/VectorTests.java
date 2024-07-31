@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test;
  * methods of the Vector class. It includes equivalence partitions and boundary
  * value tests.
  * 
- * @author tal and avital
+ * @author Shay and Asaf
  */
 class VectorTests {
 

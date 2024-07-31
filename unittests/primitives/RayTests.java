@@ -10,6 +10,8 @@ import primitives.Vector;
 
 /**
  * A test class for the {@link Ray} class.
+ * 
+ * @author Shay and Asaf
  */
 class RayTests {
 	@Test

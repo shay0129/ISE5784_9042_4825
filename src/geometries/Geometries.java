@@ -1,10 +1,9 @@
 package geometries;
 
-import primitives.Point;
-import primitives.Ray;
-
 import java.util.LinkedList;
 import java.util.List;
+import primitives.Point;
+import primitives.Ray;
 
 /**
  * Geometries class to represent a collection of geometric shapes.
@@ -18,13 +17,13 @@ import java.util.List;
  * @author Shay and Asaf
  */
 public class Geometries implements Intersectable {
-    private final List<Intersectable> geometries;
+
+    private final List<Intersectable> geometries = new LinkedList<>();
 
     /**
      * Default constructor for creating an empty Geometries object.
      */
     public Geometries() {
-        geometries = new LinkedList<>();
     }
 
     /**
@@ -33,7 +32,7 @@ public class Geometries implements Intersectable {
      * @param geometries The intersectable geometries to add to this collection.
      */
     public Geometries(Intersectable... geometries) {
-        this.geometries = new LinkedList<>(List.of(geometries));
+        add(geometries);
     }
 
     /**
@@ -46,6 +45,7 @@ public class Geometries implements Intersectable {
             this.geometries.add(geometry);
         }
     }
+
     @Override
     public List<Point> findIntersections(Ray ray) {
         List<Point> intersections = new LinkedList<>();
@@ -57,6 +57,4 @@ public class Geometries implements Intersectable {
         }
         return intersections.isEmpty() ? null : intersections;
     }
-
-
 }
