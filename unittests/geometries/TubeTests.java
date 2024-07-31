@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 /**
  * Unit tests for primitives.Point class
  * 
- * @author Tal and Avital
+ * @author Shay and Asaf
  */
 class TubeTests {
 
