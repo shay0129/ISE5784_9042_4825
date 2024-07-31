@@ -1,5 +1,9 @@
 package primitives;
 
+import java.util.List;
+
+import static java.lang.Double.MAX_VALUE;
+
 /**
  * The Ray class represents a directed line segment in Euclidean space.
  * It is defined by a starting point (head) and a direction vector.
@@ -32,6 +36,19 @@ public class Ray {
         return head;
     }
 
+    /***
+     *
+     * @param obj - an Object
+     * @return true if the object equals this ray, else return false
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        return (obj instanceof Ray other)
+                && this.head.equals(other.head)
+                && this.direction.equals(other.direction);
+    }
+
     /**
      * Returns the direction vector of the ray.
      *
@@ -56,30 +73,30 @@ public class Ray {
         }
     }
 
-    /**
-     * Determines if this ray is equal to another object.
-     *
-     * @param obj the object to compare with this ray
-     * @return {@code true} if the object is a {@link Ray} and has the same head point and direction vector;
-     *         {@code false} otherwise
-     */
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        return (obj instanceof Ray other) &&
-                this.head.equals(other.head) &&
-                this.direction.equals(other.direction);
-    }
-
-    /**
-     * Returns a string representation of this ray.
-     *
-     * @return a string representing the ray, in the format "Ray:{head}->{direction}"
-     */
     @Override
     public String toString() {
         return "Ray: " + head + " -> " + direction;
     }
+
+    /**
+     * Finds the closest point
+     * @param points //collection of points
+     * @return closest point to ray's head
+     */
+    public Point findClosestPoint(List<Point> points ) {
+        double closestDistance = MAX_VALUE;
+        if (points.isEmpty())
+            return null;
+        //If there are values in the points list
+        Point closestPoint = points.getFirst(); //set the first point
+        for (Point p : points){
+            if (p.distance(this.head) < closestDistance) { //closer than previous points
+                closestDistance = p.distance((this.head));
+                closestPoint = p;
+            }
+        }
+        return closestPoint;
+
+    }
 }
+
