@@ -1,8 +1,5 @@
 package primitives;
 
-import static primitives.Util.alignZero;
-import static primitives.Util.isZero;
-
 /**
  * The Vector class represents a vector in 3-dimensional space.
  * It extends the {@link Point} class, where a vector is essentially a point with an origin at (0,0,0).
@@ -76,72 +73,45 @@ public class Vector extends Point {
      * @param other the other vector
      * @return a new vector that is the cross product of this vector and the given vector
      */
+
     public Vector crossProduct(Vector other) {
-        return new Vector( //
-                xyz.d2 * other.xyz.d3 - xyz.d3 * other.xyz.d2, //
-                xyz.d3 * other.xyz.d1 - xyz.d1 * other.xyz.d3, //
-                xyz.d1 * other.xyz.d2 - xyz.d2 * other.xyz.d1);
+        return new Vector(other.xyz.d2 * this.xyz.d3 - other.xyz.d3 * this.xyz.d2, //
+                -(other.xyz.d1 * this.xyz.d3 - other.xyz.d3 * this.xyz.d1),
+                other.xyz.d1 * this.xyz.d2 - other.xyz.d2 * this.xyz.d1);
     }
 
-    /**
-     * Calculates the squared length (magnitude) of this vector.
+    /***
      *
-     * @return the squared length of the vector
+     * @return length squared
      */
     public double lengthSquared() {
         return this.dotProduct(this);
     }
 
     /**
-     * Calculates the length (magnitude) of this vector.
-     *
-     * @return the length of the vector
+     *length - calls lengthsquared
+     * @return the length
      */
     public double length() {
-        return Math.sqrt(lengthSquared());
+        return Math.sqrt(this.lengthSquared());
     }
 
-    /**
-     * Normalizes this vector, returning a new vector with length 1 in the same direction.
+    /***
      *
-     * @return a new vector that is the normalized version of this vector
-     * @throws IllegalArgumentException if this vector is a zero vector
+     * @return the vector normalized
      */
     public Vector normalize() {
-        return scale(1 / this.length());
+        // return new Vector(xyz.d1 / length(), xyz.d2 / length(), xyz.d3 / length());
+        return new Vector(xyz.reduce(this.length()));
     }
 
-    /**
-     * Checks if this vector is equal to another object.
-     *
-     * @param obj the object to compare with this vector
-     * @return {@code true} if the object is a {@link Vector} with the same coordinates; {@code false} otherwise
-     */
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
+        if (this==obj) return true;
         return (obj instanceof Vector other) && this.xyz.equals(other.xyz);
     }
 
-    /**
-     * Returns the hash code value for this vector.
-     *
-     * @return the hash code value for this vector
-     */
     @Override
-    public int hashCode() {
-        return xyz.hashCode();
-    }
-
-    /**
-     * Returns a string representation of this vector.
-     *
-     * @return a string representing the vector in the format "V{xyz}"
-     */
-    @Override
-    public String toString() {
-        return "V" + xyz;
+    public String toString() {return "->" + super.toString();
     }
 }

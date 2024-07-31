@@ -42,7 +42,7 @@ class TubeTests {
 	}
 
 	/**
-	 * Tests the {@link Tube#findIntersections()} method.
+	 * Tests the {@link geometries.Tube.findIntersections()} method.
 	 * 
 	 * <p>
 	 * This test is currently disabled and will fail with the message "not yet
