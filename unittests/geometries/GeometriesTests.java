@@ -1,10 +1,5 @@
+package geometries;
 
-package unittests.geometries;
-
-import geometries.Geometries;
-import geometries.Plane;
-import geometries.Sphere;
-import geometries.Triangle;
 import org.junit.jupiter.api.Test;
 import primitives.Point;
 import primitives.Ray;
@@ -12,50 +7,60 @@ import primitives.Vector;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * @author Jessica and Shlomit
+ * A class to test the {@link Geometries} class.
  */
 class GeometriesTests {
+
 	/**
-	 * Test method for
-	 * {@link geometries.Geometries#findIntersections(primitives.Ray)}.
+	 * Test case for {@link Geometries#findIntersections(Ray)}.
+	 * <p>
+	 * Tests the intersection of a ray with a collection of geometries.
 	 */
 	@Test
-	void testFindIntersections() {
-		Geometries geos = new Geometries(new Sphere(new Point(6, 2, 0), 1d),
-				new Plane(new Point(2, 2, 1), new Vector(-1, 0, 0)),
-				new Triangle(new Point(73, 12, 26), new Point(72, 15, 30), new Point(80, 18, 28)));
+	void testfindIntersections() {
+		Sphere sphere2 = new Sphere(new Point(4, 0, 0), 4);
+		Plane plane2 = new Plane(new Point(2, 2, 1), new Vector(0, 0, 2));
+		Triangle triangle = new Triangle(new Point(0, 2, 0), new Point(0, -2, 0), new Point(2, 0, 0));
 
 		// ============ Equivalence Partitions Tests ==============
-		// TC01: Ray's line intersects with some geometries but not all of them(3 points)
-		List<Point> result = geos.findIntersections(new Ray(new Point(0, 2, 0), new Vector(1, 0, 0)));
-		assertEquals(3, result.size(), "Error: need 3 intersections");
+
+		// EP: Some shapes intersect
+		Geometries geometriesSomeIntersections = new Geometries(sphere2, plane2, triangle);
+		Ray ray = new Ray(new Point(2, 2, -4), new Vector(0, 0, 2));
+		List<Point> intersections = geometriesSomeIntersections.findIntersections(ray);
+		// assertNotNull(intersections, "EP: Some shapes intersect");
+		assertEquals(3, intersections.size(), "EP: Some shapes intersect");
 
 		// =============== Boundary Values Tests ==================
-		// TC02: Ray does not intersect with any geometries (0 points)
-		assertNull(geos.findIntersections(new Ray(new Point(0, 2, 0), new Vector(-1, 0, 0))),
-				"Error: need 0 intersections");
 
-		// TC03: Ray only intersects one geometry (1 point)
-		result = geos.findIntersections(new Ray(new Point(0, 2, 0), new Vector(1, -2, 0)));
-		assertEquals(1, result.size(), "Error: need 1 intersections");
+		// BVA: Empty collection
+		Geometries emptyGeometries = new Geometries();
+		Ray ray0 = new Ray(new Point(5, -11, -4), new Vector(13, 21, -6));
+		assertNull(emptyGeometries.findIntersections(ray0), "BVA: Empty collection");
 
-		// TC04: Empty Geometries (0 points)
-		geos = new Geometries();
-		assertNull(geos.findIntersections(new Ray(new Point(1, 0, 1), new Vector(1, 0, 2))),
-				"Error: need 0 intersections");
+		// BVA: No shapes intersect
+		// Sphere sphere1 = new Sphere(new Point(1, 0, 0), 0.5);
+		// Plane plane1 = new Plane(new Point(0, 0, 2), new Vector(0, 0, 1));
+		Geometries geometriesNoIntersections = new Geometries(sphere2, plane2, triangle);
+		Ray ray1 = new Ray(new Point(5, -11, -4), new Vector(13, 21, -6));
+		assertNull(geometriesNoIntersections.findIntersections(ray1), "BVA: No shapes intersect");
 
-		// TC05: Ray's line intersects with all geometries (4 points)
-		geos = new Geometries(new Sphere(new Point(6, 2, 0), 1d),
-				new Plane(new Point(2, 2, 1), new Vector(-1, 0, 0)),
-				new Triangle(new Point(19, -20, 26), new Point(20, 20, 1), new Point(18, -18, -28)));
-		result = geos.findIntersections(new Ray(new Point(0, 2, 0), new Vector(1, 0, 0)));
-		assertEquals(4, result.size(), "There should be four intersections");
+		// BVA: Only one shape intersects
+		Ray ray2 = new Ray(new Point(10, 0, -4), new Vector(0, 0, 2));
+		List<Point> intersections1 = geometriesNoIntersections.findIntersections(ray2);
+		// assertNotNull(intersections, "BVA: Only one shape intersects");
+		assertEquals(1, intersections1.size(), "BVA: Only one shape intersects");
 
+		// BVA: All shapes intersect
+
+		Geometries geometriesAllIntersections = new Geometries(sphere2, plane2, triangle);
+		Ray ray3 = new Ray(new Point(1, 1, -4), new Vector(0, 0, 2));
+		List<Point> intersections2 = geometriesAllIntersections.findIntersections(ray3);
+		assertNotNull(intersections2, "BVA: All shapes intersect");
+		assertEquals(3, intersections2.size(), "BVA: All shapes intersect");
 
 	}
-
 }

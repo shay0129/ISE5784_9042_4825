@@ -1,11 +1,10 @@
 package geometries;
 
-import primitives.Point;
 import primitives.Ray;
-import primitives.Util;
 import primitives.Vector;
-
+import primitives.Util;
 import java.util.List;
+import primitives.Point;
 
 /**
  * Represents a triangle in three-dimensional space.
@@ -19,13 +18,25 @@ import java.util.List;
  * @author Shay and Asaf
  */
 public class Triangle extends Polygon {
-
-    public Triangle(Point p1, Point p2, Point p3) {
-        super(p1,p2,p3);
+    /**
+     * Constructs a Triangle object with three given points.
+     *
+     * @param ver1 the first point of the triangle
+     * @param ver2 the second point of the triangle
+     * @param ver3 the third point of the triangle
+     */
+    public Triangle(Point ver1, Point ver2, Point ver3) {
+        // Calls the constructor of the superclass Polygon
+        super(ver1, ver2, ver3);
     }
+
 
     @Override
     public List<Point> findIntersections(Ray ray) {
+
+        // we take three vectors from the same starting point and connect them to the
+        // triangle's vertices
+        // we get a pyramid
 
         // Check if the ray intersect the plane.
         if (plane.findIntersections(ray) == null) {

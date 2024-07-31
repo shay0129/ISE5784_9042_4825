@@ -27,21 +27,19 @@ public class Plane implements Geometry {
     private final Vector normal;
 
     /**
-     * Constructs a Plane using three points that lie on the plane.
-     * The normal vector is calculated using the cross product of the vectors formed by these points.
+     * Constructs a Plane object using three points.
      *
-     * @param point1 the first point on the plane
-     * @param point2 the second point on the plane
-     * @param point3 the third point on the plane
-     * @throws IllegalArgumentException if the points are collinear or any two points are the same
+     * <p>
+     * The constructor calculates the normal vector based on the points given, and
+     * stores one of the points as the reference point of the plane.
+     *
+     * @param point1 the first point
+     * @param point2 the second point
+     * @param point3 the third point
      */
     public Plane(Point point1, Point point2, Point point3) {
-        point = point1;
-        try {
-            normal = point1.subtract(point2).crossProduct(point1.subtract(point3)).normalize();
-        } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("The points are collinear or any two points are the same");
-        }
+        point = point1; // Store one of the points as the reference point
+        normal = (point2.subtract(point1)).crossProduct(point3.subtract(point1)).normalize(); // Normal vector calculation
     }
 
     /**
@@ -51,11 +49,8 @@ public class Plane implements Geometry {
      * @param normal the normal vector to the plane
      */
     public Plane(Point point, Vector normal) {
-        if (normal.equals(Vector.ZERO)) {
-            throw new IllegalArgumentException("Normal vector cannot be the zero vector");
-        }
-        this.normal = normal.normalize(); // Ensure the normal vector is normalized
         this.point = point;
+        this.normal = normal.normalize(); // Ensure the normal vector is normalized
     }
 
     /**
@@ -67,16 +62,23 @@ public class Plane implements Geometry {
         return this.normal;
     }
 
+    /**
+     * Calculates the normal vector to the plane at a given point.
+     *
+     * @param point the point on the plane at which to calculate the normal vector
+     * @return the normal vector to the plane at the specified point
+     */
     @Override
     public Vector getNormal(Point point) {
         return getNormal();
     }
 
-    @Override
-    public String toString() {
-        return "Plane{" + "point=" + point + ", normal=" + normal + '}';
-    }
-
+    /**
+     * Finds the intersections between the plane and the given ray.
+     *
+     * @param ray the ray for which intersections with the plane are to be found
+     * @return a list of intersection points. If no intersections are found, an empty list should be returned
+     */
     @Override
     public List<Point> findIntersections(Ray ray) {
         List<Point> intersections = null;

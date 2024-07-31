@@ -39,12 +39,6 @@ public class Tube extends RadialGeometry {
         // Calculate and return the normal vector by subtracting the axis point from the surface point
         return point.subtract(o).normalize();
     }
-
-    @Override
-    public String toString() {
-        return "Tube{" + "axisRay=" + axisRay + ", radius=" + radius + '}';
-    }
-
     @Override
     public List<Point> findIntersections(Ray ray) {
         //  Auto-generated method stub
