@@ -27,12 +27,20 @@ public class Cylinder extends Tube {
      */
     public Cylinder(double radius, Ray axis, double height) {
         super(radius, axis);
+        if (height <= 0 )
+            throw new IllegalArgumentException("Height must be greater than 0");
         this.height = height;
     }
+
 
     @Override
     public Vector getNormal(Point point) {
         // Placeholder implementation
         return null;
+    }
+
+    @Override
+    public String toString() {
+        return "Cylinder{" + super.toString() + "height=" + height + '}';
     }
 }

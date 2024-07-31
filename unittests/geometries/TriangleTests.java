@@ -8,74 +8,74 @@ import primitives.Vector;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
+import static primitives.Util.isZero;
 
 /**
- * Unit tests for primitives.Point class
- * 
- * @author Shay and Asaf
+ * Testing Triangles
+ * @author jessi
+ * @author shlomit
+ *
  */
 class TriangleTests {
 
 	/**
-	 * Test method for {@link Polygon#getNormal(Point)}.
+	 * Test method for {@link geometries.Triangle#getNormal(primitives.Point)}.
 	 */
 	@Test
 	void testGetNormal() {
 		// ============ Equivalence Partitions Tests ==============
-		// TC01: Test for a general case
-		Triangle triangle = new Triangle(new Point(0, 0, 0), new Point(1, 0, 0), new Point(0, 1, 0));
-		Vector expectedNormal = new Vector(0, 0, 1); // Assuming the points define a triangle in the xy-plane
-		assertEquals(expectedNormal, triangle.getNormal(new Point(0, 0, 0)),
-				"getNormal() returned wrong normal vector");
+		Point p1 = new Point(0, 0, 1);
+		Point p2 = new Point(1, 0, 0);
+		Point p3 = new Point(0, 1, 0);
+		Triangle tri = new Triangle(p1,p2,p3);
+		// generate the test result
+		Vector result = tri.getNormal(new Point(1, 1, 1));
+		assertEquals(1, result.length(), 0.00000001, "Triangle's normal is not the unit vector");
 
-		// =============== Boundary Values Tests ==================
-		// No boundary values tests for this function
+		// check  that the normal in orthogonal to all the edges
+		assertTrue(isZero(tri.getNormal(new Point(0, 0, 1)).dotProduct(new Vector(0, 1, -1))),
+				"ERROR: normal is not orthogonal to the first edge");
+		assertTrue(isZero(tri.getNormal(new Point(0, 0, 1)).dotProduct(new Vector(1, -1, 0))),
+				"ERROR: normal is not orthogonal to the second edge");
+		assertTrue(isZero(tri.getNormal(new Point(0, 0, 1)).dotProduct(new Vector(-1, 0, 1))),
+				"ERROR:  normal is not orthogonal to the third edge");
+
 	}
 
 	/**
-	 * Test method for findIntersections function
+	 * Test method for {@link geometries.Sphere#findIntersections(primitives.Ray)}.
 	 */
 	@Test
-	void findIntersections() {
+	void testFindIntersections() {
+		Point p1 = new Point (1,0,0);
+		Point p2 = new Point (4,0,0);
+		Point p3 = new Point (3,3,0);
+
+		Triangle tri = new Triangle(p1, p2, p3);
+		Point p0 = new Point(2, 2, 2);
 		// ============ Equivalence Partitions Tests ==============
+		// Test 01: Intersection point contained on plane is in triangle
+		assertEquals(List.of(new Point(3, 1, 0)), tri.findIntersections(new Ray(p0, new Vector(1, -1, -2))), "Intersection is in the triangle");
 
-		// ============ Equivalence Partitions Tests ==============
+		// Test 02: Point contained on plane is outside triangle next to an edge
+		assertNull(tri.findIntersections(new Ray(p0, new Vector(-2, -0.5, -2))), "No intersection (outside edge of triangle)");
 
-		// TC01: Ray intersects the triangle at a point inside the triangle
-		Triangle triangle = new Triangle(new Point(2, 0, 0), new Point(0, 2, 0), new Point(0, -2, 0)); // Triangle with
-																										// vertices at
-																										// (2,0,0),
-																										// (0,2,0), and
-																										// (0,-2,0)
-		Ray rayInside = new Ray(new Point(0, 0, -2), new Vector(1, 0, 2)); // Ray from inside the triangle
-		List<Point> resultInside = triangle.findIntersections(rayInside);
-		assertEquals(1, resultInside.size(), "Wrong number of intersection points");
-		assertEquals(new Point(1, 0, 0), resultInside.getFirst(), "Ray intersects triangle at wrong point");
+		// Test 03: Point contained on plane is outside triangle next to a vertex
+		assertNull(tri.findIntersections(new Ray(p0, new Vector(-1.5, -2, -2))), "No intersection (outside vertex of triangle");
 
-		// TC02: Ray outside the triangle against edge (0)
-		assertNull(triangle.findIntersections(new Ray(new Point(-1, 0, -1), new Vector(0, 0, 1))),
-				"Wrong number of intersection points");
+		// ============ Boundary Value Analysis ==============
 
-		// TC03: Ray outside the triangle against vertex (0)
-		assertNull(triangle.findIntersections(new Ray(new Point(3, 0, -1), new Vector(0, 0, 1))),
-				"Wrong number of intersection points");
+		// Test 11: Point on plane is on one of the sides
+		assertEquals(List.of(new Point(2, 1, 0)), tri.findIntersections(new Ray(p0, new Vector(0, -1, -2))), "Intersection on the side of triangle");
 
-		// =============== Boundary Values Tests ==================
+		// Test 12: Point on plane is on a vertex
+		assertEquals(List.of(new Point(3, 2, 0)), tri.findIntersections(new Ray(p0, new Vector(1, 0, -2))), "Intersection on the edge of triangle");
 
-		// TC04: Ray start on a edge of triangle(0)
-		assertNull(triangle.findIntersections(new Ray(new Point(0, 0, -1), new Vector(0, 0, 1))),
-				"Ray start on a edge of triangle");
 
-		// TC05: Ray start on the extension of an edge of triangle(0)
-		assertNull(triangle.findIntersections(new Ray(new Point(2, 0, -1), new Vector(0, 0, 1))),
-				"Ray start on the extension of an edge of triangle");
+		// Test 13: Point on plane is on continuation of side
+		assertNull(tri.findIntersections(new Ray(p0, new Vector(3, -2, -2))), "No intersection (on the continuation of side of triangle");
 
-		// TC06: Ray start on a vertex of triangle
-		assertNull(triangle.findIntersections(new Ray(new Point(0, 3, -1), new Vector(0, 0, 1))),
-				"Ray start on a vertex of triangle");
 
 	}
-
 }
