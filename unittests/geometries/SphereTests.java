@@ -3,15 +3,15 @@
  */
 package geometries;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import org.junit.jupiter.api.Test;
-import geometries.Sphere;
 import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;
+
 import java.util.Comparator;
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Unit tests for primitives.Point class
