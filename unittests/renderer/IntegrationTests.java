@@ -16,8 +16,9 @@ import scene.Scene;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
- * @author jessica and Shlomit
  * test integration of camera and geometries
+ *
+ * @author Shay and Asaf
  */
 class IntegrationTests {
         /** Camera builder for the tests */

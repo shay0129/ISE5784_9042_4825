@@ -13,7 +13,7 @@ import static primitives.Util.isZero;
 
 /**
  * Testing Triangles
- * 
+ *
  * @author Shay and Asaf
  */
 class TriangleTests {
