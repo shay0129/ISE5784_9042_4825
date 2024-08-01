@@ -1,6 +1,3 @@
-/**
- *
- */
 package renderer;
 
 import geometries.Geometry;
@@ -16,7 +13,7 @@ import scene.Scene;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
- * test integration of camera and geometries
+ * Testing Integration between Camera and Geometries classes
  *
  * @author Shay and Asaf
  */

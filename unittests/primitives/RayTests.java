@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
- * A test class for the {@link Ray} class.
+ * Testing Rays
  *
  * @author Shay and Asaf
  */

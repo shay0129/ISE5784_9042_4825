@@ -2,8 +2,6 @@ package primitives;
 
 import java.util.List;
 
-import static java.lang.Double.MAX_VALUE;
-
 /**
  * The Ray class represents a directed line segment in Euclidean space.
  * It is defined by a starting point (head) and a direction vector.
@@ -73,30 +71,30 @@ public class Ray {
         }
     }
 
-    @Override
-    public String toString() {
-        return "Ray: " + head + " -> " + direction;
-    }
-
     /**
      * Finds the closest point
      * @param points //collection of points
      * @return closest point to ray's head
      */
-    public Point findClosestPoint(List<Point> points ) {
-        double closestDistance = MAX_VALUE;
-        if (points.isEmpty())
+    public Point findClosestPoint(List<Point> list) {
+        if (list == null)
             return null;
-        //If there are values in the points list
-        Point closestPoint = points.getFirst(); //set the first point
-        for (Point p : points){
-            if (p.distance(this.head) < closestDistance) { //closer than previous points
-                closestDistance = p.distance((this.head));
-                closestPoint = p;
-            }
-        }
-        return closestPoint;
 
+        double distance = Double.POSITIVE_INFINITY;
+        Point closest = null;
+        for (Point p : list)
+            if (p.distance(head) < distance) {
+                distance = p.distance(head);
+                closest = p;
+            }
+        return closest;
     }
+
+    @Override
+    public String toString() {
+        return "Ray: " + head + " -> " + direction;
+    }
+
+
 }
 

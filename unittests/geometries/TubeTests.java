@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
 /**
- * Unit tests for primitives.Point class
+ * Testing Tubes
  * 
  * @author Shay and Asaf
  */

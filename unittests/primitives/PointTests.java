@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
- * Unit tests for primitives.Point class
+ * Testing Points
  * 
  * @author Shay and Asaf
  */

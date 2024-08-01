@@ -16,6 +16,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 /**
+ * Testing Geometries
+ *
  * @author Shay and Asaf
  */
 class GeometriesTests {

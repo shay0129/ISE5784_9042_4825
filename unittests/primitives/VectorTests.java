@@ -9,9 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
- * Unit tests for primitives.Vector class. This class tests the constructors and
- * methods of the Vector class. It includes equivalence partitions and boundary
- * value tests.
+ * Testing Vectors
  * 
  * @author Shay and Asaf
  */

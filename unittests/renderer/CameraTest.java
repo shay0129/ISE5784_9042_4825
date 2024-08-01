@@ -1,12 +1,9 @@
-package unittests.renderer;
+package renderer;
 
 import org.junit.jupiter.api.Test;
 import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;
-import renderer.Camera;
-import renderer.ImageWriter;
-import renderer.SimpleRayTracer;
 import scene.Scene;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -29,14 +26,12 @@ class CameraTest {
     * {@link renderer.Camera#constructRay(int, int, int, int)}.
     */
    @Test
-   void testConstructRay() throws CloneNotSupportedException {
+   void testConstructRay() {
       final String badRay  = "Bad ray";
 
       // ============ Equivalence Partitions Tests ==============
       // EP01: 4X4 Inside (1,1)
       Camera camera1 = cameraBuilder.setVpSize(8, 8).build();
-
-
       assertEquals(new Ray(Point.ZERO, new Vector(1, -1, -10)),
               camera1.constructRay(4, 4, 1, 1), badRay);
 

@@ -1,12 +1,12 @@
-package unittests.renderer;
+package renderer;
 
 import org.junit.jupiter.api.Test;
 import primitives.Color;
-import renderer.ImageWriter;
 
 /**
- * @author Shay and Asaf
+ * Testing ImageWriter Class
  *
+ * @author Shay and Asaf
  */
 class ImageWriterTest {
 
@@ -32,8 +32,7 @@ class ImageWriterTest {
                 }
             }
         }
-        images.writeToImage();
-
+         images.writeToImage(); // save image to file
     }
 
     /**
