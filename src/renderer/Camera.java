@@ -1,20 +1,23 @@
 package renderer;
 
-import primitives.*;
+import primitives.Color;
+import primitives.Point;
+import primitives.Ray;
+import primitives.Vector;
 
 import java.util.MissingResourceException;
 
-import static primitives.Util.alignZero;
 import static primitives.Util.isZero;
 
 /**
- * class camera
+ * Class Camera represents a camera in a 3D scene.
+ * It includes functionality for constructing rays through image pixels and rendering an image.
  *
  * @autor Shay and Asaf
  */
 public class Camera implements Cloneable {
 
-    private Point p0; // location of camera
+    private Point p0; // location of the camera
 
     private Vector vUp;
     private Vector vTo;
@@ -28,7 +31,7 @@ public class Camera implements Cloneable {
     RayTracerBase rayTracer;
 
     /**
-     * empty constructor for camera
+     * Private empty constructor for Camera.
      */
     private Camera() {
         width = 0;
@@ -108,7 +111,6 @@ public class Camera implements Cloneable {
         return distance;
     }
 
-
     /**
      * Prints a grid on the image with the specified interval and color.
      *
@@ -142,19 +144,19 @@ public class Camera implements Cloneable {
         if (imageWriter == null) {
             throw new IllegalStateException("ImageWriter is not initialized");
         }
-
         imageWriter.writeToImage();
     }
 
     /**
-     * Casts a ray through a specific pixel in the image, computes the color of the
+     * Constructs a ray through a specific pixel in the image, computes the color of the
      * pixel based on the ray-tracing algorithm, and writes the color to the
      * corresponding pixel in the image.
      *
-     * @param nX     The width of the image.
-     * @param nY     The height of the image.
-     * @param column The column index of the pixel.
-     * @param row    The row index of the pixel.
+     * @param nX     the width of the image
+     * @param nY     the height of the image
+     * @param column the column index of the pixel
+     * @param row    the row index of the pixel
+     * @return the constructed ray
      */
     public Ray constructRay(int nX, int nY, int column, int row) {
         if (nY == 0 || nX == 0) {
@@ -166,7 +168,7 @@ public class Camera implements Cloneable {
         double Rx = width / nX;
 
         double Yi = -1 * (row - (nY - 1) / 2.0) * Ry;
-        double Xj = -1*(column - (nX - 1) / 2.0) * Rx;
+        double Xj = -1 * (column - (nX - 1) / 2.0) * Rx;
 
         Point Pij = Pc;
         if (!isZero(Xj)) {
@@ -200,7 +202,9 @@ public class Camera implements Cloneable {
     }
 
     /**
-     * Renders the image by iterating over all the pixels and coloring them according to the scene
+     * Renders the image by iterating over all the pixels and coloring them according to the scene.
+     *
+     * @return this Camera instance
      */
     public Camera renderImage() {
         int nX = imageWriter.getNx();
@@ -209,7 +213,6 @@ public class Camera implements Cloneable {
             for (int j = 0; j < nY; ++j)
                 castRay(nX, nY, j, i);
         return this;
-
     }
 
     @Override
@@ -221,11 +224,14 @@ public class Camera implements Cloneable {
         }
     }
 
+    /**
+     * Builder class for constructing Camera objects.
+     */
     public static class Builder {
         private final Camera camera = new Camera();
 
         /**
-         * Sets the location of the camera
+         * Sets the location of the camera.
          *
          * @param location the location point
          * @return this Builder instance
@@ -239,19 +245,23 @@ public class Camera implements Cloneable {
         }
 
         /**
-         * Sets the direction of the camera
+         * Sets the direction of the camera.
          *
          * @param vTo the direction vector
          * @param vUp the up vector
          * @return this Builder instance
+         * @throws IllegalArgumentException if the vectors are null, parallel, or not orthogonal
          */
-        public Builder setDirection(Vector vTo, Vector vUp) { //  מקבלת שני וקטורים, במידה ומקבילים זורק חריגה, אחרת מחשבים את הוקטור האנכי ומציבים
-            if (vTo.crossProduct(vUp).length() == 0)
-                throw new IllegalArgumentException("vTo and vUp are parallel");
-            if (vTo == null || vUp == null)
+        public Builder setDirection(Vector vTo, Vector vUp) {
+            if (vTo == null || vUp == null) {
                 throw new IllegalArgumentException("Direction vectors cannot be null");
-            if (!isZero(vTo.dotProduct(vUp)))
+            }
+            if (vTo.crossProduct(vUp).length() == 0) {
+                throw new IllegalArgumentException("vTo and vUp are parallel");
+            }
+            if (!isZero(vTo.dotProduct(vUp))) {
                 throw new IllegalArgumentException("Direction vectors must be orthogonal");
+            }
 
             camera.vTo = vTo.normalize();
             camera.vUp = vUp.normalize();
@@ -260,29 +270,31 @@ public class Camera implements Cloneable {
         }
 
         /**
-         * Sets the size of the view plane
+         * Sets the size of the view plane.
          *
          * @param height the height of the view plane
          * @param width  the width of the view plane
          * @return this Builder instance
          */
         public Builder setVpSize(double height, double width) {
-            if (height < 0 || width < 0)
+            if (height < 0 || width < 0) {
                 throw new IllegalArgumentException("The height and width of the view plane must be positive");
+            }
             camera.height = height;
             camera.width = width;
             return this;
         }
 
         /**
-         * Sets the distance of the view plane
+         * Sets the distance of the view plane.
          *
          * @param distance the distance from the view plane
          * @return this Builder instance
          */
         public Builder setVpDistance(double distance) {
-            if (distance < 0)
+            if (distance < 0) {
                 throw new IllegalArgumentException("The distance from the view plane must be positive");
+            }
             camera.distance = distance;
             return this;
         }
@@ -291,33 +303,25 @@ public class Camera implements Cloneable {
          * Builds and returns the Camera object.
          *
          * @return the constructed Camera object
-         * @throws MissingResourceException if any required resources are missing
-         * @throws IllegalArgumentException if width, height, or distance are non-positive or if direction vectors are not orthogonal
+         * @throws MissingResourceException if any required fields are missing
          */
         public Camera build() {
-            if (camera.p0 == null) {
-                throw new MissingResourceException("Location", "Point", "Location point is missing");
+            if (camera.p0 == null || camera.vUp == null || camera.vTo == null || camera.vRight == null) {
+                throw new MissingResourceException("Missing essential camera parameters", "Camera", "");
             }
-            if (camera.vTo == null || camera.vUp == null || camera.vRight == null) {
-                throw new MissingResourceException("Direction vectors", "Vector", "Direction vectors are missing");
-            }
-            if (alignZero(camera.width) <= 0 || alignZero(camera.height) <= 0 || alignZero(camera.distance) <= 0) {
-                throw new IllegalArgumentException("Width, height, and distance must be positive");
-            }
-            if (!isZero(camera.vRight.dotProduct(camera.vTo))) {
-                throw new IllegalArgumentException("Direction vectors must be orthogonal");
-            }
-            camera.vRight = camera.vTo.crossProduct(camera.vUp).normalize();
-            return (Camera) camera.clone();
+            return camera.clone();
         }
 
         /**
          * Sets the ImageWriter for the camera.
          *
-         * @param imageWriter the ImageWriter to set
-         * @return the Builder instance
+         * @param imageWriter the ImageWriter to use
+         * @return this Builder instance
          */
         public Builder setImageWriter(ImageWriter imageWriter) {
+            if (imageWriter == null) {
+                throw new IllegalArgumentException("ImageWriter cannot be null");
+            }
             camera.imageWriter = imageWriter;
             return this;
         }
@@ -325,10 +329,13 @@ public class Camera implements Cloneable {
         /**
          * Sets the RayTracer for the camera.
          *
-         * @param rayTracer the RayTracer to set
-         * @return the Builder instance
+         * @param rayTracer the RayTracer to use
+         * @return this Builder instance
          */
         public Builder setRayTracer(RayTracerBase rayTracer) {
+            if (rayTracer == null) {
+                throw new IllegalArgumentException("RayTracer cannot be null");
+            }
             camera.rayTracer = rayTracer;
             return this;
         }

@@ -6,8 +6,10 @@ import scene.Scene;
 
 /**
  * Abstract base class for ray tracing algorithms.
+ * Provides the foundation for tracing rays in a given scene and determining the color at intersection points.
+ * Subclasses must implement the specific ray tracing logic.
  *
- * @author Shay and Asaf
+ * @autor Shay and Asaf
  */
 public abstract class RayTracerBase {
 

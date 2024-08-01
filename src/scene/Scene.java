@@ -10,10 +10,11 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Scene class
- * Plain Data Structure - access to all its attributes are public
+ * Represents a 3D scene containing geometries, lights, and other elements.
+ * This class is a plain data structure with public access to all its attributes.
+ * It provides methods to set and update the scene's attributes.
  *
- * @author Shay and Asaf
+ * @autor Shay and Asaf
  */
 public class Scene {
 
@@ -21,7 +22,7 @@ public class Scene {
     public final String name;
 
     /** The background color of the scene */
-    public Color background = Color.BLACK;;
+    public Color background = Color.BLACK;
 
     /** The ambient light of the scene */
     public AmbientLight ambientLight = AmbientLight.NONE;
@@ -32,43 +33,54 @@ public class Scene {
     /** The lights in the scene */
     public List<LightSource> lights = new LinkedList<>();
 
-    /***
-     * Constructor for Scene's name
-     * @param name
+    /**
+     * Constructs a Scene with the given name.
+     *
+     * @param name the name of the scene
      */
     public Scene(String name) {
         this.name = name;
     }
-    /***
-     * Sets the background color
-     * @param backColor
-     * @return
+
+    /**
+     * Sets the background color of the scene.
+     *
+     * @param backColor the background color to set
+     * @return this Scene object
      */
-    public Scene setBackground( Color backColor) {
+    public Scene setBackground(Color backColor) {
         this.background = backColor;
         return this;
     }
 
     /**
-     * sets the Ambient light to the color and scale given
-     * @param color
-     * @param ka
-     * @return
+     * Sets the ambient light of the scene.
+     *
+     * @param color the color of the ambient light
+     * @param ka the scale factor of the ambient light
+     * @return this Scene object
      */
     public Scene setAmbientLight(Color color, double ka) {
         this.ambientLight = new AmbientLight(color, ka);
         return this;
     }
 
+    /**
+     * Sets the ambient light of the scene.
+     *
+     * @param amb the AmbientLight object to set
+     * @return this Scene object
+     */
     public Scene setAmbientLight(AmbientLight amb) {
         this.ambientLight = amb;
         return this;
     }
+
     /**
-     * adds a geometry to the list
+     * Adds geometries to the scene.
      *
-     * @param geometries the Geometry you want to add to the scene
-     * @return the scene
+     * @param geometries the geometries to add
+     * @return this Scene object
      */
     public Scene setGeometries(Geometries... geometries) {
         for (Intersectable g : geometries) {
@@ -78,14 +90,13 @@ public class Scene {
     }
 
     /**
-     * Updates the lights in the scene.
+     * Sets the lights in the scene.
      *
-     * @param lights The new list of lights.
-     * @return This Scene object.
+     * @param lights the list of lights to set
+     * @return this Scene object
      */
     public Scene setLights(List<LightSource> lights) {
         this.lights = lights;
         return this;
     }
-
 }
