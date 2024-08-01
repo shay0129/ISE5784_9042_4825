@@ -5,7 +5,6 @@ import primitives.Ray;
 import primitives.Util;
 import primitives.Vector;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -21,7 +20,7 @@ import java.util.List;
  *
  * @author Shay and Asaf
  */
-public class Plane implements Geometry {
+public class Plane extends Geometry {
 
     private final Point point;
     private final Vector normal;
@@ -73,31 +72,34 @@ public class Plane implements Geometry {
     }
 
     @Override
-    public String toString() {
-        return "Plane{" + "point=" + point + ", normal=" + normal + '}';
-    }
+    protected List<Intersectable.GeoPoint> findGeoIntersectionsHelper(Ray ray) {
+        // Calculate the denominator of the division for finding the parameter t
+        double denominator = this.normal.dotProduct(ray.getDirection());
+        // If the denominator is close to zero, the ray is parallel to the plane
+        if (Util.isZero(denominator))
+            return null; // Ray is parallel to the plane
 
-    @Override
-    public List<Point> findIntersections(Ray ray) {
-        List<Point> intersections = null;
-        Vector planeNormal = getNormal();
-        double denominator = planeNormal.dotProduct(ray.getDirection());
-
-        if (Util.isZero(denominator)) {
+        // Calculate the numerator of the division for finding the parameter t
+        Vector p0MinusQ0;
+        try {
+            p0MinusQ0 = point.subtract(ray.getHead());
+        } catch (IllegalArgumentException ignore) {
             return null;
         }
 
-        Vector p0MinusQ0 = point.subtract(ray.getHead());
-        double numerator = planeNormal.dotProduct(p0MinusQ0);
+        double numerator = this.normal.dotProduct(p0MinusQ0);
+        // Calculate the parameter t
         double t = Util.alignZero(numerator / denominator);
 
-        if (t < 0) {
+        // If t is negative, the intersection point is behind the ray's start point
+        if (t < 0)
             return null;
-        } else {
-            Point intersectionPoint = ray.getPoint(t);
-            intersections = new ArrayList<>();
-            intersections.add(intersectionPoint);
-            return intersections;
-        }
+
+        // Calculate the intersection point
+        Point intersectionPoint = ray.getPoint(t);
+
+        // Return a list with a single GeoPoint containing this plane and the
+        // intersection point
+        return List.of(new Intersectable.GeoPoint(this, intersectionPoint));
     }
 }

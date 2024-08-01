@@ -8,6 +8,7 @@ package primitives;
  * @author Shay and Asaf
  */
 public class Vector extends Point {
+
     /**
      * Constructs a Vector with the specified coordinates.
      *

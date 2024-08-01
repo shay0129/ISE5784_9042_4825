@@ -13,7 +13,7 @@ import java.util.List;
  *
  * @author Shay and Asaf
  */
-public class SimpleRayTracer extends RayTraceBase {
+public class SimpleRayTracer extends RayTracerBase {
 
     /**
      * Constructs a SimpleRayTracer with the specified scene.

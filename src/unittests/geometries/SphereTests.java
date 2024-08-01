@@ -1,8 +1,7 @@
-/**
- * 
- */
-package geometries;
+package unittests.geometries;
 
+import geometries.Sphere;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import primitives.Point;
 import primitives.Ray;
@@ -11,7 +10,8 @@ import primitives.Vector;
 import java.util.Comparator;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 /**
  * Testing Spheres
@@ -35,16 +35,16 @@ class SphereTests {
 		Point testPoint = new Point(3, 1, 1); // A point on the surface of the sphere
 		Vector normal = sphere.getNormal(testPoint);
 
-		assertNotNull(normal, "getNormal() should not return null");
+		Assertions.assertNotNull(normal, "getNormal() should not return null");
 
 		// Expected normal vector
 		Vector expectedNormal = new Vector(1, 0, 0);
 
 		// Check if the returned normal vector is as expected
-		assertEquals(expectedNormal, normal, "getNormal() did not return the correct normal vector");
+		Assertions.assertEquals(expectedNormal, normal, "getNormal() did not return the correct normal vector");
 
 		// Ensure the normal vector is normalized
-		assertEquals(1, normal.length(), "Normal vector is not normalized");
+		Assertions.assertEquals(1, normal.length(), "Normal vector is not normalized");
 	}
 
 
@@ -75,7 +75,7 @@ class SphereTests {
 		var result1 = sphere.findIntersections(new Ray(p01, v310)).stream()
 				.sorted(Comparator.comparingDouble(p -> p.distance(p01))).toList();
 		assertEquals(2, result1.size(), "Wrong number of points");
-		assertEquals(exp, result1, "Ray crosses sphere");
+		Assertions.assertEquals(exp, result1, "Ray crosses sphere");
 
 		// TC03: Ray starts inside the sphere (1 point)
 		Point p02 = new Point(0.5, 0, 0);

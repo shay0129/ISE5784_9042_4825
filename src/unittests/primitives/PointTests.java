@@ -1,12 +1,11 @@
-/**
- * 
- */
-package primitives;
+package unittests.primitives;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import primitives.Point;
+import primitives.Vector;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Testing Points
@@ -30,7 +29,7 @@ class PointTests {
 		assertEquals(expected, p2.subtract(p1), "wrong subtract result");
 		// TC10: Test that checks the property of result of the subtraction operation
 		// between a point and itself.
-		assertThrows(IllegalArgumentException.class, () -> p1.subtract(p1), //
+		Assertions.assertThrows(IllegalArgumentException.class, () -> p1.subtract(p1), //
 				"subtraction operation between a point and itself should throw an exception for zero vector");
 
 	}

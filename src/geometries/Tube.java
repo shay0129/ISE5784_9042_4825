@@ -41,13 +41,8 @@ public class Tube extends RadialGeometry {
     }
 
     @Override
-    public String toString() {
-        return "Tube{" + "axisRay=" + axisRay + ", radius=" + radius + '}';
-    }
-
-    @Override
-    public List<Point> findIntersections(Ray ray) {
-        //  Auto-generated method stub
+    public List<GeoPoint> findGeoIntersectionsHelper(Ray ray) {
+        // Auto-generated method stub
         return null;
     }
 }

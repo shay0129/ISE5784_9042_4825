@@ -6,6 +6,8 @@ import primitives.Util;
 import primitives.Vector;
 import java.util.List;
 
+import static primitives.Util.alignZero;
+
 /**
  * Represents a sphere in 3D space, defined by a center point and a radius.
  * The sphere is a spherical shape with a constant radius from its center to any point on its surface.
@@ -57,47 +59,44 @@ public class Sphere extends RadialGeometry {
     }
 
     @Override
-    public List<Point> findIntersections(Ray ray) {
+    protected List<Intersectable.GeoPoint> findGeoIntersectionsHelper(Ray ray) {
+        // Initialize an empty list to store the intersection GeoPoints
+        // List<GeoPoint> intersections = new ArrayList<>();
+        if (ray.getHead().equals(this.center))
+            return List.of(new Intersectable.GeoPoint(this, ray.getPoint(this.radius)));
 
-        Point p0 = ray.getHead();
-        Vector v = ray.getDirection();
-        Vector u;
+        // Calculate the vector from the ray's start point to the center of the sphere
+        Vector u = this.center.subtract(ray.getHead());
 
-        try {
-            u = center.subtract(p0); // p0 == center the ray start from the center of the sphere
-        } catch (IllegalArgumentException e) {
-            return List.of(Util.isZero(this.radius) ? p0 : p0.add(ray.getDirection().scale(this.radius)));
-        }
-
-        double tm = Util.alignZero(v.dotProduct(u));
+        // Calculate the projection of u on the ray's direction vector
+        double tm = u.dotProduct(ray.getDirection());
+        // Calculate the distance from the ray's start point to the closest point to the
+        // sphere's center
         double dSquared = u.lengthSquared() - tm * tm;
-        double thSquared = Util.alignZero(this.radius * this.radius - dSquared);
+        double thSquared = this.radiusSquared - dSquared;
+        // If the distance is greater than the sphere's radius, there are no
+        // intersections
+        if (alignZero(thSquared) <= 0)
+            return null; // Return an empty list
 
-        if (thSquared <= 0)
-            return null;// no intersections
+        // Calculate the distance from the closest point to the intersection points on
+        // the sphere's surface
+        double th = Math.sqrt(thSquared);
 
-        double th = Util.alignZero(Math.sqrt(thSquared));
-        if (th == 0)
-            return null;// ray tangent to sphere
+        // Calculate the intersection points. It's always t2 > t1
+        double t2 = tm + th;
+        if (alignZero(t2) <= 0)
+            return null; // both points are behind the ray
 
-        double t1 = Util.alignZero(tm - th);
-        double t2 = Util.alignZero(tm + th);
+        double t1 = tm - th;
 
-        // ray starts after sphere
-        if (Util.alignZero(t1) <= 0 && Util.alignZero(t2) <= 0)
-            return null;
-
-        // 2 intersections
-        if (Util.alignZero(t1) > 0 && Util.alignZero(t2) > 0) {
-            // P1 , P2
-            return List.of(Util.isZero(t1) ? p0 : p0.add(ray.getDirection().scale(t1)),
-                    Util.isZero(t2) ? p0 : p0.add(ray.getDirection().scale(t2)));
+        if (alignZero(t1) <= 0) {
+            // Only one intersection point
+            return List.of(new Intersectable.GeoPoint(this, ray.getPoint(t2)));
+        } else {
+            // Two intersection points
+            return List.of(new Intersectable.GeoPoint(this, ray.getPoint(t1)),
+                    new Intersectable.GeoPoint(this, ray.getPoint(t2)));
         }
-
-        // 1 intersection
-        if (Util.alignZero(t1) > 0)
-            return List.of(Util.isZero(t1) ? p0 : p0.add(ray.getDirection().scale(t1)));
-        else
-            return List.of(Util.isZero(t2) ? p0 : p0.add(ray.getDirection().scale(t2)));
     }
 }

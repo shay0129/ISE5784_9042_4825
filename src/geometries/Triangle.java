@@ -2,10 +2,12 @@ package geometries;
 
 import primitives.Point;
 import primitives.Ray;
-import primitives.Util;
 import primitives.Vector;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import static primitives.Util.alignZero;
 
 /**
  * Represents a triangle in three-dimensional space.
@@ -25,36 +27,40 @@ public class Triangle extends Polygon {
     }
 
     @Override
-    public List<Point> findIntersections(Ray ray) {
+    public List<Intersectable.GeoPoint> findGeoIntersectionsHelper(Ray ray) {
+        // Find intersection points with the plane containing the triangle
+        List<Point> intersectionPoints = plane.findIntersections(ray);
 
-        // Check if the ray intersect the plane.
-        if (plane.findIntersections(ray) == null) {
+        // If there are no intersection points with the plane, return null
+        if (intersectionPoints == null || intersectionPoints.isEmpty()) {
             return null;
         }
-        // the three vectors from the same starting point
-        Vector v1 = vertices.get(0).subtract(ray.getHead());
-        Vector v2 = vertices.get(1).subtract(ray.getHead());
-        Vector v3 = vertices.get(2).subtract(ray.getHead());
 
-        // we want to get a normal for each pyramid's face so we do the crossProduct
-        Vector n1 = v1.crossProduct(v2).normalize();
-        Vector n2 = v2.crossProduct(v3).normalize();
-        Vector n3 = v3.crossProduct(v1).normalize();
+        List<Intersectable.GeoPoint> geoPoints = new ArrayList<>();
 
-        // the ray's vector - it has the same starting point as the three vectors from
-        // above
-        Vector v = ray.getDirection();
+        for (Point intersectionPoint : intersectionPoints) {
+            // Check if the intersection point lies inside the triangle
+            Vector v = ray.getDirection();
+            Vector v1 = vertices.get(0).subtract(ray.getHead());
+            Vector v2 = vertices.get(1).subtract(ray.getHead());
+            Vector v3 = vertices.get(2).subtract(ray.getHead());
 
-        // check if the vector's direction (from Subtraction between the ray's vector to
-        // each vector from above) are equal
-        // if not - there is no intersection point between the ray and the triangle
-        if ((Util.alignZero(v.dotProduct(n1)) > 0 && Util.alignZero(v.dotProduct(n2)) > 0
-                && Util.alignZero(v.dotProduct(n3)) > 0)
-                || (Util.alignZero(v.dotProduct(n1)) < 0 && Util.alignZero(v.dotProduct(n2)) < 0
-                && Util.alignZero(v.dotProduct(n3)) < 0)) {
+            Vector n1 = v1.crossProduct(v2).normalize();
+            double sign1 = alignZero(v.dotProduct(n1));
 
-            return plane.findIntersections(ray);
+            Vector n2 = v2.crossProduct(v3).normalize();
+            double sign2 = alignZero(v.dotProduct(n2));
+
+            Vector n3 = v3.crossProduct(v1).normalize();
+            double sign3 = alignZero(v.dotProduct(n3));
+
+            if ((sign1 > 0 && sign2 > 0 && sign3 > 0) || (sign1 < 0 && sign2 < 0 && sign3 < 0)) {
+                // Intersection point is inside the triangle, create a GeoPoint and add to the
+                // list
+                geoPoints.add(new Intersectable.GeoPoint(this, intersectionPoint));
+            }
         }
-        return null;
+
+        return geoPoints.isEmpty() ? null : geoPoints;
     }
 }

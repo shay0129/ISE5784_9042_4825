@@ -1,9 +1,12 @@
-package renderer;
+package unittests.renderer;
 
 import org.junit.jupiter.api.Test;
 import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;
+import renderer.Camera;
+import renderer.ImageWriter;
+import renderer.SimpleRayTracer;
 import scene.Scene;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

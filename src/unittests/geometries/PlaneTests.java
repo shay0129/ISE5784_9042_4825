@@ -1,15 +1,15 @@
-/**
- * 
- */
-package geometries;
+package unittests.geometries;
 
+import geometries.Plane;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;
+
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 /**
  * Testing Plane
@@ -44,15 +44,15 @@ class PlaneTests {
 		Plane plane = new Plane(point1, point2, point3);
 		Vector normal = plane.getNormal();
 		// Ensure the normal vector has unit length
-		assertEquals(1, normal.length(), DELTA, "Normal vector should have unit length");
+		Assertions.assertEquals(1, normal.length(), DELTA, "Normal vector should have unit length");
 		// Ensure the normal vector is perpendicular to the plane
 		Vector vector1 = point2.subtract(point1);
 		Vector vector2 = point3.subtract(point1);
 		double dotProduct = normal.dotProduct(vector1);
 		// Ensure the dot product is Equal to 0
-		assertEquals(0, dotProduct, DELTA, "Normal vector is not perpendicular to the plane");
+		Assertions.assertEquals(0, dotProduct, DELTA, "Normal vector is not perpendicular to the plane");
 		dotProduct = normal.dotProduct(vector2);
-		assertEquals(0, dotProduct, DELTA, "Normal vector is not perpendicular to the plane");
+		Assertions.assertEquals(0, dotProduct, DELTA, "Normal vector is not perpendicular to the plane");
 	}
 
 	/**
@@ -70,9 +70,9 @@ class PlaneTests {
 		// EP: Ray intersects the plane(1)
 		Ray ray1 = new Ray(new Point(0, 0, 0), new Vector(1, 1, 0));
 		List<Point> result1 = plane.findIntersections(ray1);
-		assertNotNull(result1, "Ray intersects the plane");
-		assertEquals(1, result1.size(), DELTA, "Wrong number of points");
-		assertEquals(new Point(1, 1, 0), result1.get(0), "Ray intersects plane at (1,1,0)");
+		Assertions.assertNotNull(result1, "Ray intersects the plane");
+		Assertions.assertEquals(1, result1.size(), DELTA, "Wrong number of points");
+		Assertions.assertEquals(new Point(1, 1, 0), result1.get(0), "Ray intersects plane at (1,1,0)");
 
 		// =============== Boundary Values Tests ==================
 
@@ -87,9 +87,9 @@ class PlaneTests {
 		// BVA: Ray is orthogonal to the plane and starts before the plane
 		Ray ray4 = new Ray(new Point(0, 0, 0), new Vector(1, 0, 0));
 		List<Point> result4 = plane.findIntersections(ray4);
-		assertNotNull(result4, "Ray is orthogonal to the plane and starts before the plane");
-		assertEquals(1, result4.size(), DELTA, "Wrong number of points");
-		assertEquals(new Point(1, 0, 0), result4.get(0), "Ray intersects plane at (2, 2, 1)");
+		Assertions.assertNotNull(result4, "Ray is orthogonal to the plane and starts before the plane");
+		Assertions.assertEquals(1, result4.size(), DELTA, "Wrong number of points");
+		Assertions.assertEquals(new Point(1, 0, 0), result4.get(0), "Ray intersects plane at (2, 2, 1)");
 
 		// BVA: Ray is orthogonal to the plane and starts after the plane
 		Ray ray6 = new Ray(new Point(2, 0, 0), new Vector(2, 0, 0));

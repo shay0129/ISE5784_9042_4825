@@ -38,9 +38,4 @@ public class Cylinder extends Tube {
         // Placeholder implementation
         return null;
     }
-
-    @Override
-    public String toString() {
-        return "Cylinder{" + super.toString() + "height=" + height + '}';
-    }
 }

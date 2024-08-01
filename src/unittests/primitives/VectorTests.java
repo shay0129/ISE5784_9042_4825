@@ -1,12 +1,11 @@
-/**
- * 
- */
-package primitives;
+package unittests.primitives;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import primitives.Double3;
+import primitives.Vector;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Testing Vectors
@@ -38,7 +37,7 @@ class VectorTests {
 		assertEquals(vector1, vector, "wrong constructor vector");
 		// =============== Boundary Values Tests ==================
 		// TC11: test zero vector from constructor
-		assertThrows(IllegalArgumentException.class, () -> new Vector(Double3.ZERO), //
+		Assertions.assertThrows(IllegalArgumentException.class, () -> new Vector(Double3.ZERO), //
 				"ConstructorWithDouble3() should throw an exception for zero vector");
 	}
 
@@ -67,7 +66,7 @@ class VectorTests {
 		assertEquals(vector1, vector, "wrong constructor vector");
 		// =============== Boundary Values Tests ==================
 		// TC11: test zero vector from constructor
-		assertThrows(IllegalArgumentException.class, () -> new Vector(Double3.ZERO), //
+		Assertions.assertThrows(IllegalArgumentException.class, () -> new Vector(Double3.ZERO), //
 				"ConstructorWithComponents() should throw an exception for zero vector");
 	}
 
@@ -91,7 +90,7 @@ class VectorTests {
 
 		// =============== Boundary Values Tests ==================
 		// TC11: test zero result from add opposite and equals vectors
-		assertThrows(IllegalArgumentException.class, () -> v1.add(v3), //
+		Assertions.assertThrows(IllegalArgumentException.class, () -> v1.add(v3), //
 				"addVector() for parallel vectors does not throw an exception");
 
 	}
@@ -118,7 +117,7 @@ class VectorTests {
 		assertEquals(expected1, v.scale(scalar1), "wrong scaled vector");
 		// =============== Boundary Values Tests ==================
 		// TC11: Test for scaling a zero vector
-		assertThrows(IllegalArgumentException.class, () -> v.scale(scalar2), //
+		Assertions.assertThrows(IllegalArgumentException.class, () -> v.scale(scalar2), //
 				"scale() with scalar 0 does not throw an exception");
 	}
 
@@ -193,19 +192,19 @@ class VectorTests {
 		// =============== Boundary Values Tests ==================
 		// TC10: Test for the inner multiplication operation (dot product) between two
 		// vectors with same directions.
-		assertThrows(IllegalArgumentException.class, () -> v1.crossProduct(v4),
+		Assertions.assertThrows(IllegalArgumentException.class, () -> v1.crossProduct(v4),
 				"crossProduct() with same directions does not throw an exception");
 		// TC11: Test for the inner multiplication operation (dot product) between two
 		// vectors with opposite directions and equals.
-		assertThrows(IllegalArgumentException.class, () -> v4.crossProduct(v2),
+		Assertions.assertThrows(IllegalArgumentException.class, () -> v4.crossProduct(v2),
 				"crossProduct() with same directions does not throw an exception");
 		// TC100: Test for the inner multiplication operation (dot product) between two
 		// vectors with opposite directions.
-		assertThrows(IllegalArgumentException.class, () -> v1.crossProduct(v2),
+		Assertions.assertThrows(IllegalArgumentException.class, () -> v1.crossProduct(v2),
 				"crossProduct() with same directions does not throw an exception");
 		// TC101: Test for the inner multiplication operation (dot product) between two
 		// same vectors.
-		assertThrows(IllegalArgumentException.class, () -> v1.crossProduct(v1),
+		Assertions.assertThrows(IllegalArgumentException.class, () -> v1.crossProduct(v1),
 				"crossProduct() with same directions does not throw an exception");
 	}
 
@@ -245,7 +244,7 @@ class VectorTests {
 		// ============Equivalence Partitions Tests ==============
 		// TC01: Simple test
 		assertEquals(1d, n.lengthSquared(), 0.00001, "wrong normalized vector length");
-		assertThrows(IllegalArgumentException.class, () -> v.crossProduct(n),
+		Assertions.assertThrows(IllegalArgumentException.class, () -> v.crossProduct(n),
 				"normalized vector is not in the same direction");
 		assertEquals(new Vector(0, 0.6, 0.8), n, "wrong normalized vector");
 		// =============== Boundary Values Tests ==================

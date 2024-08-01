@@ -1,16 +1,18 @@
-package renderer;
+package unittests.renderer;
 
 import geometries.Geometry;
 import geometries.Plane;
 import geometries.Sphere;
 import geometries.Triangle;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;
+import renderer.Camera;
+import renderer.ImageWriter;
+import renderer.SimpleRayTracer;
 import scene.Scene;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Testing Integration between Camera and Geometries classes
@@ -45,7 +47,7 @@ class IntegrationTests {
                 }
             }
         }
-        assertEquals(intersections, count, assertMessage);
+        Assertions.assertEquals(intersections, count, assertMessage);
     }
 
     /**

@@ -1,4 +1,4 @@
-package lighting;
+package unittests.lighting;
 
 import static java.awt.Color.*;
 
@@ -15,7 +15,7 @@ import scene.Scene;
 
 /**
  * Test rendering a basic image
- * 
+ *
  * @author Dan
  */
 public class LightsTests {

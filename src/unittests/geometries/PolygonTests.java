@@ -1,14 +1,16 @@
-package geometries;
-
-import org.junit.jupiter.api.Test;
-import primitives.Point;
-import primitives.Vector;
+package unittests.geometries;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.junit.jupiter.api.Test;
+
+import geometries.Polygon;
+import primitives.Point;
+import primitives.Vector;
+
 /**
  * Testing Polygons
- * 
+ *
  * @author Dan
  */
 public class PolygonTests {
@@ -18,7 +20,7 @@ public class PolygonTests {
 	 */
 	private final double DELTA = 0.000001;
 
-	/** Test method for {@link Polygon#Polygon(Point...)}. */
+	/** Test method for {@link geometries.Polygon#Polygon(primitives.Point...)}. */
 	@Test
 	public void testConstructor() {
 		// ============ Equivalence Partitions Tests ==============
@@ -63,7 +65,7 @@ public class PolygonTests {
 
 	}
 
-	/** Test method for {@link Polygon#getNormal(Point)}. */
+	/** Test method for {@link geometries.Polygon#getNormal(primitives.Point)}. */
 	@Test
 	public void testGetNormal() {
 		// ============ Equivalence Partitions Tests ==============
