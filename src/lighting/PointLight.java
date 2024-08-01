@@ -7,6 +7,8 @@ import primitives.Vector;
 /**
  * A class representing a point light source. Inherits from Light and implements
  * LightSource.
+ *
+ * @autor Shay and Asaf
  */
 public class PointLight extends Light implements LightSource {
 

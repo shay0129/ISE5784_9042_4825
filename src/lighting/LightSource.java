@@ -7,6 +7,8 @@ import primitives.Vector;
 /**
  * Interface representing a light source in a scene. A light source has
  * properties to determine its intensity and direction.
+ *
+ * @autor Shay and Asaf
  */
 public interface LightSource {
 

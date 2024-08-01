@@ -1,12 +1,15 @@
 package geometries;
 
-import primitives.Point;
-import primitives.Vector;
 import primitives.Color;
 import primitives.Material;
+import primitives.Point;
+import primitives.Vector;
 
 /**
  * Abstract class Geometry represents any geometric body.
+ * It defines common properties and methods for all geometric shapes.
+ *
+ * @autor Shay and Asaf
  */
 public abstract class Geometry extends Intersectable {
 
@@ -14,10 +17,6 @@ public abstract class Geometry extends Intersectable {
      * Field representing the emission color of the geometry.
      */
     protected Color emission = Color.BLACK;
-
-    /**
-     * Field representing the material of the geometry.
-     */
     private Material material = new Material();
 
     /**
@@ -30,34 +29,12 @@ public abstract class Geometry extends Intersectable {
     }
 
     /**
-     * Method to update the emission color of the geometry.
-     *
-     * @param emission the new emission color to set
-     * @return the updated Geometry object
-     */
-    public Geometry setEmission(Color emission) {
-        this.emission = emission;
-        return this;
-    }
-
-    /**
      * Method that returns the material of the geometry.
      *
      * @return the material of the geometry
      */
     public Material getMaterial() {
         return material;
-    }
-
-    /**
-     * Method to update the material of the geometry.
-     *
-     * @param material the new material to set
-     * @return the updated Geometry object
-     */
-    public Geometry setMaterial(Material material) {
-        this.material = material;
-        return this;
     }
 
     /**
@@ -68,4 +45,34 @@ public abstract class Geometry extends Intersectable {
      * @return a vector
      */
     public abstract Vector getNormal(Point point);
+
+    /**
+     * Method to update the emission color of the geometry.
+     *
+     * @param emission the new emission color to set
+     * @return the updated Geometry object
+     */
+    public Geometry setEmission(Color emission) {
+        if (emission == null)
+            throw new IllegalArgumentException("Emission cannot be null");
+        this.emission = emission;
+        return this;
+    }
+
+
+
+    /**
+     * Method to update the material of the geometry.
+     *
+     * @param material the new material to set
+     * @return the updated Geometry object
+     */
+    public Geometry setMaterial(Material material) {
+        if (material == null)
+            throw new IllegalArgumentException("Material cannot be null");
+        this.material = material;
+        return this;
+    }
+
+
 }

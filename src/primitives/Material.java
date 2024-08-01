@@ -2,6 +2,8 @@ package primitives;
 
 /**
  * A class representing Material properties.
+ *
+ * @autor Shay and Asaf
  */
 public class Material {
 	/** The ambient coefficient of the material */

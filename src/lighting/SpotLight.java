@@ -8,6 +8,8 @@ import static primitives.Util.alignZero;
 /**
  * A class representing a spotlight source. Inherits from PointLight and
  * implements LightSource.
+ *
+ * @autor Shay and Asaf
  */
 public class SpotLight extends PointLight {
 	/**

@@ -9,6 +9,8 @@ import static primitives.Util.isZero;
 
 /**
  * class camera
+ *
+ * @autor Shay and Asaf
  */
 public class Camera implements Cloneable {
 

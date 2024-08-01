@@ -5,6 +5,8 @@ import primitives.Color;
 /**
  * Abstract class representing a light source. This class defines common
  * properties and behavior for all light sources.
+ *
+ * @autor Shay and Asaf
  */
 public abstract class Light {
 	/**
