@@ -44,12 +44,15 @@ public class Scene {
 
     /**
      * Sets the background color of the scene.
+     * If the provided color is null, the background color is not changed.
      *
-     * @param backColor the background color to set
-     * @return this Scene object
+     * @param backColor the background color to set; if null, the background color remains unchanged
+     * @return this Scene object for method chaining
      */
     public Scene setBackground(Color backColor) {
-        this.background = backColor;
+        if (backColor != null) {
+            this.background = backColor;
+        }
         return this;
     }
 
@@ -61,6 +64,8 @@ public class Scene {
      * @return this Scene object
      */
     public Scene setAmbientLight(Color color, double ka) {
+        if (ka < 0 || ka > 1) throw new IllegalArgumentException("Ambient light scale factor must be between 0 and 1");
+
         this.ambientLight = new AmbientLight(color, ka);
         return this;
     }
@@ -83,6 +88,19 @@ public class Scene {
      * @return this Scene object
      */
     public Scene setGeometries(Geometries... geometries) {
+        for (Intersectable g : geometries) {
+            this.geometries.add(g);
+        }
+        return this;
+    }
+
+    /**
+     * Adds geometries to the scene.
+     *
+     * @param geometries the geometries to add
+     * @return this Scene object
+     */
+    public Scene addGeometries(Geometries... geometries) {
         for (Intersectable g : geometries) {
             this.geometries.add(g);
         }

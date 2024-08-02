@@ -2,21 +2,44 @@ package primitives;
 
 /**
  * A class representing Material properties.
+ * Used for calculating light reflection and refraction.
  *
  * @autor Shay and Asaf
  */
 public class Material {
-	/** The ambient coefficient of the material */
-	public double kA;
+	private Double3 kD = Double3.ZERO;
+	private Double3 kS = Double3.ZERO;
+	private int shininess = 0;
 
-	/** The diffuse coefficient of the material */
-	public Double3 kD = Double3.ZERO;
+	/**
+	 * Default constructor for Material.
+	 */
+	public Material() {
+	}
 
-	/** The specular coefficient of the material */
-	public Double3 kS = Double3.ZERO;
+	/**
+	 * Getter for the diffuse coefficient.
+	 * @return the diffuse coefficient
+	 */
+	public Double3 getKd() {
+		return kD;
+	}
 
-	/** The shininess exponent of the material */
-	public int shininess = 0;
+	/**
+	 * Getter for the specular coefficient.
+	 * @return the specular coefficient
+	 */
+	public Double3 getKs() {
+		return kS;
+	}
+
+	/**
+	 * Getter for the shininess level.
+	 * @return the shininess level
+	 */
+	public int getShininess() {
+		return shininess;
+	}
 
 	/**
 	 * Setter for the diffuse coefficient.
@@ -24,7 +47,7 @@ public class Material {
 	 * @param kD The diffuse coefficient to set.
 	 * @return This Material object.
 	 */
-	public Material setKD(double kD) {
+	public Material setKd(double kD) {
 		this.kD = new Double3(kD);
 		return this;
 	}
@@ -35,7 +58,7 @@ public class Material {
 	 * @param kD The diffuse coefficient to set.
 	 * @return This Material object.
 	 */
-	public Material setKD(Double3 kD) {
+	public Material setKd(Double3 kD) {
 		this.kD = kD;
 		return this;
 	}
@@ -46,7 +69,7 @@ public class Material {
 	 * @param kS The specular coefficient to set.
 	 * @return This Material object.
 	 */
-	public Material setKS(double kS) {
+	public Material setKs(double kS) {
 		this.kS = new Double3(kS);
 		return this;
 	}
@@ -57,7 +80,7 @@ public class Material {
 	 * @param kS The specular coefficient to set.
 	 * @return This Material object.
 	 */
-	public Material setKS(Double3 kS) {
+	public Material setKs(Double3 kS) {
 		this.kS = kS;
 		return this;
 	}

@@ -6,6 +6,7 @@ import primitives.Ray;
 import primitives.Vector;
 
 import java.util.MissingResourceException;
+import java.util.Objects;
 
 import static primitives.Util.isZero;
 
@@ -80,7 +81,7 @@ public class Camera implements Cloneable {
      *
      * @return the direction vector towards which the camera is facing
      */
-    public Vector getVTo() {
+    public Vector getVto() {
         return vTo;
     }
 
@@ -207,10 +208,11 @@ public class Camera implements Cloneable {
      * @return this Camera instance
      */
     public Camera renderImage() {
-        int nX = imageWriter.getNx();
-        int nY = imageWriter.getNy();
-        for (int i = 0; i < nX; ++i)
-            for (int j = 0; j < nY; ++j)
+        final int nX = imageWriter.getNx();
+        final int nY = imageWriter.getNy();
+
+        for (int i = 0; i < nY; ++i)
+            for (int j = 0; j < nX; ++j)
                 castRay(nX, nY, j, i);
         return this;
     }
@@ -223,7 +225,6 @@ public class Camera implements Cloneable {
             return null; // This should not happen since Camera implements Cloneable
         }
     }
-
     /**
      * Builder class for constructing Camera objects.
      */
@@ -237,10 +238,8 @@ public class Camera implements Cloneable {
          * @return this Builder instance
          */
         public Builder setLocation(Point location) {
-            if (location == null) {
-                throw new IllegalArgumentException("Location cannot be null");
-            }
-            camera.p0 = location;
+            // Ensure that the location is not null
+            camera.p0 = Objects.requireNonNull(location, "Location cannot be null");
             return this;
         }
 

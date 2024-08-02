@@ -56,6 +56,7 @@ public class Point {
 
     /**
      * Calculates the squared distance between this point and another point.
+     * This method avoids the computational cost of a square root operation.
      *
      * @param p the other point
      * @return the squared distance between this point and the specified point

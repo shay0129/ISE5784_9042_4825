@@ -3,6 +3,8 @@ package primitives;
 import geometries.Intersectable.GeoPoint;
 import java.util.List;
 
+import static primitives.Util.isZero;
+
 /**
  * The Ray class represents a directed line segment in Euclidean space.
  * It is defined by a starting point (head) and a direction vector.
@@ -18,12 +20,26 @@ public class Ray {
     /**
      * Constructs a Ray with the specified starting point and direction vector.
      *
-     * @param point   the starting point (head) of the ray
-     * @param vector  the direction vector of the ray; it is normalized internally
+     * @param pHead   the starting point (head) of the ray
+     * @param vDirection  the direction vector of the ray; it is normalized internally
      */
-    public Ray(Point point, Vector vector) {
-        head = point;
-        direction = vector.normalize(); // Ensure vector is normalized
+    public Ray(Point pHead, Vector vDirection) {
+        head = pHead;
+        direction = vDirection.normalize(); // Ensure vector is normalized
+    }
+
+    /**
+     * Constructor to initialize a Ray object with a given head point, direction vector and normal vector.
+     * The direction vector is normalized.
+     * @param pHead the starting point of the ray
+     * @param vDirection the direction vector of the ray
+     * @param n the normal vector
+     */
+    public Ray(Point pHead, Vector vDirection, Vector n) {
+        this.direction = vDirection.normalize();
+        double nDir = this.direction.dotProduct(n);
+        this.head = isZero(nDir) ? pHead :
+                nDir > 0 ? pHead.add(n.scale(0.1)) : pHead.add(n.scale(-0.1));
     }
 
     /**
@@ -33,19 +49,6 @@ public class Ray {
      */
     public Point getHead() {
         return head;
-    }
-
-    /***
-     *
-     * @param obj - an Object
-     * @return true if the object equals this ray, else return false
-     */
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        return (obj instanceof Ray other)
-                && this.head.equals(other.head)
-                && this.direction.equals(other.direction);
     }
 
     /**
@@ -124,6 +127,13 @@ public class Ray {
         return "Ray: " + head + " -> " + direction;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        return (obj instanceof Ray other)
+                && this.head.equals(other.head)
+                && this.direction.equals(other.direction);
+    }
 
 }
 

@@ -12,27 +12,10 @@ import primitives.Vector;
  */
 public class PointLight extends Light implements LightSource {
 
-	/**
-	 * The position of the light source in 3D space.
-	 */
 	private Point position;
-	/**
-	 * Constant attenuation factor (kC) affecting the intensity of the light source.
-	 * This factor is independent of the distance from the light source.
-	 */
-	private double kC = 1; // Constant attenuation
-	/**
-	 * Linear attenuation factor (kL) affecting the intensity of the light source.
-	 * This factor decreases the intensity linearly with the distance from the light
-	 * source.
-	 */
-	private double kL = 0; // Linear attenuation
-	/**
-	 * Quadratic attenuation factor (kQ) affecting the intensity of the light
-	 * source. This factor decreases the intensity quadratically with the distance
-	 * from the light source.
-	 */
-	private double kQ = 0; // Quadratic attenuation
+	private double kC = 1.0; // Constant attenuation
+	private double kL = 0.0; // Linear attenuation
+	private double kQ = 0.0; // Quadratic attenuation
 
 	/**
 	 * Constructs a point light with the given intensity and position.
@@ -57,25 +40,13 @@ public class PointLight extends Light implements LightSource {
 	}
 
 	/**
-	 * Sets the constant attenuation factor (kC) for the point light source.
-	 *
-	 * @param kC The new value of the constant attenuation factor.
-	 * @return This PointLight object with the updated constant attenuation factor
-	 *         (kC), allowing method chaining.
-	 */
-	public PointLight setKC(double kC) {
-		this.kC = kC;
-		return this;
-	}
-
-	/**
 	 * Sets the linear attenuation factor (kL) for the point light source.
 	 *
 	 * @param kL The new value of the linear attenuation factor.
 	 * @return This PointLight object with the updated linear attenuation factor
 	 *         (kL), allowing method chaining.
 	 */
-	public PointLight setKL(double kL) {
+	public PointLight setKl(double kL) {
 		this.kL = kL;
 		return this;
 	}
@@ -87,7 +58,7 @@ public class PointLight extends Light implements LightSource {
 	 * @return This PointLight object with the updated quadratic attenuation factor
 	 *         (kQ), allowing method chaining.
 	 */
-	public PointLight setKQ(double kQ) {
+	public PointLight setKq(double kQ) {
 		this.kQ = kQ;
 		return this;
 	}
@@ -107,4 +78,8 @@ public class PointLight extends Light implements LightSource {
 		return p.subtract(position).normalize();
 	}
 
+	@Override
+	public double getDistance(Point point) {
+		return position.distance(point);
+	}
 }

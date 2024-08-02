@@ -4,7 +4,6 @@ import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static primitives.Util.alignZero;
@@ -18,49 +17,53 @@ import static primitives.Util.alignZero;
  * @see Vector
  * @see Point
  *
- * @author Shay and Asaf
+ * @autor Shay and Asaf
  */
 public class Triangle extends Polygon {
 
+    /**
+     * Constructs a triangle with three given vertices.
+     *
+     * @param p1 the first vertex
+     * @param p2 the second vertex
+     * @param p3 the third vertex
+     */
     public Triangle(Point p1, Point p2, Point p3) {
-        super(p1,p2,p3);
+        super(p1, p2, p3);
     }
 
     @Override
-    public List<Intersectable.GeoPoint> findGeoIntersectionsHelper(Ray ray) {
-        // Find intersection points with the plane containing the triangle
-        List<Point> intersectionPoints = plane.findIntersections(ray);
+    protected List<Intersectable.GeoPoint> findGeoIntersectionsHelper(Ray ray) {
+        // First, check for intersection with the plane
+        List<Point> planeIntersections = plane.findIntersections(ray);
 
-        // If there are no intersection points with the plane, return null
-        if (intersectionPoints == null || intersectionPoints.isEmpty()) {
+        // If no intersections with the plane, return null
+        if (planeIntersections == null || planeIntersections.isEmpty()) {
             return null;
         }
 
-        List<Intersectable.GeoPoint> geoPoints = new ArrayList<>();
+        // Proceed to check if the intersection point is within the triangle
+        Point intersectionPoint = planeIntersections.get(0);
 
-        for (Point intersectionPoint : intersectionPoints) {
-            // Check if the intersection point lies inside the triangle
-            Vector v = ray.getDirection();
-            Vector v1 = vertices.get(0).subtract(ray.getHead());
-            Vector v2 = vertices.get(1).subtract(ray.getHead());
-            Vector v3 = vertices.get(2).subtract(ray.getHead());
+        Vector v = ray.getDirection();
+        Vector v1 = vertices.get(0).subtract(ray.getHead());
+        Vector v2 = vertices.get(1).subtract(ray.getHead());
+        Vector v3 = vertices.get(2).subtract(ray.getHead());
 
-            Vector n1 = v1.crossProduct(v2).normalize();
-            double sign1 = alignZero(v.dotProduct(n1));
+        Vector n1 = v1.crossProduct(v2).normalize();
+        Vector n2 = v2.crossProduct(v3).normalize();
+        Vector n3 = v3.crossProduct(v1).normalize();
 
-            Vector n2 = v2.crossProduct(v3).normalize();
-            double sign2 = alignZero(v.dotProduct(n2));
+        double sign1 = alignZero(v.dotProduct(n1));
+        double sign2 = alignZero(v.dotProduct(n2));
+        double sign3 = alignZero(v.dotProduct(n3));
 
-            Vector n3 = v3.crossProduct(v1).normalize();
-            double sign3 = alignZero(v.dotProduct(n3));
-
-            if ((sign1 > 0 && sign2 > 0 && sign3 > 0) || (sign1 < 0 && sign2 < 0 && sign3 < 0)) {
-                // Intersection point is inside the triangle, create a GeoPoint and add to the
-                // list
-                geoPoints.add(new Intersectable.GeoPoint(this, intersectionPoint));
-            }
+        // Check if the intersection point is inside the triangle
+        if ((sign1 > 0 && sign2 > 0 && sign3 > 0) || (sign1 < 0 && sign2 < 0 && sign3 < 0)) {
+            // Create a GeoPoint for the intersection point
+            return List.of(new Intersectable.GeoPoint(this, intersectionPoint));
         }
 
-        return geoPoints.isEmpty() ? null : geoPoints;
+        return null;
     }
 }
