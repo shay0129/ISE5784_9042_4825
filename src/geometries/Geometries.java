@@ -2,13 +2,14 @@ package geometries;
 
 import primitives.Ray;
 
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
 /**
  * The Geometries class represents a collection of geometric shapes that can be intersected by a ray.
  * It implements the Intersectable interface.
+ *
+ * @author Shay and Asaf
  */
 public class Geometries extends Intersectable {
 
@@ -37,9 +38,10 @@ public class Geometries extends Intersectable {
      * @param geometries Varargs of Intersectable objects to be added.
      */
     public void add(Intersectable... geometries) {
-        this.geometries.addAll(Arrays.asList(geometries));
+        for (Intersectable geo : geometries) {
+            this.geometries.add(geo);
+        }
     }
-
     @Override
     protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray, double maxDistance) {
         // Initialize a list to hold the intersection points

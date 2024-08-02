@@ -10,6 +10,9 @@ import static primitives.Util.*;
 
 /**
  * Represents a triangle in three-dimensional space.
+ * The class is derived from Polygon.
+ *
+ * @author Shay and Asaf
  */
 public class Triangle extends Polygon {
 

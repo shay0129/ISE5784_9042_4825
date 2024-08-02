@@ -216,14 +216,6 @@ public class Camera implements Cloneable {
         return this;
     }
 
-    @Override
-    public Camera clone() {
-        try {
-            return (Camera) super.clone();
-        } catch (CloneNotSupportedException e) {
-            return null; // This should not happen since Camera implements Cloneable
-        }
-    }
     /**
      * Builder class for constructing Camera objects.
      */
@@ -338,6 +330,15 @@ public class Camera implements Cloneable {
             }
             camera.rayTracer = rayTracer;
             return this;
+        }
+    }
+
+    @Override
+    public Camera clone() {
+        try {
+            return (Camera) super.clone();
+        } catch (CloneNotSupportedException e) {
+            return null; // This should not happen since Camera implements Cloneable
         }
     }
 }

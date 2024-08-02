@@ -1,8 +1,12 @@
-package lighting;
+package unittests.lighting;
 
 import geometries.Geometry;
 import geometries.Sphere;
 import geometries.Triangle;
+import lighting.AmbientLight;
+import lighting.DirectionalLight;
+import lighting.PointLight;
+import lighting.SpotLight;
 import org.junit.jupiter.api.Test;
 import primitives.*;
 import renderer.Camera;
@@ -93,6 +97,7 @@ public class LightsTests {
 	/** The first triangle in appropriate tests */
 	private final Geometry       triangle2               = new Triangle(vertices[0], vertices[1], vertices[3])
 			.setMaterial(material);
+
 
 	/** Produce a picture of a sphere lighted by a directional light */
 	@Test

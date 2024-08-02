@@ -6,35 +6,33 @@ import primitives.Vector;
 
 /**
  * Interface representing a light source in a scene. A light source has
- * properties to determine its intensity and direction.
+ * properties to determine its intensity, direction, and distance from a point.
  *
- * @autor Shay and Asaf
+ * @author Shay and Asaf
  */
 public interface LightSource {
 
 	/**
-	 * Returns the intensity (color) of the light source at a given point in the
-	 * scene.
+	 * Gets the intensity of the light source at a specific point.
 	 *
-	 * @param p The point in the scene.
-	 * @return The intensity (color) of the light source at the given point.
+	 * @param p the point at which to calculate the light intensity
+	 * @return the color representing the intensity of the light at the given point
 	 */
 	public Color getIntensity(Point p);
 
 	/**
-	 * Returns the direction vector from the light source to a given point in the
-	 * scene. This vector represents the direction in which the light is shining.
+	 * Gets the direction vector from the light source to a specific point.
 	 *
-	 * @param p The point in the scene.
-	 * @return The direction vector from the light source to the given point.
+	 * @param p the point to which the direction vector is calculated
+	 * @return the vector representing the direction from the light source to the given point
 	 */
 	public Vector getL(Point p);
 
 	/**
-	 * Get the distance from the light source to a specific point.
+	 * Gets the distance between the light source and a specific point.
 	 *
-	 * @param point the point to calculate the distance to
-	 * @return the distance to the specified point
+	 * @param point the point to which the distance is calculated
+	 * @return the distance from the light source to the given point
 	 */
 	public double getDistance(Point point);
 }

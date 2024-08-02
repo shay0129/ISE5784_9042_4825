@@ -6,11 +6,13 @@ import primitives.Vector;
 
 import java.util.List;
 
-import static java.lang.Math.sqrt;
 import static primitives.Util.alignZero;
 
 /**
  * Represents a sphere in three-dimensional space.
+ * The class is derived from RadialGeometry.
+ *
+ * @author Shay and Asaf
  */
 public class Sphere extends RadialGeometry {
 
@@ -29,60 +31,47 @@ public class Sphere extends RadialGeometry {
 
     @Override
     public Vector getNormal(Point point) {
-        return point.subtract(center).normalize();
+
+        Vector normalVector = point.subtract(center);
+        // Check if the point is the center of the sphere (should not happen for valid sphere surface points)
+        if (normalVector.length() == 0) {
+            throw new IllegalArgumentException("Point cannot be the center of the sphere");
+        }
+        return normalVector.normalize();
     }
 
     @Override
     protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray, double maxDistance) {
-        Vector u;
-        try {
-            // Vector from the ray's origin to the sphere's center
-            u = center.subtract(ray.getPoint(0));
-        } catch (IllegalArgumentException e) {
-            // Ray starts at the sphere's center, return the point on the sphere's surface
-            return List.of(new GeoPoint(this,ray.getPoint(radius)));
+        if (this.center.equals(ray.getHead())) {
+            return List.of(new GeoPoint(this, ray.getHead().add(ray.getDirection().scale(this.radius))));
         }
 
-        // Projection of vector u onto the ray's direction
-        double tm = alignZero(ray.getDirection().dotProduct(u));
+        Vector U = this.center.subtract(ray.getHead());
+        double tm = ray.getDirection().dotProduct(U);
+        double dSquared = U.lengthSquared() - tm * tm;
+        double radiusSquared = this.radius * this.radius;
 
-        // Distance squared from the sphere's center to the ray's path
-        double dSquared = u.lengthSquared() - tm * tm;
-        double d = alignZero(sqrt(dSquared));
-
-        // If the distance is greater than the sphere's radius, there's no intersection
-        if (d >= radius) {
+        // If dSquared is greater than or equal to radiusSquared, there are no intersections
+        if (dSquared >= radiusSquared) {
             return null;
         }
 
-        // Distance from the closest point to the intersection points
-        double th = alignZero(sqrt(radius * radius - d * d));
+        double th = Math.sqrt(radiusSquared - dSquared);
+        double t1 = tm - th;
+        double t2 = tm + th;
+        if (t1 > maxDistance || t2 > maxDistance) return null;
 
-        // Intersection points along the ray
-        double t1 = alignZero(tm + th);
-        double t2 = alignZero(tm - th);
 
-        // Both intersection points are in front of the ray's origin
-        if (t1 > 0 && t2 > 0 && alignZero(t1 - maxDistance) <= 0 && alignZero(t2 - maxDistance) <= 0) {
-            return List.of(
-                    new GeoPoint(this,ray.getPoint(t1)),
-                    new GeoPoint(this,ray.getPoint(t2)));
+        if (alignZero(t1) > 0 && alignZero(t2) > 0) {
+            return List.of(new GeoPoint(this, ray.getPoint(t1)), new GeoPoint(this, ray.getPoint(t2)));
+        } else if (alignZero(t1) > 0) {
+            return List.of(new GeoPoint(this, ray.getPoint(t1)));
+        } else if (alignZero(t2) > 0) {
+            return List.of(new GeoPoint(this, ray.getPoint(t2)));
+        } else {
+            return null;
         }
-
-        // Only the first intersection point is in front of the ray's origin
-        if (t1 > 0 && alignZero(t1 - maxDistance) <= 0) {
-            return List.of(new GeoPoint(this,ray.getPoint(t1)));
-        }
-
-        // Only the second intersection point is in front of the ray's origin
-        if (t2 > 0 && alignZero(t2 - maxDistance) <= 0) {
-            return List.of(new GeoPoint(this,ray.getPoint(t2)));
-        }
-
-        // No intersection points are in front of the ray's origin
-        return null;
     }
-
 }
 
 

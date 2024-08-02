@@ -4,13 +4,16 @@ import primitives.*;
 
 /**
  * Represents a point light source that emits light from a specific point in all directions.
+ * The intensity of the light decreases with the square of the distance from the light source.
+ *
+ * @autor Shay and Asaf
  */
 public class PointLight extends Light implements LightSource {
 
 	protected Point position;
-	private double kC = 1;
-	private double kL = 0;
-	private double kQ = 0;
+	private double kC = 1.0;
+	private double kL = 0.0;
+	private double kQ = 0.0;
 
 	/**
 	 * Constructs a PointLight object with the specified color intensity and position.
@@ -56,7 +59,6 @@ public class PointLight extends Light implements LightSource {
 		return this;
 	}
 
-
 	@Override
 	public double getDistance(Point point) {
 		return position.distance(point);
@@ -64,8 +66,9 @@ public class PointLight extends Light implements LightSource {
 
 	@Override
 	public Color getIntensity(Point p) {
-		double distance = position.distance(p);
-		return intensity.scale(1 / (kC + kL * distance + kQ * distance * distance));
+		double d = position.distance(p);
+		double denominator = kC + kL * d + kQ * (d * d);
+		return intensity.scale(1 / denominator);
 	}
 
 

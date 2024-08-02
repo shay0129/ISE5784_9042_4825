@@ -9,6 +9,8 @@ import java.util.List;
 /**
  * Represents a tube in a three-dimensional (3D) space.
  * A tube is defined by its radius and an axis - a Ray.
+ *
+ * @autor Shay and Asaf
  */
 public class Tube extends RadialGeometry {
 

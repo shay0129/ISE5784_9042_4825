@@ -17,15 +17,9 @@ class RayTests {
 
 	/**
 	 * Tests the {@link Ray#getPoint(double)} method.
-	 * <p>
+	 *
 	 * This method tests the {@link Ray#getPoint(double)} method of the {@link Ray}
 	 * class. It includes equivalence partitions tests and boundary values tests
-	 * for:
-	 * <ul>
-	 * <li>Negative distance</li>
-	 * <li>Positive distance</li>
-	 * <li>Zero distance</li>
-	 * </ul>
 	 */
 	void testgetPoint() {
 		// ============ Equivalence Partitions Tests ==============

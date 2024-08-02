@@ -1,8 +1,5 @@
 package geometries;
 
-import primitives.Point;
-import primitives.Vector;
-
 /**
  * RadialGeometry class represents a geometric shape in 3-dimensional space.
  * It is an abstract class that is extended by specific geometric shapes.
@@ -18,11 +15,6 @@ public abstract class RadialGeometry extends Geometry {
     protected final double radius;
 
     /**
-     * Radius squared of the geometric body.
-     */
-    protected final double radiusSquared;
-
-    /**
      * Constructs a RadialGeometry object with the given radius.
      *
      * @param radius the radius of the geometric body
@@ -32,9 +24,5 @@ public abstract class RadialGeometry extends Geometry {
             throw new IllegalArgumentException("Radius must be positive");
         }
         this.radius = radius;
-        this.radiusSquared = radius * radius;
     }
-
-    public abstract Vector getNormal(Point point);
-
 }

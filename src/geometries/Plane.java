@@ -11,6 +11,9 @@ import static primitives.Util.isZero;
 
 /**
  * Represents a plane in three-dimensional space.
+ * The class is derived from Geometry.
+ *
+ * @author Shay and Asaf
  */
 public class Plane extends Geometry {
 
@@ -23,10 +26,17 @@ public class Plane extends Geometry {
      * @param a The first point.
      * @param b The second point.
      * @param c The third point.
+     * @throws IllegalArgumentException if the three points are collinear
      */
     public Plane(Point a, Point b, Point c) {
         Vector v1 = b.subtract(a);
         Vector v2 = c.subtract(a);
+
+        // Check that the vectors are not collinear
+        if (v1.crossProduct(v2).length() == 0) {
+            throw new IllegalArgumentException("The three points are collinear");
+        }
+
         normal = v1.crossProduct(v2).normalize();
         q = a;
     }
@@ -34,12 +44,12 @@ public class Plane extends Geometry {
     /**
      * Constructs a plane from a point on the plane and its normal vector.
      *
-     * @param a The point on the plane.
-     * @param n The normal vector to the plane.
+     * @param point The point on the plane.
+     * @param vN The normal vector to the plane.
      */
-    public Plane(Point a, Vector n) {
-        q = a;
-        normal = n.normalize();
+    public Plane(Point point, Vector vN) {
+        q = point;
+        normal = vN.normalize();
     }
 
     /**
@@ -68,12 +78,10 @@ public class Plane extends Geometry {
         if(isZero(t))
             return null;
 
-
         //if the ray is the opposite direction to the normal
         t = alignZero(normal.dotProduct(q.subtract(p0))/ t);
         if(t <= 0 || alignZero(t - maxDistance) > 0)
             return null;
-
 
         return List.of(new GeoPoint(this, ray.getPoint(t)));
     }

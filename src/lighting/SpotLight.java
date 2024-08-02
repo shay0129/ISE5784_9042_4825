@@ -4,10 +4,11 @@ import primitives.Color;
 import primitives.Point;
 import primitives.Vector;
 
-import static primitives.Util.alignZero;
-
 /**
  * Represents a spotlight, which is a type of light source that emits light in a specific direction.
+ * The intensity of the light decreases with the cosine of the angle between the direction vector
+ *
+ * @autor Shay and Asaf
  */
 public class SpotLight extends PointLight {
 
@@ -43,56 +44,30 @@ public class SpotLight extends PointLight {
 	 * @param kC the constant attenuation factor
 	 * @return the current SpotLight object (for method chaining)
 	 */
+	@Override
 	public SpotLight setKc(double kC) {
 		return (SpotLight) super.setKc(kC);
 	}
 
-	/**
-	 * Sets the linear attenuation factor of the spotlight.
-	 *
-	 * @param kL the linear attenuation factor
-	 * @return the current SpotLight object (for method chaining)
-	 */
+	@Override
 	public SpotLight setKl(double kL) {
 		return (SpotLight) super.setKl(kL);
 	}
 
-	/**
-	 * Sets the quadratic attenuation factor of the spotlight.
-	 *
-	 * @param kQ the quadratic attenuation factor
-	 * @return the current SpotLight object (for method chaining)
-	 */
+	@Override
 	public SpotLight setKq(double kQ) {
 		return (SpotLight) super.setKq(kQ);
 	}
 
-	/**
-	 * Calculates the intensity of the light at a given point.
-	 *
-	 * @param p the point at which to calculate the light intensity
-	 * @return the color intensity at the specified point
-	 */
+	@Override
 	public Color getIntensity(Point p) {
-		// Calculate the direction vector from the light source to the point
-		Vector l = getL(p);
+		double dirDotL = direction.dotProduct(getL(p)); // Dot product of direction and light direction to point
+		return super.getIntensity(p).scale(Math.max(0, dirDotL)); // Scale intensity by maximum of 0 and dot product
+	}
 
-		// If the direction vector is null, use the spotlight's direction
-		if (l == null)
-			l = direction;
-
-		// Calculate the cosine of the angle between the direction vector and the spotlight's direction
-		double cos = alignZero(l.dotProduct(direction));
-
-		// If the cosine is less than or equal to 0, return black color as the point is not illuminated
-		if (cos <= 0) return Color.BLACK;
-
-		// If the narrow beam factor is not 1, adjust the cosine value accordingly
-		if (narrowBeam != 1)
-			cos = alignZero(Math.pow(cos, narrowBeam));
-
-		// Calculate the final color intensity at the point by scaling the base intensity with the adjusted cosine value
-		return super.getIntensity(p).scale(cos);
+	@Override
+	public Vector getL(Point p) {
+		return super.getL(p); // Delegate to the PointLight implementation
 	}
 
 }

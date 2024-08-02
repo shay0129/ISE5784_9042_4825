@@ -17,6 +17,7 @@ public class Ray {
 
     final private Point head;
     final private Vector direction;
+    private static final double DELTA = 0.1;
 
     /**
      * Constructs a Ray with the specified starting point and direction vector.

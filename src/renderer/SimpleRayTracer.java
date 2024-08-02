@@ -11,6 +11,8 @@ import static primitives.Util.alignZero;
 
 /**
  * SimpleRayTracer is a basic implementation of a ray tracer for rendering a scene.
+ *
+ * @author Shay and Asaf
  */
 public class SimpleRayTracer extends RayTracerBase {
 
