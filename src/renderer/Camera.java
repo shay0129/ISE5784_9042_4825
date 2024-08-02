@@ -6,7 +6,6 @@ import primitives.Ray;
 import primitives.Vector;
 
 import java.util.MissingResourceException;
-import java.util.Objects;
 
 import static primitives.Util.isZero;
 
@@ -208,12 +207,12 @@ public class Camera implements Cloneable {
      * @return this Camera instance
      */
     public Camera renderImage() {
-        final int nX = imageWriter.getNx();
-        final int nY = imageWriter.getNy();
+        int width = imageWriter.getNx(); // Get the width of the image
+        int height = imageWriter.getNy(); // Get the height of the image
 
-        for (int i = 0; i < nY; ++i)
-            for (int j = 0; j < nX; ++j)
-                castRay(nX, nY, j, i);
+        for (int i = 0; i < height; ++i)
+            for (int j = 0; j < width; ++j)
+                castRay(width, height, j, i);
         return this;
     }
 
@@ -238,8 +237,10 @@ public class Camera implements Cloneable {
          * @return this Builder instance
          */
         public Builder setLocation(Point location) {
-            // Ensure that the location is not null
-            camera.p0 = Objects.requireNonNull(location, "Location cannot be null");
+            if (location == null) {
+                throw new IllegalArgumentException("Location cannot be null");
+            }
+            camera.p0 = location;
             return this;
         }
 

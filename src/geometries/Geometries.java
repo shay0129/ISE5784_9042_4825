@@ -1,68 +1,66 @@
 package geometries;
 
-import primitives.Point;
 import primitives.Ray;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Geometries class to represent a collection of geometric shapes.
- * Implements the Composite design pattern.
- * This class allows for managing and intersecting multiple geometric shapes as a single entity.
- *
- * @see Intersectable
- * @see Point
- * @see Ray
- *
- * @author Shay and Asaf
+ * The Geometries class represents a collection of geometric shapes that can be intersected by a ray.
+ * It implements the Intersectable interface.
  */
 public class Geometries extends Intersectable {
-    private final List<Intersectable> geometries;
 
     /**
-     * Default constructor for creating an empty Geometries object.
+     * A list of intersectable geometric shapes.
      */
-    public Geometries() {
-        geometries = new LinkedList<>();
-    }
+    private final List<Intersectable> geometries = new LinkedList<>();
 
     /**
-     * Constructor for creating a Geometries object with specified geometries.
+     * Default constructor for an empty Geometries collection.
+     */
+    public Geometries() {}
+
+    /**
+     * Constructor that initializes the Geometries collection with given Intersectable objects.
      *
-     * @param geometries The intersectable geometries to add to this collection.
+     * @param geometries Varargs of Intersectable objects to be added to the collection.
      */
     public Geometries(Intersectable... geometries) {
-        this.geometries = new LinkedList<>(List.of(geometries));
+        add(geometries);
     }
 
     /**
-     * Adds one or more intersectable geometries to the collection.
+     * Adds one or more Intersectable objects to the Geometries collection.
      *
-     * @param geometries The intersectable geometries to add.
+     * @param geometries Varargs of Intersectable objects to be added.
      */
     public void add(Intersectable... geometries) {
-        for (Intersectable geometry : geometries) {
-            this.geometries.add(geometry);
-        }
+        this.geometries.addAll(Arrays.asList(geometries));
     }
 
     @Override
-    public List<GeoPoint> findGeoIntersectionsHelper(Ray ray) {
+    protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray, double maxDistance) {
+        // Initialize a list to hold the intersection points
         List<GeoPoint> intersections = null;
 
-        for (Intersectable geometry : this.geometries) {
-            List<GeoPoint> intersections1 = geometry.findGeoIntersectionsHelper(ray);
-            if (intersections1 != null) {
-                if (intersections == null)
+        // Iterate through each geometry in the collection
+        for (Intersectable geometry : geometries) {
+            // Find intersections of the ray with the current geometry within the maximum distance
+            List<GeoPoint> geometryIntersections = geometry.findGeoIntersections(ray, maxDistance);
+
+            // If intersections are found, add them to the main intersections list
+            if (geometryIntersections != null) {
+                // Lazy initialization of the intersections list
+                if (intersections == null) {
                     intersections = new LinkedList<>();
-                intersections.addAll(intersections1);
+                }
+                // Add all intersections of the current geometry to the main list
+                intersections.addAll(geometryIntersections);
             }
         }
-
-        if (intersections == null)
-            return null;
+        // Return the list of all intersection points, or null if no intersections are found
         return intersections;
-
     }
 }

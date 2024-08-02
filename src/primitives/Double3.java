@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package primitives;
 
@@ -49,9 +49,9 @@ public class Double3 {
    public boolean equals(Object obj) {
       if (this == obj) return true;
       return (obj instanceof Double3 other)
-            && isZero(d1 - other.d1)
-            && isZero(d2 - other.d2)
-            && isZero(d3 - other.d3);
+              && isZero(d1 - other.d1)
+              && isZero(d2 - other.d2)
+              && isZero(d3 - other.d3);
    }
 
    @Override
@@ -117,4 +117,6 @@ public class Double3 {
     *               triad, false otherwise
     */
    public boolean lowerThan(Double3 other) { return d1 < other.d1 && d2 < other.d2 && d3 < other.d3; }
+
+   public boolean greaterThan(double k) { return d1 > k && d2 > k && d3 > k; }
 }

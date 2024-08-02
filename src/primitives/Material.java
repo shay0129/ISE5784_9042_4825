@@ -1,62 +1,67 @@
 package primitives;
 
 /**
- * A class representing Material properties.
- * Used for calculating light reflection and refraction.
- *
- * @autor Shay and Asaf
+ * Represents the material properties of a geometric object.
+ * The material properties include diffuse reflection (kD), specular reflection (kS),
+ * transmission coefficient (kT), reflection coefficient (kR), and shininess (nShininess).
  */
 public class Material {
-	private Double3 kD = Double3.ZERO;
-	private Double3 kS = Double3.ZERO;
-	private int shininess = 0;
+
+	public Double3 kD = Double3.ZERO;
+	public Double3 kS = Double3.ZERO;
+	public Double3 kT = Double3.ZERO;
+	public Double3 kR = Double3.ZERO;
+	public int nShininess = 0;
 
 	/**
-	 * Default constructor for Material.
+	 * Sets the reflection coefficient using a {@link Double3} object.
+	 *
+	 * @param kR the reflection coefficient
+	 * @return the current Material object (for chaining method calls)
 	 */
-	public Material() {
-	}
-
-	/**
-	 * Getter for the diffuse coefficient.
-	 * @return the diffuse coefficient
-	 */
-	public Double3 getKd() {
-		return kD;
-	}
-
-	/**
-	 * Getter for the specular coefficient.
-	 * @return the specular coefficient
-	 */
-	public Double3 getKs() {
-		return kS;
-	}
-
-	/**
-	 * Getter for the shininess level.
-	 * @return the shininess level
-	 */
-	public int getShininess() {
-		return shininess;
-	}
-
-	/**
-	 * Setter for the diffuse coefficient.
-	 * 
-	 * @param kD The diffuse coefficient to set.
-	 * @return This Material object.
-	 */
-	public Material setKd(double kD) {
-		this.kD = new Double3(kD);
+	public Material setkR(Double3 kR) {
+		this.kR = kR;
 		return this;
 	}
 
 	/**
-	 * Setter for the diffuse coefficient.
-	 * 
-	 * @param kD The diffuse coefficient to set.
-	 * @return This Material object.
+	 * Sets the transmission coefficient using a {@link Double3} object.
+	 *
+	 * @param kT the transmission coefficient
+	 * @return the current Material object (for chaining method calls)
+	 */
+	public Material setkT(Double3 kT) {
+		this.kT = kT;
+		return this;
+	}
+
+	/**
+	 * Sets the reflection coefficient using a double value.
+	 *
+	 * @param kR the reflection coefficient
+	 * @return the current Material object (for chaining method calls)
+	 */
+	public Material setkR(Double kR) {
+		this.kR = new Double3(kR);
+		return this;
+	}
+
+	/**
+	 * Sets the transmission coefficient using a double value.
+	 *
+	 * @param kT the transmission coefficient
+	 * @return the current Material object (for chaining method calls)
+	 */
+	public Material setkT(Double kT) {
+		this.kT = new Double3(kT);
+		return this;
+	}
+
+	/**
+	 * Sets the diffuse reflection coefficient using a {@link Double3} object.
+	 *
+	 * @param kD the diffuse reflection coefficient
+	 * @return the current Material object (for chaining method calls)
 	 */
 	public Material setKd(Double3 kD) {
 		this.kD = kD;
@@ -64,21 +69,21 @@ public class Material {
 	}
 
 	/**
-	 * Setter for the specular coefficient.
-	 * 
-	 * @param kS The specular coefficient to set.
-	 * @return This Material object.
+	 * Sets the diffuse reflection coefficient using a double value.
+	 *
+	 * @param kD the diffuse reflection coefficient
+	 * @return the current Material object (for chaining method calls)
 	 */
-	public Material setKs(double kS) {
-		this.kS = new Double3(kS);
+	public Material setKd(Double kD) {
+		this.kD = new Double3(kD);
 		return this;
 	}
 
 	/**
-	 * Setter for the specular coefficient.
-	 * 
-	 * @param kS The specular coefficient to set.
-	 * @return This Material object.
+	 * Sets the specular reflection coefficient using a {@link Double3} object.
+	 *
+	 * @param kS the specular reflection coefficient
+	 * @return the current Material object (for chaining method calls)
 	 */
 	public Material setKs(Double3 kS) {
 		this.kS = kS;
@@ -86,13 +91,24 @@ public class Material {
 	}
 
 	/**
-	 * Setter for the shininess exponent.
-	 * 
-	 * @param shininess The shininess exponent to set.
-	 * @return This Material object.
+	 * Sets the specular reflection coefficient using a double value.
+	 *
+	 * @param kS the specular reflection coefficient
+	 * @return the current Material object (for chaining method calls)
 	 */
-	public Material setShininess(int shininess) {
-		this.shininess = shininess;
+	public Material setKs(Double kS) {
+		this.kS = new Double3(kS);
+		return this;
+	}
+
+	/**
+	 * Sets the shininess coefficient.
+	 *
+	 * @param nShininess the shininess coefficient
+	 * @return the current Material object (for chaining method calls)
+	 */
+	public Material setShininess(int nShininess) {
+		this.nShininess = nShininess;
 		return this;
 	}
 }

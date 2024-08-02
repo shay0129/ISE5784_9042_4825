@@ -1,52 +1,33 @@
 package lighting;
 
-import primitives.Color;
-import primitives.Double3;
+import primitives.*;
 
 /**
- * Represents ambient light in a scene. Ambient light is a type of light that is uniformly distributed
- * across all directions and does not have a specific source.
- *
- * @author Shay and Asaf
+ * The AmbientLight class represents an ambient light source.
+ * Ambient light is a non-directional light that affects all objects equally.
  */
-public class AmbientLight {
-    /** Constant for no ambient light. */
-    public static final AmbientLight NONE = new AmbientLight(Color.BLACK, Double3.ZERO);
+public class AmbientLight extends Light {
 
-    /** Intensity of the ambient light. */
-    private final Color intensity;
-
-    /** Attenuation factors for the ambient light. */
-    private final Double3 Ka;
+    /** A constant representing no ambient light (black color, intensity 0) */
+    public static final AmbientLight NONE = new AmbientLight(Color.BLACK, 0d);
 
     /**
-     * Constructs an ambient light with the given color and attenuation factor.
+     * Constructs an AmbientLight object with the specified color and intensity.
      *
-     * @param iA the color of the ambient light
-     * @param kA the attenuation factor for the ambient light
+     * @param IA the color of the ambient light
+     * @param KA the intensity of the ambient light as a Double3
      */
-    public AmbientLight(Color iA, double kA) {
-        this.intensity = iA.scale(kA);
-        this.Ka = new Double3(kA, kA, kA); // Create a Double3 instance with uniform scaling
+    public AmbientLight(Color IA, Double3 KA) {
+        super(IA.scale(KA));
     }
 
     /**
-     * Constructs an ambient light with the given color and attenuation factors.
+     * Constructs an AmbientLight object with the specified color and intensity.
      *
-     * @param iA the color of the ambient light
-     * @param kA the attenuation factors for the ambient light
+     * @param IA the color of the ambient light
+     * @param KA the intensity of the ambient light as a Double
      */
-    public AmbientLight(Color iA, Double3 kA) {
-        this.intensity = iA.scale(kA);
-        this.Ka = kA;
-    }
-
-    /**
-     * Returns the intensity of the ambient light.
-     *
-     * @return the intensity of the ambient light
-     */
-    public Color getIntensity() {
-        return intensity;
+    public AmbientLight(Color IA, Double KA) {
+        super(IA.scale(KA));
     }
 }

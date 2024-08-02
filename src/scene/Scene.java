@@ -1,7 +1,6 @@
 package scene;
 
 import geometries.Geometries;
-import geometries.Intersectable;
 import lighting.AmbientLight;
 import lighting.LightSource;
 import primitives.Color;
@@ -82,28 +81,12 @@ public class Scene {
     }
 
     /**
-     * Adds geometries to the scene.
-     *
-     * @param geometries the geometries to add
-     * @return this Scene object
+     * Setter for the geometries.
+     * @param geometries the geometries
+     * @return the scene
      */
-    public Scene setGeometries(Geometries... geometries) {
-        for (Intersectable g : geometries) {
-            this.geometries.add(g);
-        }
-        return this;
-    }
-
-    /**
-     * Adds geometries to the scene.
-     *
-     * @param geometries the geometries to add
-     * @return this Scene object
-     */
-    public Scene addGeometries(Geometries... geometries) {
-        for (Intersectable g : geometries) {
-            this.geometries.add(g);
-        }
+    public Scene setGeometries(Geometries geometries) {
+        this.geometries = geometries;
         return this;
     }
 
@@ -114,7 +97,9 @@ public class Scene {
      * @return this Scene object
      */
     public Scene setLights(List<LightSource> lights) {
-        this.lights = lights;
+        if (lights != null) {
+            this.lights = lights;
+        }
         return this;
     }
 }

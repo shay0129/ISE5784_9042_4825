@@ -12,21 +12,29 @@ import static primitives.Util.isZero;
 /**
  * Polygon class represents two-dimensional polygon in 3D Cartesian coordinate
  * system
+ *
  * @author Dan
  */
 public class Polygon extends Geometry {
-   /** List of polygon's vertices */
+   /**
+    * List of polygon's vertices
+    */
    protected final List<Point> vertices;
-   /** Associated plane in which the polygon lays */
-   protected final Plane       plane;
-   /** The size of the polygon - the amount of the vertices in the polygon */
-   private final int           size;
+   /**
+    * Associated plane in which the polygon lays
+    */
+   protected final Plane plane;
+   /**
+    * The size of the polygon - the amount of the vertices in the polygon
+    */
+   private final int size;
 
    /**
     * Polygon constructor based on vertices list. The list must be ordered by edge
     * path. The polygon must be convex.
-    * @param  vertices                 list of vertices according to their order by
-    *                                  edge path
+    *
+    * @param vertices list of vertices according to their order by
+    *                 edge path
     * @throws IllegalArgumentException in any case of illegal combination of
     *                                  vertices:
     *                                  <ul>
@@ -47,19 +55,19 @@ public class Polygon extends Geometry {
       if (vertices.length < 3)
          throw new IllegalArgumentException("A polygon can't have less than 3 vertices");
       this.vertices = List.of(vertices);
-      size          = vertices.length;
+      size = vertices.length;
 
       // Generate the plane according to the first three vertices and associate the
       // polygon with this plane.
       // The plane holds the invariant normal (orthogonal unit) vector to the polygon
-      plane         = new Plane(vertices[0], vertices[1], vertices[2]);
+      plane = new Plane(vertices[0], vertices[1], vertices[2]);
       if (size == 3) return; // no need for more tests for a Triangle
 
-      Vector  n        = plane.getNormal();
+      Vector n = plane.getNormal();
       // Subtracting any subsequent points will throw an IllegalArgumentException
       // because of Zero Vector if they are in the same point
-      Vector  edge1    = vertices[vertices.length - 1].subtract(vertices[vertices.length - 2]);
-      Vector  edge2    = vertices[0].subtract(vertices[vertices.length - 1]);
+      Vector edge1 = vertices[vertices.length - 1].subtract(vertices[vertices.length - 2]);
+      Vector edge2 = vertices[0].subtract(vertices[vertices.length - 1]);
 
       // Cross Product of any subsequent edges will throw an IllegalArgumentException
       // because of Zero Vector if they connect three vertices that lay in the same
@@ -82,42 +90,47 @@ public class Polygon extends Geometry {
    }
 
    @Override
-   public Vector getNormal(Point point) { return plane.getNormal(); }
+   public Vector getNormal(Point point) {
+      return plane.getNormal();
+   }
 
-   /**
-    * @param ray of polygon
-    * @return list of points
-    */
-   protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray){
-      List<GeoPoint> intersectionPoints = plane.findGeoIntersectionsHelper(ray);
-      if (intersectionPoints == null) {
+   @Override
+   protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray, double maxDistance) {
+      // Find intersections with the underlying plane
+      List<GeoPoint> lst = plane.findGeoIntersections(ray,maxDistance);
+      if (lst == null)
          return null;
+
+      // Get the origin point of the ray
+      Point p0 = ray.getHead();
+      Vector v = ray.getDirection();
+
+      // Calculate vectors from the origin to each vertex of the polygon
+      final Vector[] vectors = new Vector[size];
+      for(int i = 0; i < size; ++i) {
+         vectors[i] = p0.subtract(this.vertices.get(i));
       }
-      // if there is a potential point to check
-      GeoPoint intersectionPoint = intersectionPoints.getFirst();
 
-      // check if the intersection point is within the polygon
-      int counter = 0;
-      for (int i = 0; i < this.size; i++) {
-         Point vertex1 = vertices.get(i);
-         Point vertex2 = vertices.get((i + 1) % this.size);
-         Vector edge = vertex2.subtract(vertex1);
-         Vector normal = null;
-         try {
-            normal = edge.crossProduct(intersectionPoint.point.subtract(vertex1)).normalize();
-
-         } catch (Exception e) {
-
-            return null;
-         }
-         // counting the number of normals who has the same sign
-         if (alignZero(normal.dotProduct(plane.getNormal())) < 0) {
-            counter += 1;
-         } else if (alignZero(normal.dotProduct(plane.getNormal())) > 0) {
-            counter -= 1;
-         }
+      // Calculate normals for each edge of the polygon
+      final Vector[] normals = new Vector[size];
+      for(int i = 0; i < size; ++i) {
+         normals[i] = vectors[i].crossProduct(vectors[(i + 1) % size]).normalize();
       }
-      // if absolute sum is equal to number of vertices then the point is within
-      return Math.abs(counter) == this.vertices.size() ? intersectionPoints : null;
+
+      // Calculate dot products between ray direction and each normal
+      final List<Double> doubles = new java.util.ArrayList<>(List.of());
+      for(int i = 0; i < size; ++i) {
+         doubles.add(alignZero(v.dotProduct(normals[i])));
+      }
+
+      // Check if all dot products have the same sign, if so, return the intersections
+      boolean allPositive = doubles.stream().allMatch(d -> d > 0);
+      boolean allNegative = doubles.stream().allMatch(d -> d < 0);
+
+      if (allPositive || allNegative)
+         return List.of(new GeoPoint(this, lst.get(0).point));
+
+      // Otherwise, return null indicating no intersections
+      return null;
    }
 }
