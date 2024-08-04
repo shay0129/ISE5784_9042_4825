@@ -1,6 +1,8 @@
 package lighting;
 
-import primitives.*;
+import primitives.Color;
+import primitives.Point;
+import primitives.Vector;
 
 /**
  * Represents a point light source that emits light from a specific point in all directions.
@@ -10,10 +12,10 @@ import primitives.*;
  */
 public class PointLight extends Light implements LightSource {
 
-	protected Point position;
-	private double kC = 1.0;
-	private double kL = 0.0;
-	private double kQ = 0.0;
+	private Point position;
+	private double kC = 1.0; // Constant attenuation
+	private double kL = 0.0; // Linear attenuation
+	private double kQ = 0.0; // Quadratic attenuation
 
 	/**
 	 * Constructs a PointLight object with the specified color intensity and position.
@@ -27,12 +29,23 @@ public class PointLight extends Light implements LightSource {
 	}
 
 	/**
+	 * Sets the position of the point light source.
+	 *
+	 * @param position The new position of the point light source.
+	 * @return This PointLight object, allowing method chaining.
+	 */
+	public PointLight setPosition(Point position) {
+		this.position = position;
+		return this;
+	}
+
+	/**
 	 * Sets the constant attenuation factor.
 	 *
 	 * @param kC the constant attenuation factor
 	 * @return the current PointLight object (for chaining method calls)
 	 */
-	public PointLight setKc(double kC) {
+	public PointLight setKC(double kC) {
 		this.kC = kC;
 		return this;
 	}
@@ -43,7 +56,7 @@ public class PointLight extends Light implements LightSource {
 	 * @param kL the linear attenuation factor
 	 * @return the current PointLight object (for chaining method calls)
 	 */
-	public PointLight setKl(double kL) {
+	public PointLight setKL(double kL) {
 		this.kL = kL;
 		return this;
 	}
@@ -54,30 +67,29 @@ public class PointLight extends Light implements LightSource {
 	 * @param kQ the quadratic attenuation factor
 	 * @return the current PointLight object (for chaining method calls)
 	 */
-	public PointLight setKq(double kQ) {
+	public PointLight setKQ(double kQ) {
 		this.kQ = kQ;
 		return this;
 	}
 
 	@Override
-	public double getDistance(Point point) {
-		return position.distance(point);
-	}
-
-	@Override
 	public Color getIntensity(Point p) {
 		double d = position.distance(p);
-		double denominator = kC + kL * d + kQ * (d * d);
-		return intensity.scale(1 / denominator);
+		return intensity.scale(1d / (kC + kL * d + kQ * d * d));
 	}
-
 
 	@Override
 	public Vector getL(Point p) {
-		try {
-			return p.subtract(position).normalize();
-		} catch (IllegalArgumentException e) {
+		// if the point is the same as the light source, return null
+		if (p.equals(position))// ??למחוק
 			return null;
-		}
+		// otherwise, return the normalized vector from the light source to the point
+		return p.subtract(position).normalize();
 	}
+
+	@Override
+	public double getDistance(Point point) {
+		return point.distance(position);
+	}
+
 }

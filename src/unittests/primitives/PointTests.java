@@ -1,22 +1,31 @@
+/**
+ * 
+ */
 package unittests.primitives;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+import geometries.Cylinder;
 import primitives.Point;
 import primitives.Vector;
+import static org.junit.jupiter.api.Assertions.*;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
 
 /**
- * Testing Points
- * 
+ * Testing {@link Point} Class
+ *
  * @author Shay and Asaf
  */
-
 class PointTests {
+	/**
+	 * A small constant representing the precision for floating-point comparison.
+	 * This constant is used in unit tests to specify the maximum allowable
+	 * difference between expected and actual values when comparing floating-point
+	 * numbers.
+	 */
+	private static final double DELTA = 0.000001;
 
 	/**
-	 * Test method for {@link Point#subtract(Point)}.
+	 * Test method for {@link primitives.Point#subtract(primitives.Point)}.
 	 */
 	@Test
 	void testSubtract() {
@@ -29,13 +38,13 @@ class PointTests {
 		assertEquals(expected, p2.subtract(p1), "wrong subtract result");
 		// TC10: Test that checks the property of result of the subtraction operation
 		// between a point and itself.
-		Assertions.assertThrows(IllegalArgumentException.class, () -> p1.subtract(p1), //
+		assertThrows(IllegalArgumentException.class, () -> p1.subtract(p1), //
 				"subtraction operation between a point and itself should throw an exception for zero vector");
 
 	}
 
 	/**
-	 * Test method for {@link Point#add(Vector)}.
+	 * Test method for {@link primitives.Point#add(primitives.Vector)}.
 	 */
 	@Test
 	void testAdd() {
@@ -49,30 +58,42 @@ class PointTests {
 	}
 
 	/**
-	 * Test method for {@link Point#distanceSquared(Point)}.
+	 * Test method for {@link primitives.Point#distanceSquared(primitives.Point)}.
 	 */
 	@Test
 	void testDistanceSquared() {
-		// ============Equivalence Partitions Tests ==============
 		Point p1 = new Point(1, 2, 3);
 		Point p2 = new Point(4, 5, 6);
+		// ============Equivalence Partitions Tests ==============
 		double expected = 27;
 		// TC01: Test that checks the property of result of the calculating the squared
 		// distance between two points.
-		assertEquals(expected, p1.distanceSquared(p2), "wrong distanceSquared result");
+		assertEquals(expected, p1.distanceSquared(p2), DELTA, "wrong distanceSquared result");
+		// =============== Boundary Values Tests ==================
+		double expected2 = 0;
+		// TC02: Test that checks the property of result of the calculating the squared
+		// distance between point to same point.
+		assertEquals(expected2, p1.distanceSquared(p1), DELTA, "wrong distanceSquared result");
 	}
 
 	/**
-	 * Test method for {@link Point#distance(Point)}.
+	 * Test method for {@link primitives.Point#distance(primitives.Point)}.
 	 */
 	@Test
 	void testDistance() {
 		Point p1 = new Point(1, 2, 3);
 		Point p2 = new Point(4, 5, 6);
+
+		// ============Equivalence Partitions Tests ==============
 		double expected = Math.sqrt(27);
 		// TC01: Test that checks the property of result of the calculating the squared
 		// distance between two points.
-		assertEquals(expected, p1.distance(p2), "wrong distance result");
+		assertEquals(expected, p1.distance(p2), DELTA, "wrong distance result");
+		// =============== Boundary Values Tests ==================
+		// TC02: Test that checks the property of result of the calculating the squared
+		// distance between point to same point.
+		double expected2 = 0.0;
+		assertEquals(expected2, p1.distance(p1), DELTA, "wrong distance result");
 	}
 
 }

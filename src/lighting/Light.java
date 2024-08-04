@@ -9,6 +9,7 @@ import primitives.Color;
  * @autor Shay and Asaf
  */
 public abstract class Light {
+
 	/**
 	 * The intensity (color) of the light source. This field is protected to allow
 	 * access within subclasses.

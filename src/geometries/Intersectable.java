@@ -12,86 +12,76 @@ import java.util.List;
  */
 public abstract class Intersectable {
 
-    /**
-     * Finds the intersection points between a given ray and the object implementing this interface.
-     *
-     * @param ray the ray to intersect with the object
-     * @return a list of Points where the ray intersects the object, or null if there are no intersections
-     */
-    public List<Point> findIntersections(Ray ray) {
-        var geoPoints = findGeoIntersections(ray);
-        if (geoPoints == null) {
-            return null;
-        }
-        return geoPoints.stream()
-                .map(gp -> gp.point)
-                .toList();
-    }
+	/**
+	 * Finds intersection points between the intersectable object and a given ray.
+	 *
+	 * @param ray The ray to intersect with the object.
+	 * @return A list of intersection points between the object and the ray. If no
+	 *         intersections are found, an empty list is returned.
+	 */
+	public final List<Point> findIntersections(Ray ray) {
+		var geoPointsList = findGeoIntersections(ray);
+		return geoPointsList == null ? null : geoPointsList.stream().map(gp -> gp.point).toList();
+	}
 
-    /**
-     * Finds the intersections between a given ray and the object implementing this interface.
-     *
-     * @param ray the ray to intersect with the object
-     * @return a list of GeoPoints where the ray intersects the object, or null if there are no intersections
-     */
-    public final List<GeoPoint> findGeoIntersections(Ray ray) {
-        return findGeoIntersectionsHelper(ray, Double.POSITIVE_INFINITY);
-    }
+	/**
+	 * Public method findGeoIntersections for finding GeoPoints of intersections
+	 * between the intersectable object and a given ray.
+	 *
+	 * @param ray The ray to intersect with the object.
+	 * @return A list of GeoPoints representing intersection points between the
+	 *         object and the ray.
+	 */
+	public final List<GeoPoint> findGeoIntersections(Ray ray) {
+		return findGeoIntersectionsHelper(ray);
+	}
 
-    /**
-     * Finds the intersections between a given ray and the object implementing this interface within a specified distance.
-     *
-     * @param ray the ray to intersect with the object
-     * @param maxDistance the maximum distance for intersections
-     * @return a list of GeoPoints where the ray intersects the object within the specified distance, or null if there are no intersections
-     */
-    public final List<GeoPoint> findGeoIntersections(Ray ray, double maxDistance) {
-        return findGeoIntersectionsHelper(ray, maxDistance);
-    }
-
-    /**
-     * Helper method to find the intersections between a given ray and the object within a specified distance.
-     * This method must be implemented by subclasses.
-     *
-     * @param ray the ray to intersect with the object
-     * @param maxDistance the maximum distance for intersections
-     * @return a list of GeoPoints where the ray intersects the object within the specified distance, or null if there are no intersections
-     */
-    protected abstract List<GeoPoint> findGeoIntersectionsHelper(Ray ray, double maxDistance);
+	/**
+	 * Protected method findGeoIntersectionsHelper for finding GeoPoints of
+	 * intersections between the intersectable object and a given ray. This method
+	 * should be implemented in subclasses.
+	 *
+	 * @param ray The ray to intersect with the object.
+	 * @return A list of GeoPoints representing intersection points between the
+	 *         object and the ray.
+	 */
+	protected abstract List<GeoPoint> findGeoIntersectionsHelper(Ray ray);// לתקן
 
 
+	/**
+	 * Inner static class GeoPoint representing a point in three-dimensional space with its related geometry.
+	 */
+	public static class GeoPoint {
+		/**
+		 * The geometry object of the intersection
+		 * The actual point of intersection
+		 */
+		public Geometry geometry;
+		public Point point;
 
-    /**
-     * Represents a point in three-dimensional space with its related geometry.
-     */
-    public static class GeoPoint {
-        public Geometry geometry;
-        public Point point;
+		/**
+		 * Constructor for GeoPoint.
+		 *
+		 * @param geometry The geometry object of the intersection.
+		 * @param point    The actual point of intersection.
+		 */
+		public GeoPoint(Geometry geometry, Point point) {
+			this.geometry = geometry;
+			this.point = point;
+		}
 
-        /**
-         * Constructs a GeoPoint with the specified geometry and point.
-         *
-         * @param geometry the geometry associated with this point
-         * @param point the point in three-dimensional space
-         */
-        public GeoPoint(Geometry geometry, Point point) {
-            this.geometry = geometry;
-            this.point = point;
-        }
+		@Override
+		public boolean equals(Object object) {
+			if (this == object) return true;    // Check if the objects are the same object in memory.
+			if (!(object instanceof GeoPoint geoPoint)) return false;   // Check if the object is of the correct type.
+			return geometry.equals(geoPoint.geometry) && point.equals(geoPoint.point);  // Check if the two fields are equal.
 
-        @Override
-        public boolean equals(Object object) {
-            if (this == object) return true;    // Check if the objects are the same object in memory.
-            if (!(object instanceof GeoPoint geoPoint)) return false;   // Check if the object is of the correct type.
-            return geometry.equals(geoPoint.geometry) && point.equals(geoPoint.point);  // Check if the two fields are equal.
-        }
+		}
 
-        @Override
-        public String toString() {
-            return "GeoPoint{" +
-                    "geometry=" + geometry +
-                    ", point=" + point +
-                    '}';
-        }
-    }
+		@Override
+		public String toString() {
+			return "GeoPoint{" + "geometry=" + geometry + ", point=" + point + '}';
+		}
+
+	}
 }

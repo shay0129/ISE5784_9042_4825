@@ -1,6 +1,7 @@
 package lighting;
 
-import primitives.*;
+import primitives.Color;
+import primitives.Double3;
 
 /**
  * The AmbientLight class represents an ambient light source.
@@ -11,35 +12,29 @@ import primitives.*;
  */
 public class AmbientLight extends Light {
 
-    /** A constant representing no ambient light (black color, intensity 0) */
-    public static final AmbientLight NONE = new AmbientLight(Color.BLACK, 0d);
+	/**
+	 * A constant instance of AmbientLight with no light (black color).
+	 * Useful as a default or placeholder value.
+	 */
+	public static final AmbientLight NONE = new AmbientLight(new Color(java.awt.Color.BLACK), Double3.ZERO);
 
-    /**
-     * Constructs an AmbientLight object with the specified color and intensity.
-     *
-     * @param iA the color of the ambient light
-     * @param kA the intensity of the ambient light as a Double3
-     */
-    public AmbientLight(Color iA, Double3 kA) {
-        super(iA.scale(kA));
-    }
+	/**
+	 * Constructs an AmbientLight with a specified intensity and attenuation factor (kA).
+	 *
+	 * @param intensity The intensity of the ambient light.
+	 * @param kA The attenuation factor as a Double3 object.
+	 */
+	public AmbientLight(Color intensity, Double3 kA) {
+		super(intensity.scale(kA));
+	}
 
-    /**
-     * Constructs an AmbientLight object with the specified color and intensity.
-     *
-     * @param IA the color of the ambient light
-     * @param KA the intensity of the ambient light as a Double
-     */
-    public AmbientLight(Color IA, Double KA) {
-        super(IA.scale(KA));
-    }
-
-    /**
-     * Gets the intensity of the ambient light.
-     *
-     * @return the intensity of the ambient light
-     */
-    public Color getIntensity() {
-        return super.getIntensity();
-    }
+	/**
+	 * Constructs an AmbientLight with a specified intensity and attenuation factor (kA).
+	 *
+	 * @param intensity The intensity of the ambient light.
+	 * @param kA The attenuation factor as a double.
+	 */
+	public AmbientLight(Color intensity, double kA) {
+		super(intensity.scale(kA));
+	}
 }

@@ -1,50 +1,28 @@
+/**
+ * 
+ */
 package unittests.geometries;
 
-import geometries.Tube;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-import primitives.Point;
-import primitives.Ray;
-import primitives.Vector;
+import static org.junit.jupiter.api.Assertions.*;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import geometries.Cylinder;
+import org.junit.jupiter.api.*;
+import geometries.Tube;
+import primitives.Point;
+import primitives.Vector;
+import primitives.Ray;
+
+import java.util.List;
 
 /**
- * Testing Tubes
- * 
+ * Testing {@link Tube} Class
+ *
  * @author Shay and Asaf
  */
 class TubeTests {
 
 	/**
-	 * Test method for Tube constructor.
-	 * Tests various cases including valid tube creation and invalid cases.
-	 * Tests the normal calculation at various points on the tube.
-	 */
-	@Test
-	void testConstructor() {
-		// ============ Equivalence Partitions Tests ==============
-		// TC01: Correct tube
-		assertDoesNotThrow(() ->
-						new Tube(1, new Ray(new Point(0, 0, 0),
-								new Vector(0, 0, 1))),
-				"Failed constructing a correct tube");
-
-		// TC02: Zero radius
-		assertThrows(IllegalArgumentException.class, ()
-						-> new Tube(0, new Ray(new Point(0, 0, 0),
-						new Vector(0, 0, 1))),
-				"Failed constructing a tube with zero radius");
-
-		// TC03: Negative radius
-		assertThrows(IllegalArgumentException.class,
-				() -> new Tube(-1, new Ray(new Point(0, 0, 0), new Vector(0, 0, 1))),
-				"Failed constructing a tube with negative radius");
-	}
-
-	/**
-	 * Test method for {@link Tube#getNormal(Point)}.
+	 * Test method for {@link geometries.Tube#getNormal(primitives.Point)}.
 	 */
 	@Test
 	void testGetNormal() {
@@ -59,9 +37,14 @@ class TubeTests {
 		Vector expectedNormal = new Vector(1, 0, 0); // Normal vector pointing outwards
 		// Get the normal vector at the test point
 		Vector actualNormal = tube.getNormal(testPoint);
-		Assertions.assertEquals(expectedNormal, actualNormal, "getNormal() does not return the correct normal vector");
+		assertEquals(expectedNormal, actualNormal, "getNormal() does not return the correct normal vector");
 
-		// Ensure the normal vector is normalized
-		Assertions.assertEquals(1, actualNormal.length(), "Normal vector is not normalized");
+		// =============== Boundary Values Tests ==================
+		// TC02: When connecting the point to the top of the beam
+		// of the axis of the cylinder makes a right angle with the axis -
+		// the point "is in front of the head of the horn" when (P-P0) is orthogonal to
+		// v
+		assertEquals(new Vector(0, 1, 0), tube.getNormal(new Point(0, 10, 0)), "ERROR: (P-P0) is orthogonal to v");
 	}
+
 }

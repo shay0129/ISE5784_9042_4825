@@ -1,27 +1,28 @@
+/**
+ * 
+ */
 package unittests.geometries;
 
-import geometries.Sphere;
-import org.junit.jupiter.api.Assertions;
+import static org.junit.jupiter.api.Assertions.*;
+
+import geometries.Cylinder;
 import org.junit.jupiter.api.Test;
+import geometries.Sphere;
 import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;
-
 import java.util.Comparator;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
-
 /**
- * Testing Spheres
- * 
+ * Testing {@link Sphere} Class
+ *
  * @author Shay and Asaf
  */
 class SphereTests {
 
 	/**
-	 * Test method for {@link Sphere#getNormal(Point)}.
+	 * Test method for {@link geometries.Sphere#getNormal(primitives.Point)}.
 	 */
 	@Test
 
@@ -35,18 +36,17 @@ class SphereTests {
 		Point testPoint = new Point(3, 1, 1); // A point on the surface of the sphere
 		Vector normal = sphere.getNormal(testPoint);
 
-		Assertions.assertNotNull(normal, "getNormal() should not return null");
+		assertNotNull(normal, "getNormal() should not return null");
 
 		// Expected normal vector
 		Vector expectedNormal = new Vector(1, 0, 0);
 
 		// Check if the returned normal vector is as expected
-		Assertions.assertEquals(expectedNormal, normal, "getNormal() did not return the correct normal vector");
+		assertEquals(expectedNormal, normal, "getNormal() did not return the correct normal vector");
 
 		// Ensure the normal vector is normalized
-		Assertions.assertEquals(1, normal.length(), "Normal vector is not normalized");
+		assertEquals(1, normal.length(), "Normal vector is not normalized");
 	}
-
 
 	/**
 	 * Represents a point (1, 0, 0) in 3D space.
@@ -54,11 +54,11 @@ class SphereTests {
 	private final Point p100 = new Point(1, 0, 0);
 
 	/**
-	 * Test method for {@link Sphere#findIntersections(Ray)}.
+	 * Test method for {@link geometries.Sphere#findIntersections(primitives.Ray)}.
 	 */
 
 	@Test
-	public void testfindIntersections() {
+	public void testfindIntsersections() {
 		Sphere sphere = new Sphere(p100, 1d);
 		final Point gp1 = new Point(0.0651530771650466, 0.355051025721682, 0);
 		final Point gp2 = new Point(1.53484692283495, 0.844948974278318, 0);
@@ -74,14 +74,13 @@ class SphereTests {
 		// TC02: Ray starts before and crosses the sphere (2 points)
 		var result1 = sphere.findIntersections(new Ray(p01, v310)).stream()
 				.sorted(Comparator.comparingDouble(p -> p.distance(p01))).toList();
-		assertEquals(2, result1.size(), "Wrong number of points");
-		Assertions.assertEquals(exp, result1, "Ray crosses sphere");
+		assertEquals(exp, result1, "Ray crosses sphere");
 
 		// TC03: Ray starts inside the sphere (1 point)
 		Point p02 = new Point(0.5, 0, 0);
-		var result2 = sphere.findIntersections(new Ray(p02, v310)).stream()
-				.sorted(Comparator.comparingDouble(p -> p.distance(p02))).toList();
-		assertEquals(1, result2.size(), "Ray from inside sphere should intersect once");
+		var result2 = sphere.findIntersections(new Ray(p02, new Vector(1, 0, 0)));
+		var exp2 = List.of(new Point(2, 0, 0));
+		assertEquals(exp2, result2, "Ray from inside sphere should intersect once");
 
 		// TC04: Ray starts after the sphere (0 points)
 		Point p03 = new Point(3, 0, 0);

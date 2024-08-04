@@ -8,15 +8,11 @@ import primitives.Vector;
  * A class representing a directional light source. Inherits from Light and
  * implements LightSource.
  *
- * @autor Shay and Asaf
+ * @author Shay and Asaf
  */
 public class DirectionalLight extends Light implements LightSource {
-	/**
-	 * Represents a direction vector in three-dimensional space. This vector can be
-	 * used to denote the direction of light, movement, or any other directional
-	 * quantity.
-	 */
-	private Vector direction;
+
+	private final Vector direction;
 
 	/**
 	 * Constructs a directional light with the given intensity and direction.

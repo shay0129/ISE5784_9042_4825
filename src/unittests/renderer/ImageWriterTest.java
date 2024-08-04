@@ -1,47 +1,62 @@
 package unittests.renderer;
 
-import org.junit.jupiter.api.Test;
 import primitives.Color;
 import renderer.ImageWriter;
+import org.junit.jupiter.api.Test;
 
 /**
- * Testing ImageWriter Class
+ * Testing {@link ImageWriter} Class
  *
  * @author Shay and Asaf
  */
 class ImageWriterTest {
+	/**
+	 * Test method to verify the functionality of writing an image with a grid
+	 * pattern.
+	 */
+	@Test
+	public void testWriteImage() {
+		int imageWidth = 800; // Image width
+		int imageHeight = 500; // Image height
+		String imageName = "test_image"; // Image file name
 
-    /**
-     * Test method for {@link renderer.ImageWriter#writeToImage()}.
-     */
-    @Test
-    void testWriteToImage() {
-        int nY = 500;
-        int nX = 800;
-        int rows = 10;
-        int columns = 16;
-        Color grid = new Color(37, 46, 235); //Blue
-        Color square = new Color(235, 163, 190); //Baby pink
-        ImageWriter images = new ImageWriter("gridImage", nX, nY);
+		// Create ImageWriter object
+		ImageWriter imageWriter = new ImageWriter(imageName, imageWidth, imageHeight);
 
-        for (int i = 0; i < nY; i++) {
-            for (int j = 0; j < nX; j++) {
-                if (((i % (nY/rows)) == 0) || ((j % (nX/columns)) == 0)) {
-                    images.writePixel(j, i, grid);
-                } else {
-                    images.writePixel(j,  i, square);
-                }
-            }
-        }
-         images.writeToImage(); // save image to file
-    }
+		// Define colors for background and grid
+		Color backgroundColor = Color.YELLOW; // Background color (in this example, black)
+		Color gridColor = Color.RED; // Grid color (in this example, white)
 
-    /**
-     * Test method for {@link renderer.ImageWriter#writePixel(int, int, primitives.Color)}.
-     */
-    @Test
-    void testWritePixel() {
-        //fail("Not yet implemented");
-    }
+		// Calculate grid size
+		int squareWidth = imageWidth / 16; // Width of each grid square
+		int squareHeight = imageHeight / 10; // Height of each grid square
 
+		// Write background color to the entire image
+		for (int i = 0; i < imageWidth; i++) {
+			for (int j = 0; j < imageHeight; j++) {
+				imageWriter.writePixel(i, j, backgroundColor);
+			}
+		}
+
+		// Write vertical grid lines
+		for (int i = 0; i < imageWidth; i++) {
+			if (i % squareWidth == 0) {
+				for (int j = 0; j < imageHeight; j++) {
+					imageWriter.writePixel(i, j, gridColor);
+				}
+			}
+		}
+
+		// Write horizontal grid lines
+		for (int j = 0; j < imageHeight; j++) {
+			if (j % squareHeight == 0) {
+				for (int i = 0; i < imageWidth; i++) {
+					imageWriter.writePixel(i, j, gridColor);
+				}
+			}
+		}
+
+		// Write the image to a file
+		imageWriter.writeToImage();
+	}
 }

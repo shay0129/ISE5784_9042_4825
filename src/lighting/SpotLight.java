@@ -3,6 +3,7 @@ package lighting;
 import primitives.Color;
 import primitives.Point;
 import primitives.Vector;
+import static primitives.Util.alignZero;
 
 /**
  * Represents a spotlight, which is a type of light source that emits light in a specific direction.
@@ -12,8 +13,8 @@ import primitives.Vector;
  */
 public class SpotLight extends PointLight {
 
-	private Vector direction;
-	private double narrowBeam = 1;
+	private final Vector direction;
+	private double narrowBeam = 1.0;
 
 	/**
 	 * Constructs a SpotLight object with the specified color intensity, position, and direction.
@@ -38,42 +39,31 @@ public class SpotLight extends PointLight {
 		return this;
 	}
 
-	/**
-	 * Sets the constant attenuation factor of the spotlight.
-	 *
-	 * @param kC the constant attenuation factor
-	 * @return the current SpotLight object (for method chaining)
-	 */
-	@Override
-	public SpotLight setKc(double kC) {
-		return (SpotLight) super.setKc(kC);
-	}
-
-	@Override
-	public SpotLight setKl(double kL) {
-		return (SpotLight) super.setKl(kL);
-	}
-
-	@Override
-	public SpotLight setKq(double kQ) {
-		return (SpotLight) super.setKq(kQ);
-	}
-
-	@Override
-	public Color getIntensity(Point p) {
-		double dirDotL = direction.dotProduct(getL(p)); // Dot product of direction and light direction to point
-		return super.getIntensity(p).scale(Math.max(0, dirDotL)); // Scale intensity by maximum of 0 and dot product
-	}
-
 	@Override
 	public Vector getL(Point p) {
-		return super.getL(p); // Delegate to the PointLight implementation
+		return super.getL(p); // Returns the direction from the point to the light source
 	}
 
 	@Override
-	public double getDistance(Point point) {
-		return position.distance(point);
+	public SpotLight setKC(double kC) {
+		return (SpotLight) super.setKC(kC);
 	}
 
+	@Override
+	public SpotLight setKL(double kL) {
+		return (SpotLight) super.setKL(kL);
+	}
 
+	@Override
+	public SpotLight setKQ(double kQ) {
+		return (SpotLight) super.setKQ(kQ);
+	}
+
+	@Override
+	public Color getIntensity(Point point) {
+		double cos = alignZero(direction.dotProduct(getL(point)));
+		return cos <= 0 ? Color.BLACK //
+				: super.getIntensity(point).scale(narrowBeam == 1 ? cos //
+						: Math.pow(cos, narrowBeam));
+	}
 }

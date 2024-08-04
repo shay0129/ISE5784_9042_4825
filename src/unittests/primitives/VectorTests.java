@@ -1,15 +1,19 @@
+/**
+ * 
+ */
 package unittests.primitives;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-import primitives.Double3;
-import primitives.Vector;
+import static org.junit.jupiter.api.Assertions.*;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import primitives.Point;
+import primitives.Vector;
+import primitives.Double3;
+
+import org.junit.jupiter.api.Test;
 
 /**
- * Testing Vectors
- * 
+ * Testing {@link Vector} Class
+ *
  * @author Shay and Asaf
  */
 class VectorTests {
@@ -18,7 +22,7 @@ class VectorTests {
 	private static final double DELTA = 0.00001;
 
 	/**
-	 * Test method for {@link Vector#Vector(Double3)}. This
+	 * Test method for {@link primitives.Vector#Vector(primitives.Double3)}. This
 	 * test checks the constructor that accepts the coordinate values. It verifies
 	 * correct vector creation and ensures that zero vectors throw an exception.
 	 */
@@ -37,12 +41,12 @@ class VectorTests {
 		assertEquals(vector1, vector, "wrong constructor vector");
 		// =============== Boundary Values Tests ==================
 		// TC11: test zero vector from constructor
-		Assertions.assertThrows(IllegalArgumentException.class, () -> new Vector(Double3.ZERO), //
+		assertThrows(IllegalArgumentException.class, () -> new Vector(Double3.ZERO), //
 				"ConstructorWithDouble3() should throw an exception for zero vector");
 	}
 
 	/**
-	 * Test method for {@link Vector#Vector(double, double, double)}.
+	 * Test method for {@link primitives.Vector#Vector(double, double, double)}.
 	 * This test checks the constructor that accepts individual x, y, and z
 	 * coordinate values. It verifies correct vector creation and ensures that zero
 	 * vectors throw an exception.
@@ -66,12 +70,12 @@ class VectorTests {
 		assertEquals(vector1, vector, "wrong constructor vector");
 		// =============== Boundary Values Tests ==================
 		// TC11: test zero vector from constructor
-		Assertions.assertThrows(IllegalArgumentException.class, () -> new Vector(Double3.ZERO), //
+		assertThrows(IllegalArgumentException.class, () -> new Vector(Double3.ZERO), //
 				"ConstructorWithComponents() should throw an exception for zero vector");
 	}
 
 	/**
-	 * Test method for {@link Vector#add(Vector)}.
+	 * Test method for {@link primitives.Vector#add(primitives.Vector)}.
 	 */
 	@Test
 	void testAddVector() {
@@ -90,13 +94,13 @@ class VectorTests {
 
 		// =============== Boundary Values Tests ==================
 		// TC11: test zero result from add opposite and equals vectors
-		Assertions.assertThrows(IllegalArgumentException.class, () -> v1.add(v3), //
+		assertThrows(IllegalArgumentException.class, () -> v1.add(v3), //
 				"addVector() for parallel vectors does not throw an exception");
 
 	}
 
 	/**
-	 * Test method for {@link Vector#scale(int)}.
+	 * Test method for {@link primitives.Vector#scale(int)}.
 	 */
 	@Test
 	void testScale() {
@@ -117,12 +121,12 @@ class VectorTests {
 		assertEquals(expected1, v.scale(scalar1), "wrong scaled vector");
 		// =============== Boundary Values Tests ==================
 		// TC11: Test for scaling a zero vector
-		Assertions.assertThrows(IllegalArgumentException.class, () -> v.scale(scalar2), //
+		assertThrows(IllegalArgumentException.class, () -> v.scale(scalar2), //
 				"scale() with scalar 0 does not throw an exception");
 	}
 
 	/**
-	 * Test method for {@link Vector#dotProduct(Vector)}.
+	 * Test method for {@link primitives.Vector#dotProduct(primitives.Vector)}.
 	 */
 	@Test
 	void testDotProduct() {
@@ -139,17 +143,17 @@ class VectorTests {
 		// TC001: Checks the correctness and result of the inner multiplication
 		// operation
 		// (dot product) between two vectors
-		assertEquals(expected, v1.dotProduct(v2), "wrong dot product value");
+		assertEquals(expected, v1.dotProduct(v2), DELTA, "wrong dot product value");
 
 		// =============== Boundary Values Tests ==================
 		// TC010: Checks the correctness and result of the A unit vector with a
 		// different
 		// vector multiplication operation (dot product) between two vectors
-		assertEquals(expected2, v1.dotProduct(v4), "wrong dot product value");
+		assertEquals(expected2, v1.dotProduct(v4), DELTA, "wrong dot product value");
 
 		// TC011: Checks the correctness and result of the A vertical vector with a
 		// different vector multiplication operation (dot product) between two vectors
-		assertEquals(expected1, v1.dotProduct(v5), "wrong dot product value");
+		assertEquals(expected1, v1.dotProduct(v5), DELTA, "wrong dot product value");
 
 		// TC100: Checks the correctness and result of the dot product for vectors with
 		// a sharp angle between them
@@ -171,7 +175,7 @@ class VectorTests {
 	}
 
 	/**
-	 * Test method for {@link Vector#crossProduct(Vector)}.
+	 * Test method for {@link primitives.Vector#crossProduct(primitives.Vector)}.
 	 */
 	@Test
 	void testCrossProduct() {
@@ -192,24 +196,24 @@ class VectorTests {
 		// =============== Boundary Values Tests ==================
 		// TC10: Test for the inner multiplication operation (dot product) between two
 		// vectors with same directions.
-		Assertions.assertThrows(IllegalArgumentException.class, () -> v1.crossProduct(v4),
+		assertThrows(IllegalArgumentException.class, () -> v1.crossProduct(v4),
 				"crossProduct() with same directions does not throw an exception");
 		// TC11: Test for the inner multiplication operation (dot product) between two
 		// vectors with opposite directions and equals.
-		Assertions.assertThrows(IllegalArgumentException.class, () -> v4.crossProduct(v2),
+		assertThrows(IllegalArgumentException.class, () -> v4.crossProduct(v2),
 				"crossProduct() with same directions does not throw an exception");
 		// TC100: Test for the inner multiplication operation (dot product) between two
 		// vectors with opposite directions.
-		Assertions.assertThrows(IllegalArgumentException.class, () -> v1.crossProduct(v2),
+		assertThrows(IllegalArgumentException.class, () -> v1.crossProduct(v2),
 				"crossProduct() with same directions does not throw an exception");
 		// TC101: Test for the inner multiplication operation (dot product) between two
 		// same vectors.
-		Assertions.assertThrows(IllegalArgumentException.class, () -> v1.crossProduct(v1),
+		assertThrows(IllegalArgumentException.class, () -> v1.crossProduct(v1),
 				"crossProduct() with same directions does not throw an exception");
 	}
 
 	/**
-	 * Test method for {@link Vector#lengthSquared()}.
+	 * Test method for {@link primitives.Vector#lengthSquared()}.
 	 */
 	@Test
 
@@ -219,11 +223,11 @@ class VectorTests {
 
 		double expected1 = 14;
 		// TC01: Test for a vector with positive components
-		assertEquals(expected1, v1.lengthSquared(), "wrong squared length value for positive components");
+		assertEquals(expected1, v1.lengthSquared(), DELTA, "wrong squared length value for positive components");
 	}
 
 	/**
-	 * Test method for {@link Vector#length()}.
+	 * Test method for {@link primitives.Vector#length()}.
 	 */
 	@Test
 	void testLength() {
@@ -231,11 +235,11 @@ class VectorTests {
 		Vector v = new Vector(1, 2, 3);
 		double expected = Math.sqrt(14);
 		// TC01: Checks the correctness and the result step length vector.
-		assertEquals(expected, v.length(), "wrong length value");
+		assertEquals(expected, v.length(), DELTA, "wrong length value");
 	}
 
 	/**
-	 * Test method for {@link Vector#normalize()}.
+	 * Test method for {@link primitives.Vector#normalize()}.
 	 */
 	@Test
 	void testNormalize() {
@@ -244,7 +248,7 @@ class VectorTests {
 		// ============Equivalence Partitions Tests ==============
 		// TC01: Simple test
 		assertEquals(1d, n.lengthSquared(), 0.00001, "wrong normalized vector length");
-		Assertions.assertThrows(IllegalArgumentException.class, () -> v.crossProduct(n),
+		assertThrows(IllegalArgumentException.class, () -> v.crossProduct(n),
 				"normalized vector is not in the same direction");
 		assertEquals(new Vector(0, 0.6, 0.8), n, "wrong normalized vector");
 		// =============== Boundary Values Tests ==================
@@ -253,6 +257,30 @@ class VectorTests {
 		Vector nUnitVector = unitVector.normalize();
 		assertEquals(unitVector, nUnitVector, "normalized vector is not the same as the original unit vector");
 
+	}
+
+	/**
+	 * Test method for {@link primitives.Vector#subtract(primitives.Vector)}.
+	 */
+	@Test
+	void testSubtractVector() {
+		// ============Equivalence Partitions Tests ==============
+		Vector v1 = new Vector(1, 2, 3);
+		Vector v2 = new Vector(2, 4, 6);
+
+		Vector expected1 = new Vector(-1, -2, -3);
+		Vector expected2 = new Vector(1, 2, 3);
+		// Vector expected3 = new Vector(0,0,0);
+
+		// TC01: Test subtracting a vector from another vector and check that the result
+		// is proper.
+		assertEquals(expected1, v1.subtract(v2), "wrong subtracted vector");
+		assertEquals(expected2, v2.subtract(v1), "wrong subtracted vector");
+
+		// =============== Boundary Values Tests ==================
+		// TC11: Test subtracting the same vector (result should be a zero vector)
+		assertThrows(IllegalArgumentException.class, () -> v1.subtract(v1), //
+				"subtract() with the same vector  does not throw an exception");
 	}
 
 }
