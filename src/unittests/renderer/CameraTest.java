@@ -25,16 +25,18 @@ class CameraTest {
            .setVpDistance(10);
 
    /**
-    * Test method for
+    * Test method for constructing ray
     * {@link renderer.Camera#constructRay(int, int, int, int)}.
     */
    @Test
-   void testConstructRay() {
+   void testConstructRay() throws CloneNotSupportedException {
       final String badRay  = "Bad ray";
 
       // ============ Equivalence Partitions Tests ==============
       // EP01: 4X4 Inside (1,1)
       Camera camera1 = cameraBuilder.setVpSize(8, 8).build();
+
+
       assertEquals(new Ray(Point.ZERO, new Vector(1, -1, -10)),
               camera1.constructRay(4, 4, 1, 1), badRay);
 

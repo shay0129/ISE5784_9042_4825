@@ -198,7 +198,7 @@ public class LightsTests {
 
 		camera2.setImageWriter(new ImageWriter("lightTrianglesSpotSharp", 500, 500))
 				.build()
-				.renderImage()
+				//.renderImage()
 				.writeToImage();
 	}
 

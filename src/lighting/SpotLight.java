@@ -70,4 +70,10 @@ public class SpotLight extends PointLight {
 		return super.getL(p); // Delegate to the PointLight implementation
 	}
 
+	@Override
+	public double getDistance(Point point) {
+		return position.distance(point);
+	}
+
+
 }

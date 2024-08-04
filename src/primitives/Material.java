@@ -1,75 +1,98 @@
 package primitives;
 
-/**
- * Represents the material properties of a geometric object.
- * The material properties include diffuse reflection (kD), specular reflection (kS),
- * transmission coefficient (kT), reflection coefficient (kR), and shininess (nShininess).
- *
- * @autor Shay and Asaf
- */
 public class Material {
-
-	/** Diffuse reflection coefficient */
-	public Double3 kD = Double3.ZERO;
-
-	/** Specular reflection coefficient */
-	public Double3 kS = Double3.ZERO;
-
-	/** Shininess exponent for specular highlights */
+	/**
+	 * kD = diffusive attenuation coefficient
+	 * kS = specular attenuation coefficient
+	 * kT = transparency coefficient
+	 * kR = reflection coefficient
+	 */
+	public Double3 Kd = Double3.ZERO;
+	public Double3 Ks = Double3.ZERO;
+	public Double3 kT = Double3.ZERO;
+	public Double3 kR = Double3.ZERO;
 	public int nShininess = 0;
 
 	/**
-	 * Sets the diffuse reflection coefficient (kD) of the material.
-	 *
-	 * @param kD the diffuse reflection coefficient to set
-	 * @return the updated Material object
+	 * Sets diffusive attenuation factor.
+	 * @param Kd double
 	 */
-	public Material setKd(Double3 kD) {
-		this.kD = kD;
+	public Material setKd(double Kd) {
+		this.Kd = new Double3(Kd);
+		return this;
+	}
+	/**
+	 * Sets diffusive attenuation factor.
+	 * @param Kd Double3
+	 */
+	public Material setKd(Double3 Kd) {
+		this.Kd = Kd;
 		return this;
 	}
 
 	/**
-	 * Sets the diffuse reflection coefficient (kD) of the material using a scalar value.
-	 *
-	 * @param kd the scalar value for the diffuse reflection coefficient to set
-	 * @return the updated Material object
+	 * Sets specular attenuation factor.
+	 * @param Ks double.
 	 */
-	public Material setKd(double kd) {
-		this.kD = new Double3(kd);
+	public Material setKs(double Ks) {
+		this.Ks = new Double3(Ks);
+		return this;
+	}
+	/**
+	 * Sets specular attenuation factor.
+	 * @param Ks Double3
+	 */
+	public Material setKs(Double3 Ks) {
+		this.Ks = Ks;
 		return this;
 	}
 
 	/**
-	 * Sets the specular reflection coefficient (kS) of the material.
-	 *
-	 * @param kS the specular reflection coefficient to set
-	 * @return the updated Material object
+	 * sets transparency coefficient
+	 * @param kT
+	 * @return this (builder pattern)
 	 */
-	public Material setKs(Double3 kS) {
-		this.kS = kS;
+	public Material setkT(double kT) {
+		this.kT = new Double3(kT);
 		return this;
 	}
 
 	/**
-	 * Sets the specular reflection coefficient (kS) of the material using a scalar value.
-	 *
-	 * @param ks the scalar value for the specular reflection coefficient to set
-	 * @return the updated Material object
+	 * sets transparency coeff
+	 * @param kT
+	 * @return this (builder pattern)
 	 */
-	public Material setKs(double ks) {
-		this.kS = new Double3(ks);
+	public Material setkT(Double3 kT) {
+		this.kT = kT;
 		return this;
 	}
 
 	/**
-	 * Sets the shininess exponent (nShininess) of the material.
-	 *
-	 * @param nShininess the shininess exponent to set
-	 * @return the updated Material object
+	 * sets refelection coeff
+	 * @param kR
+	 * @return this (builder pattern)
+	 */
+	public Material setkR(double kR) {
+		this.kR = new Double3(kR);
+		return this;
+	}
+
+	/**
+	 * sets reflection coeff
+	 * @param kR
+	 * @return this (builder pattern)
+	 */
+	public Material setkR(Double3 kR) {
+		this.kR = kR;
+		return this;
+	}
+	/**
+	 * Sets the level of shininess.
+	 * @param nShininess int
 	 */
 	public Material setShininess(int nShininess) {
 		this.nShininess = nShininess;
 		return this;
 	}
+
 }
