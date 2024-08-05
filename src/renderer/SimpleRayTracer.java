@@ -61,6 +61,10 @@ public class SimpleRayTracer extends RayTracerBase {
         return calcColor(gp, ray, MAX_CALC_COLOR_LEVEL, INITIAL_K).add(scene.ambientLight.getIntensity());
     }
 
+    public Color getColor(GeoPoint geoPoint, Ray ray) {
+        return calcColor(geoPoint, ray);
+    }
+
     /**
      * Calculates the color at a given geometric intersection point considering local lighting effects and potentially global effects such as transparency or reflection.
      *
@@ -148,7 +152,7 @@ public class SimpleRayTracer extends RayTracerBase {
      * @param ray The ray for which to find the closest intersection.
      * @return The closest intersection point (GeoPoint) of the ray with the geometries, or null if no intersections are found.
      */
-    private GeoPoint findClosestIntersection(Ray ray) {
+    public GeoPoint findClosestIntersection(Ray ray) {
         return ray.findClosestGeoPoint(scene.geometries.findGeoIntersections(ray));
     }
 

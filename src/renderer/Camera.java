@@ -1,6 +1,9 @@
 package renderer;
 
 import primitives.*;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.MissingResourceException;
 import static primitives.Util.*;
 
@@ -12,20 +15,35 @@ import static primitives.Util.*;
  */
 public class Camera implements Cloneable {
 	// parameters of view plain
-	private Point position;
-	private Vector vTo;
-	private Vector vUp;
-	private Vector vRight;
-	private double viewPlaneWidth = 0.0;
-	private double viewPlaneHeight = 0.0;
-	private double viewPlaneDistance = 0.0;
+	private Point position; // location
+	private Vector vTo, vUp, vRight;
+	private double viewPlaneWidth = 0.0, viewPlaneHeight = 0.0, viewPlaneDistance = 0.0;
 
 	/**
 	 * Private constructor
 	 *
 	 */
 	public Camera() {
+		// Default constructor
+		this.position = new Point(0, 0, 0);
+		this.vTo = new Vector(0, 0, 1);
+		this.vUp = new Vector(0, 1, 0);
+		this.vRight = new Vector(1, 0, 0);
+		this.viewPlaneDistance = 1.0;
+		this.viewPlaneWidth = 1.0;
+		this.viewPlaneHeight = 1.0;
 	}
+
+	public Camera(Point position, Vector vTo, Vector vUp, Vector vRight, double viewPlaneDistance, double viewPlaneWidth, double viewPlaneHeight) {
+		this.position = position;
+		this.vTo = vTo;
+		this.vUp = vUp;
+		this.vRight = vRight;
+		this.viewPlaneDistance = viewPlaneDistance;
+		this.viewPlaneWidth = viewPlaneWidth;
+		this.viewPlaneHeight = viewPlaneHeight;
+	}
+
 
 	/**
 	 * Returns a new Builder object for Camera.
@@ -59,6 +77,32 @@ public class Camera implements Cloneable {
 		Vector Vij = pij.subtract(position);
 		return new Ray(position, Vij.normalize());
 	}
+
+
+	public List<Ray> constructRays(int nX, int nY, int j, int i, int raysPerPixel) {
+		List<Ray> rays = new ArrayList<>();
+		double ry = viewPlaneHeight / nY;
+		double rx = viewPlaneWidth / nX;
+		double pixelWidth = rx / raysPerPixel;
+		double pixelHeight = ry / raysPerPixel;
+
+		for (int row = 0; row < raysPerPixel; row++) {
+			for (int col = 0; col < raysPerPixel; col++) {
+				double xj = (j - (nX - 1) / 2.0) * rx + (col + 0.5) * pixelWidth;
+				double yi = -(i - (nY - 1) / 2.0) * ry + (row + 0.5) * pixelHeight;
+				Point pij = position.add(vTo.scale(viewPlaneDistance));
+				if (xj != 0)
+					pij = pij.add(vRight.scale(xj));
+				if (yi != 0)
+					pij = pij.add(vUp.scale(yi));
+				Vector Vij = pij.subtract(position);
+				rays.add(new Ray(position, Vij.normalize()));
+			}
+		}
+
+		return rays;
+	}
+
 
 	/**
 	 * Builder class for Camera, implementing the Builder Pattern.
@@ -235,27 +279,21 @@ public class Camera implements Cloneable {
 	 *
 	 * @return The position of the camera.
 	 */
-	public Point getPosition() {
-		return position;
-	}
+	public Point getPosition() { return position; }
 
 	/**
 	 * Retrieves the direction vector towards which the camera is pointing.
 	 *
 	 * @return The direction vector towards which the camera is pointing.
 	 */
-	public Vector getVTo() {
-		return vTo;
-	}
+	public Vector getVTo() { return vTo; }
 
 	/**
 	 * Retrieves the direction vector representing the up direction of the camera.
 	 *
 	 * @return The direction vector representing the up direction of the camera.
 	 */
-	public Vector getVUp() {
-		return vUp;
-	}
+	public Vector getVUp() { return vUp; }
 
 	/**
 	 * Retrieves the direction vector representing the right direction of the
@@ -263,38 +301,54 @@ public class Camera implements Cloneable {
 	 *
 	 * @return The direction vector representing the right direction of the camera.
 	 */
-	public Vector getVRight() {
-		return vRight;
-	}
+	public Vector getVRight() { return vRight; }
 
 	/**
 	 * Retrieves the width of the view plane.
 	 *
 	 * @return The width of the view plane.
 	 */
-	public double getViewPlaneWidth() {
-		return viewPlaneWidth;
-	}
+	public double getViewPlaneWidth() { return viewPlaneWidth; }
 
 	/**
 	 * Retrieves the height of the view plane.
 	 *
 	 * @return The height of the view plane.
 	 */
-	public double getViewPlaneHeight() {
-		return viewPlaneHeight;
-	}
+	public double getViewPlaneHeight() { return viewPlaneHeight; }
 
 	/**
 	 * Retrieves the distance from the camera to the view plane.
 	 *
 	 * @return The distance from the camera to the view plane.
 	 */
-	public double getViewPlaneDistance() {
-		return viewPlaneDistance;
+	public double getViewPlaneDistance() { return viewPlaneDistance; }
+
+	/**
+	 * Calculate the center point of a pixel.
+	 *
+	 * @param nX Number of columns (pixels) in the view plane.
+	 * @param nY Number of rows (pixels) in the view plane.
+	 * @param j  Column index of the pixel.
+	 * @param i  Row index of the pixel.
+	 * @return The center point of the pixel.
+	 */
+	public Point getPixelCenter(int nX, int nY, int j, int i) {
+		double xj = (j - (nX - 1) / 2.0) * (viewPlaneWidth / nX);
+		double yi = (i - (nY - 1) / 2.0) * (viewPlaneHeight / nY);
+		return position.add(vRight.scale(xj)).add(vUp.scale(-yi)).add(vTo.scale(viewPlaneDistance));
 	}
 
-	// stage5
+	/**
+	 * Construct a ray through a specific point on the view plane.
+	 *
+	 * @param point The point on the view plane.
+	 * @return The constructed ray.
+	 */
+	public Ray constructRayThroughPixel(Point point) {
+		return new Ray(position, point.subtract(position));
+	}
+
 	/**
 	 * The image writer used by this camera to write the rendered image.
 	 */
