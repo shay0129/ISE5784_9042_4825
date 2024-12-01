@@ -1,26 +1,26 @@
 package geometries;
 
+import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;
 
 import java.util.List;
-import primitives.Point;
-import static primitives.Util.*;
+
+import static primitives.Util.isZero;
 
 /**
- * Represents a triangle in three-dimensional space.
- * The class is derived from Polygon.
+ * Class Triangle is the basic class representing a Triangle of Euclidean geometry in Cartesian
+ * 3-Dimensional coordinate system.
  *
- * @author Shay and Asaf
+ * @author Shneor and Emanuel
  */
 public class Triangle extends Polygon {
-
 	/**
-	 * Constructs a triangle from three specified points.
+	 * Constructs a triangle with the specified points.
 	 *
-	 * @param p1 The first point.
-	 * @param p2 The second point.
-	 * @param p3 The third point.
+	 * @param p1 the first vertex of the triangle
+	 * @param p2 the second vertex of the triangle
+	 * @param p3 the third vertex of the triangle
 	 */
 	public Triangle(Point p1, Point p2, Point p3) {
 		super(p1, p2, p3);
@@ -28,44 +28,46 @@ public class Triangle extends Polygon {
 
 
 	@Override
-	protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray) {
-		// Find intersection points with the plane containing the triangle
-		List<Point> intersectionPoints = plane.findIntersections(ray);
-
-		// If there are no intersection points with the plane, return null
-		if (intersectionPoints == null) {
+	public List<GeoPoint> findGeoIntersectionsHelper(Ray ray,double maxDistance) {
+		// Step 1: Find intersection with the plane
+		List<Point> planeIntersections = plane.findIntersections(ray,maxDistance);
+		if (planeIntersections == null) {
 			return null;
 		}
 
-		// Get the ray's head and direction
-		Point head = ray.getHead();
-		Vector v = ray.getDirection();
+		// Step 2: Check if the intersection point is inside the triangle using barycentric coordinates
+		Point P = planeIntersections.getFirst();
 
-		// Check if the intersection point lies inside the triangle
-		Vector v1 = vertices.getFirst().subtract(head);
-		Vector v2 = vertices.get(1).subtract(head);
-		Vector n1 = v1.crossProduct(v2).normalize();
-		double sign1 = alignZero(v.dotProduct(n1));
-		if (sign1 == 0) {
+
+		// Handle case where P coincides with one of the vertices
+		if (P.equals(vertices.get(0)) || P.equals(vertices.get(1)) || P.equals(vertices.get(2))) {
 			return null;
 		}
 
-		Vector v3 = vertices.get(2).subtract(head);
-		Vector n2 = v2.crossProduct(v3).normalize();
-		double sign2 = alignZero(v.dotProduct(n2));
-		if (sign1 * sign2 <= 0) {
-			return null;
-		}
+		// Vectors from triangle vertices to the point
+		Vector v0v1 = vertices.get(1).subtract(vertices.get(0)); //AB
+		Vector v0v2 = vertices.get(2).subtract(vertices.get(0)); //AC
+		Vector v0P = P.subtract(vertices.get(0)); //AP
 
-		Vector n3 = v3.crossProduct(v1).normalize();
-		double sign3 = alignZero(v.dotProduct(n3));
-		if (sign1 * sign3 <= 0) {
-			return null;
-		}
+		// Dot products
+		double dot00 = v0v2.dotProduct(v0v2);
+		double dot01 = v0v2.dotProduct(v0v1);
+		double dot02 = v0v2.dotProduct(v0P);
+		double dot11 = v0v1.dotProduct(v0v1);
+		double dot12 = v0v1.dotProduct(v0P);
 
-		// Return the intersection point inside the triangle
-		return List.of(new GeoPoint(this, intersectionPoints.get(0)));
+		// Barycentric coordinates
+		double invDenom = 1 / (dot00 * dot11 - dot01 * dot01);
+		double u = (dot11 * dot02 - dot01 * dot12) * invDenom;
+		double v = (dot00 * dot12 - dot01 * dot02) * invDenom;
+
+		// Check if point is in triangle (excluding the boundaries)
+		if (!isZero(u) && u > 0 && !isZero(v) && v > 0 && !isZero(u + v - 1) && u + v < 1) {
+			return List.of(new GeoPoint(this,P));
+		}
+		return null;
 	}
+
 
 
 }

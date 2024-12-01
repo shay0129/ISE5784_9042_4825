@@ -1,14 +1,14 @@
-/**
- * 
- */
+
 package primitives;
 
 import static primitives.Util.isZero;
 
 /**
- * This class will serve all primitive classes based on three numbers
- * 
- * @author Dan Zilberstein
+ * This class represents a triad of three double values and provides operations
+ * such as addition, subtraction, scaling, and comparison.
+ * It serves as a base for primitive classes that rely on three numerical values.
+ *
+ * @author Shay and Asaf
  */
 public class Double3 {
 	/** First number */
@@ -25,8 +25,8 @@ public class Double3 {
 	public static final Double3 ONE = new Double3(1, 1, 1);
 
 	/**
-	 * Constructor to initialize Double3 based object with its three number values
-	 * 
+	 * Constructs a Double3 with the specified three values.
+	 *
 	 * @param d1 first number value
 	 * @param d2 second number value
 	 * @param d3 third number value
@@ -38,9 +38,9 @@ public class Double3 {
 	}
 
 	/**
-	 * Constructor to initialize Double3 based object the same number values
-	 * 
-	 * @param value number value for all 3 numbers
+	 * Constructs a Double3 with the same value for all three components.
+	 *
+	 * @param value the value for all components
 	 */
 	public Double3(double value) {
 		this.d1 = value;
@@ -50,9 +50,10 @@ public class Double3 {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		return (obj instanceof Double3 other) && isZero(d1 - other.d1) && isZero(d2 - other.d2)
+		if (this == obj) return true;
+		return (obj instanceof Double3 other)
+				&& isZero(d1 - other.d1)
+				&& isZero(d2 - other.d2)
 				&& isZero(d3 - other.d3);
 	}
 
@@ -67,103 +68,92 @@ public class Double3 {
 	}
 
 	/**
-	 * Sum two floating point triads into a new triad where each couple of numbers
-	 * is summarized
-	 * 
-	 * @param rhs right hand side operand for addition
-	 * @return result of add
+	 * Adds two Double3 objects component-wise.
+	 *
+	 * @param rhs the right-hand side operand for addition
+	 * @return a new Double3 representing the result
 	 */
 	public Double3 add(Double3 rhs) {
 		return new Double3(d1 + rhs.d1, d2 + rhs.d2, d3 + rhs.d3);
 	}
 
 	/**
-	 * Subtract two floating point triads into a new triad where each couple of
-	 * numbers is subtracted
-	 * 
-	 * @param rhs right hand side operand for addition
-	 * @return result of add
+	 * Subtracts two Double3 objects component-wise.
+	 *
+	 * @param rhs the right-hand side operand for subtraction
+	 * @return a new Double3 representing the result
 	 */
 	public Double3 subtract(Double3 rhs) {
 		return new Double3(d1 - rhs.d1, d2 - rhs.d2, d3 - rhs.d3);
 	}
 
 	/**
-	 * Scale (multiply) floating point triad by a number into a new triad where each
-	 * number is multiplied by the number
-	 * 
-	 * @param rhs right hand side operand for scaling
-	 * @return result of scale
+	 * Multiplies each component by a scalar value.
+	 *
+	 * @param rhs the scalar to multiply by
+	 * @return a new Double3 representing the scaled values
 	 */
 	public Double3 scale(double rhs) {
 		return new Double3(d1 * rhs, d2 * rhs, d3 * rhs);
 	}
 
 	/**
-	 * Reduce (divide) floating point triad by a number into a new triad where each
-	 * number is divided by the number
-	 * 
-	 * @param rhs right hand side operand for reducing
-	 * @return result of scale
+	 * Divides each component by a scalar value.
+	 *
+	 * @param rhs the scalar to divide by
+	 * @return a new Double3 representing the reduced values
 	 */
 	public Double3 reduce(double rhs) {
 		return new Double3(d1 / rhs, d2 / rhs, d3 / rhs);
 	}
 
 	/**
-	 * Product two floating point triads into a new triad where each couple of
-	 * numbers is multiplied
-	 * 
-	 * @param rhs right hand side operand for product
-	 * @return result of product
+	 * Multiplies two Double3 objects component-wise.
+	 *
+	 * @param rhs the right-hand side operand for multiplication
+	 * @return a new Double3 representing the product
 	 */
 	public Double3 product(Double3 rhs) {
 		return new Double3(d1 * rhs.d1, d2 * rhs.d2, d3 * rhs.d3);
 	}
 
 	/**
-	 * Checks whether all the numbers are lower than a test number
-	 * 
-	 * @param k the test number
-	 * @return true if all the numbers are less than k, false otherwise
+	 * Checks if all components are less than a given value.
+	 *
+	 * @param k the value to compare against
+	 * @return true if all components are less than k, false otherwise
 	 */
-
 	public boolean lowerThan(double k) {
 		return d1 < k && d2 < k && d3 < k;
 	}
 
 	/**
-	 * Checks whether all the numbers are lower than three numbers in another triad
-	 * 
-	 * @param other other triad
-	 * @return true if all the numbers are less that appropriate numbers in other
-	 *         triad, false otherwise
+	 * Checks if all components are less than the corresponding components of another Double3.
+	 *
+	 * @param other the other Double3 to compare against
+	 * @return true if all components are less, false otherwise
 	 */
 	public boolean lowerThan(Double3 other) {
 		return d1 < other.d1 && d2 < other.d2 && d3 < other.d3;
 	}
 
 	/**
-	 * Checks if all components are greater than a specified minimum value.
-	 * 
-	 * @param minCalcColorK The minimum value to compare against.
-	 * @return {@code true} if all components (d1, d2, d3) are greater than
-	 *         {@code minCalcColorK}, otherwise {@code false}.
+	 * Checks if all components are greater than a given value.
+	 *
+	 * @param k the value to compare against
+	 * @return true if all components are greater than k, false otherwise
 	 */
-	public boolean greaterThan(double minCalcColorK) {
-		return d1 > minCalcColorK && d2 > minCalcColorK && d3 > minCalcColorK;
+	public boolean greaterThan(double k) {
+		return d1 > k && d2 > k && d3 > k;
 	}
 
 	/**
-	 * Checks if all components are greater than the corresponding components of
-	 * another Double3 object.
-	 * 
-	 * @param other The Double3 object to compare against.
-	 * @return {@code true} if all components (d1, d2, d3) are greater than the
-	 *         corresponding components of {@code other}, otherwise {@code false}.
+	 * Checks if all components are greater than the corresponding components of another Double3.
+	 *
+	 * @param other the other Double3 to compare against
+	 * @return true if all components are greater, false otherwise
 	 */
 	public boolean greaterThan(Double3 other) {
 		return d1 > other.d1 && d2 > other.d2 && d3 > other.d3;
 	}
-
 }

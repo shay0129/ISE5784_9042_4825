@@ -9,6 +9,7 @@ import primitives.*;
 import renderer.*;
 import scene.Scene;
 import scene.SceneXMLParser;
+import java.nio.file.Paths;
 
 /**
  * Test rendering a basic image
@@ -69,7 +70,7 @@ public class RenderTests {
 	//Test for XML based scene - for bonus
 	@Test
 	public void basicRenderXml() {
-		Scene xmlScene = SceneXMLParser.loadSceneFromFile("C://ISE5784_9042_4825//src//scene//renderTestTwoColors.xml");
+		Scene xmlScene = SceneXMLParser.loadSceneFromFile(Paths.get("src", "scene", "renderTestTwoColors.xml").toString());
 		camera
 				.setRayTracer(new SimpleRayTracer(xmlScene))
 				.setImageWriter(new ImageWriter("xml render test", 1000, 1000))

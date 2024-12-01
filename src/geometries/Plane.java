@@ -2,7 +2,6 @@ package geometries;
 
 import primitives.Point;
 import primitives.Ray;
-import primitives.Util;
 import primitives.Vector;
 
 import java.util.List;
@@ -12,89 +11,76 @@ import static primitives.Util.isZero;
 
 /**
  * Represents a plane in three-dimensional space.
- * The class is derived from Geometry.
- *
- * @author Shay and Asaf
  */
 public class Plane extends Geometry {
 
-	private final Point point;
-	private final Vector normal;
+	private final Point q;       // A point on the plane
+	private final Vector normal; // The normal vector to the plane
 
 	/**
-	 * Constructs a plane from three non-collinear points.
+	 * Constructs a plane passing through a point with a given normal vector.
 	 *
-	 * @param a The first point.
-	 * @param b The second point.
-	 * @param c The third point.
-	 * @throws IllegalArgumentException if the three points are collinear
+	 * @param q      A point on the plane.
+	 * @param normal The normal vector to the plane. If its length is not 1, it will be normalized.
 	 */
-	public Plane(Point a, Point b, Point c) {
-		Vector v1 = b.subtract(a);
-		Vector v2 = c.subtract(a);
-
-		// Check that the vectors are not collinear
-		if (v1.crossProduct(v2).length() == 0) {
-			throw new IllegalArgumentException("The three points are collinear");
+	public Plane(Point q, Vector normal) {
+		this.q = q;
+		// Avoid normalizing if the vector is already normalized
+		if (normal.lengthSquared() != 1) {
+			normal = normal.normalize();
 		}
-
-		this.normal = v1.crossProduct(v2).normalize();
-		this.point = a;
+		this.normal = normal;
 	}
 
 	/**
-	 * Constructs a Plane object using a point and a normal vector.
+	 * Constructs a plane passing through three non-collinear points.
 	 *
-	 * @param p a point on the plane
-	 * @param n the normal vector to the plane
+	 * @param p1 The first point on the plane.
+	 * @param p2 The second point on the plane.
+	 * @param p3 The third point on the plane.
+	 * @throws IllegalArgumentException If the points are collinear.
 	 */
-	public Plane(Point p, Vector n) {
-		point = p;
-		normal = n.normalize();
+	public Plane(Point p1, Point p2, Point p3) throws IllegalArgumentException {
+		q = p1;
+		try {
+			normal = p1.subtract(p3).crossProduct(p1.subtract(p2)).normalize();
+		} catch (IllegalArgumentException ex) {
+			throw new IllegalArgumentException("Points must not be collinear.");
+		}
+	}
+
+	@Override
+	public Vector getNormal(Point point) {
+		return normal;
 	}
 
 	/**
 	 * Retrieves the normal vector of the plane.
 	 *
-	 * @return The normal vector of the plane.
+	 * @return The normal vector.
 	 */
 	public Vector getNormal() {
 		return normal;
 	}
 
 	@Override
-	public Vector getNormal(Point point) {
-		return getNormal();
-	}
-
-	@Override
-	protected List<Intersectable.GeoPoint> findGeoIntersectionsHelper(Ray ray) {
-		// Calculate the denominator of the division for finding the parameter t
-		double denominator = this.normal.dotProduct(ray.getDirection());
-		// If the denominator is close to zero, the ray is parallel to the plane
-		if (Util.isZero(denominator))
-			return null; // Ray is parallel to the plane
-
-		// Calculate the numerator of the division for finding the parameter t
-		Vector p0MinusQ0;
-		try {
-			p0MinusQ0 = point.subtract(ray.getHead());
-		} catch (IllegalArgumentException ignore) {
+	public List<GeoPoint> findGeoIntersectionsHelper(Ray ray, double maxDistance) {
+		// Check if the ray starts from the plane's reference point
+		if (q.equals(ray.getHead())) {
 			return null;
 		}
 
-		double numerator = this.normal.dotProduct(p0MinusQ0);
-		// Calculate the parameter t
-		double t = Util.alignZero(numerator / denominator);
-
-		// If t is negative, the intersection point is behind the ray's start point
-		if (t < 0)
+		// Check if the ray is parallel to the plane
+		if (isZero(normal.dotProduct(ray.getDirection()))) {
 			return null;
+		}
 
-		// Calculate the intersection point
-		Point intersectionPoint = ray.getPoint(t);
+		// Calculate the scalar t for the intersection point
+		double t = normal.dotProduct(q.subtract(ray.getHead())) / normal.dotProduct(ray.getDirection());
+		if (t <= 0 || isZero(t) || alignZero(t - maxDistance) >= 0) {
+			return null;
+		}
 
-		// Return a list with a single GeoPoint containing this plane and the intersection point
-		return List.of(new Intersectable.GeoPoint(this, intersectionPoint));
+		return List.of(new GeoPoint(this, ray.getPoint(t)));
 	}
 }

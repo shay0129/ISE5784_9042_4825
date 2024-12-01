@@ -5,23 +5,26 @@ import primitives.Point;
 import primitives.Vector;
 
 /**
- * Represents a point light source that emits light from a specific point in all directions.
- * The intensity of the light decreases with the square of the distance from the light source.
+ * Represents a point light source that emits light equally in all directions from a specific position in space.
+ * The intensity of the light diminishes with distance based on attenuation factors.
  *
- * @autor Shay and Asaf
+ * @see Light
+ * @see LightSource
+ * @see Color
+ * @see Point
+ * @see Vector
+ *
+ * @author Shay and Asaf
  */
 public class PointLight extends Light implements LightSource {
-
 	private Point position;
-	private double kC = 1.0; // Constant attenuation
-	private double kL = 0.0; // Linear attenuation
-	private double kQ = 0.0; // Quadratic attenuation
+	private double kC = 1.0, kL = 0.0, kQ = 0.0;
 
 	/**
-	 * Constructs a PointLight object with the specified color intensity and position.
+	 * Constructs a PointLight with the specified intensity and position.
 	 *
 	 * @param intensity the color intensity of the light
-	 * @param position the position of the light source
+	 * @param position  the position of the light in space
 	 */
 	public PointLight(Color intensity, Point position) {
 		super(intensity);
@@ -29,21 +32,10 @@ public class PointLight extends Light implements LightSource {
 	}
 
 	/**
-	 * Sets the position of the point light source.
-	 *
-	 * @param position The new position of the point light source.
-	 * @return This PointLight object, allowing method chaining.
-	 */
-	public PointLight setPosition(Point position) {
-		this.position = position;
-		return this;
-	}
-
-	/**
 	 * Sets the constant attenuation factor.
 	 *
 	 * @param kC the constant attenuation factor
-	 * @return the current PointLight object (for chaining method calls)
+	 * @return the PointLight itself for chaining
 	 */
 	public PointLight setKC(double kC) {
 		this.kC = kC;
@@ -54,7 +46,7 @@ public class PointLight extends Light implements LightSource {
 	 * Sets the linear attenuation factor.
 	 *
 	 * @param kL the linear attenuation factor
-	 * @return the current PointLight object (for chaining method calls)
+	 * @return the PointLight itself for chaining
 	 */
 	public PointLight setKL(double kL) {
 		this.kL = kL;
@@ -65,7 +57,7 @@ public class PointLight extends Light implements LightSource {
 	 * Sets the quadratic attenuation factor.
 	 *
 	 * @param kQ the quadratic attenuation factor
-	 * @return the current PointLight object (for chaining method calls)
+	 * @return the PointLight itself for chaining
 	 */
 	public PointLight setKQ(double kQ) {
 		this.kQ = kQ;
@@ -74,22 +66,23 @@ public class PointLight extends Light implements LightSource {
 
 	@Override
 	public Color getIntensity(Point p) {
-		double d = position.distance(p);
-		return intensity.scale(1d / (kC + kL * d + kQ * d * d));
+		double d = getDistance(p);
+		return intensity.scale(1 / (kC + kL * d + kQ * d * d));
 	}
 
 	@Override
 	public Vector getL(Point p) {
-		// if the point is the same as the light source, return null
-		if (p.equals(position))// ??למחוק
-			return null;
-		// otherwise, return the normalized vector from the light source to the point
+		if (p.equals(position)) {
+			throw new IllegalArgumentException("The point cannot be equal to the position of the point light.");
+		}
 		return p.subtract(position).normalize();
 	}
 
 	@Override
 	public double getDistance(Point point) {
+		if (point.equals(position)) {
+			throw new IllegalArgumentException("The point cannot be equal to the position of the point light.");
+		}
 		return point.distance(position);
 	}
-
 }

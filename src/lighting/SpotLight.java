@@ -3,67 +3,56 @@ package lighting;
 import primitives.Color;
 import primitives.Point;
 import primitives.Vector;
-import static primitives.Util.alignZero;
 
 /**
- * Represents a spotlight, which is a type of light source that emits light in a specific direction.
- * The intensity of the light decreases with the cosine of the angle between the direction vector
+ * Represents a spotlight, which is a point light source with a specific direction.
+ * The intensity diminishes with distance and the beam's direction, creating a focused beam of light.
+ * Useful for effects such as flashlights or stage lighting.
  *
- * @autor Shay and Asaf
+ * @see PointLight
+ * @see LightSource
+ * @see Color
+ * @see Point
+ * @see Vector
+ *
+ * @author Shay and Asaf
  */
 public class SpotLight extends PointLight {
-
-	private final Vector direction;
-	private double narrowBeam = 1.0;
+	private Vector direction; // Direction vector of the spotlight
+	private int beamWidth;    // Beam width or narrowness level
 
 	/**
-	 * Constructs a SpotLight object with the specified color intensity, position, and direction.
+	 * Constructs a SpotLight with the specified intensity, position, and direction.
+	 * The direction vector is normalized, and the default beam width is set to 1.
 	 *
 	 * @param intensity the color intensity of the light
-	 * @param position the position of the light source
-	 * @param direction the direction in which the light is emitted
+	 * @param position  the position of the light in space
+	 * @param direction the direction vector of the light
 	 */
 	public SpotLight(Color intensity, Point position, Vector direction) {
 		super(intensity, position);
 		this.direction = direction.normalize();
+		this.beamWidth = 1;
 	}
 
 	/**
-	 * Sets the narrow beam factor of the spotlight.
+	 * Sets the narrowness of the spotlight beam.
 	 *
-	 * @param narrow the narrow beam factor
-	 * @return the current SpotLight object (for method chaining)
+	 * @param n the narrowness level to set
+	 * @return this SpotLight instance for chaining
 	 */
-	public SpotLight setNarrowBeam(double narrow) {
-		narrowBeam = narrow;
+	public SpotLight setNarrowBeam(int n) {
+		this.beamWidth = n;
 		return this;
 	}
 
 	@Override
-	public Vector getL(Point p) {
-		return super.getL(p); // Returns the direction from the point to the light source
-	}
-
-	@Override
-	public SpotLight setKC(double kC) {
-		return (SpotLight) super.setKC(kC);
-	}
-
-	@Override
-	public SpotLight setKL(double kL) {
-		return (SpotLight) super.setKL(kL);
-	}
-
-	@Override
-	public SpotLight setKQ(double kQ) {
-		return (SpotLight) super.setKQ(kQ);
-	}
-
-	@Override
-	public Color getIntensity(Point point) {
-		double cos = alignZero(direction.dotProduct(getL(point)));
-		return cos <= 0 ? Color.BLACK //
-				: super.getIntensity(point).scale(narrowBeam == 1 ? cos //
-						: Math.pow(cos, narrowBeam));
+	public Color getIntensity(Point p) {
+		double nlOr0 = 1.0;
+		double dirL = Math.max(0, this.direction.dotProduct(super.getL(p)));
+		for (int i = 0; i < beamWidth; ++i) {
+			nlOr0 *= dirL;
+		}
+		return super.getIntensity(p).scale(nlOr0).scale(1 + (double) (beamWidth - 1) / 10);
 	}
 }

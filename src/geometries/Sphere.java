@@ -3,84 +3,71 @@ package geometries;
 import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;
+
 import java.util.List;
-import static primitives.Util.*;
+
+import static primitives.Util.alignZero;
+import static primitives.Util.isZero;
 
 /**
- * Represents a sphere in three-dimensional space.
- * The class is derived from RadialGeometry.
- *
- * @author Shay and Asaf
+ * Represents a sphere in a 3D Cartesian coordinate system.
  */
 public class Sphere extends RadialGeometry {
 
-	private final Point center;
+	private final Point center; // The center point of the sphere.
 
 	/**
-	 * Constructs a sphere with a specified radius and center point.
+	 * Constructs a sphere with the specified radius and center point.
 	 *
-	 * @param radius The radius of the sphere.
-	 * @param point The center point of the sphere.
+	 * @param center the center point of the sphere
+	 * @param radius the radius of the sphere
+	 * @throws IllegalArgumentException if the radius is negative
 	 */
-	public Sphere(Point point, double radius) {
+	public Sphere(Point center,double radius) throws IllegalArgumentException {
 		super(radius);
-		center = point;
+		this.center = center;
 	}
 
 	@Override
 	public Vector getNormal(Point point) {
-		Vector normalVector = point.subtract(center);
-		// Check if the point is the center of the sphere (should not happen for valid sphere surface points)
-		if (normalVector.length() == 0) {
-			throw new IllegalArgumentException("Point cannot be the center of the sphere");
-		}
-		return (normalVector.normalize());
+		return point.subtract(center).normalize();
 	}
 
 	@Override
-	protected List<Intersectable.GeoPoint> findGeoIntersectionsHelper(Ray ray) {
-		// Check if the ray's head is at the center of the sphere
-		if (ray.getHead().equals(this.center)) {
-			return List.of(new Intersectable.GeoPoint(this, ray.getPoint(this.radius)));
+	public List<GeoPoint> findGeoIntersectionsHelper(Ray ray, double maxDistance) {
+		if (center.equals(ray.getHead())) {
+			return List.of(new GeoPoint(this, ray.getPoint(radius)));
 		}
 
-		// Calculate the vector from the ray's start point to the center of the sphere
-		Vector u = this.center.subtract(ray.getHead());
-
-		// Calculate the projection of u on the ray's direction vector
+		Vector u = center.subtract(ray.getHead());
 		double tm = u.dotProduct(ray.getDirection());
+		double d = Math.sqrt(u.lengthSquared() - tm * tm);
 
-		// Calculate the distance squared from the ray's start point to the closest point to the sphere's center
-		double dSquared = u.lengthSquared() - tm * tm;
-
-		// Calculate the distance squared from the closest point to the intersection points on the sphere's surface
-		double thSquared = this.radiusSquared - dSquared;
-
-		// If the distance squared is greater than the sphere's radius squared, there are no intersections
-		if (alignZero(thSquared) <= 0) {
-			return null; // No intersections
+		if (d >= radius || isZero(d - radius)) {
+			return null;
 		}
 
-		// Calculate the distance from the closest point to the intersection points on the sphere's surface
-		double th = Math.sqrt(thSquared);
+		double th = Math.sqrt(radius * radius - d * d);
 
-		// Calculate the intersection points along the ray
-		double t2 = tm + th;
-		if (alignZero(t2) <= 0) {
-			return null; // Both points are behind the ray
+		if (tm + th < 0 || isZero(tm + th)) {
+			return null;
+		}
+		if ((tm - th < 0 || isZero(tm - th)) && alignZero(tm + th - maxDistance) < 0) {
+			return List.of(new GeoPoint(this, ray.getPoint(tm + th)));
+		}
+		if (tm - th < 0 || isZero(tm - th)) {
+			return null;
+		}
+		if (alignZero(tm + th - maxDistance) < 0) {
+			return List.of(
+					new GeoPoint(this, ray.getPoint(tm - th)),
+					new GeoPoint(this, ray.getPoint(tm + th))
+			);
+		}
+		if (alignZero(tm - th - maxDistance) < 0) {
+			return List.of(new GeoPoint(this, ray.getPoint(tm - th)));
 		}
 
-		double t1 = tm - th;
-
-		// Return the intersection points based on their positions relative to the ray's start point
-		if (alignZero(t1) <= 0) {
-			// Only one intersection point
-			return List.of(new Intersectable.GeoPoint(this, ray.getPoint(t2)));
-		} else {
-			// Two intersection points
-			return List.of(new Intersectable.GeoPoint(this, ray.getPoint(t1)), new Intersectable.GeoPoint(this, ray.getPoint(t2)));
-		}
+		return null;
 	}
-
-
 }

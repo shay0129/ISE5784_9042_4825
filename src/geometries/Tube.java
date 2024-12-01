@@ -1,51 +1,54 @@
 package geometries;
 
-import java.util.ArrayList;
+import primitives.Point;
+import primitives.Ray;
+import primitives.Vector;
+
 import java.util.List;
 
-import primitives.*;
+import static primitives.Util.isZero;
 
 /**
- * Represents a tube in a three-dimensional (3D) space.
- * A tube is defined by its radius and an axis - a Ray.
- *
- * @autor Shay and Asaf
+ * Represents a tube in a three-dimensional coordinate system.
+ * A tube is defined by its radius and its central axis.
  */
 public class Tube extends RadialGeometry {
-	/** Axis ray of the tube */
-	protected final Ray axisRay;
+	protected Ray axis; // The central axis of the tube.
 
 	/**
-	 * Constructs a Tube object with the given radius and axis ray.
+	 * Constructs a tube with the specified radius and axis.
 	 *
-	 * @param radius  the radius of the tube
-	 * @param axisRay the axis ray of the tube
+	 * @param radius The radius of the tube. Must be non-negative.
+	 * @param axis   The axis of the tube.
+	 * @throws IllegalArgumentException if the radius is negative.
 	 */
-	public Tube(double radius, Ray axisRay) {
+	public Tube(double radius, Ray axis) throws IllegalArgumentException {
 		super(radius);
-		this.axisRay = axisRay;
+		this.axis = axis;
 	}
 
 	@Override
-	public Vector getNormal(Point point) {
-		// Calculate the projection of the point on the axis ray
-		double t = axisRay.getDirection().dotProduct(point.subtract(axisRay.getHead()));
-		Point o = axisRay.getPoint(t);
-
-		return point.subtract(o).normalize(); // Return the normalized vector from the point to the projection
+	public Vector getNormal(Point point) throws IllegalArgumentException {
+		// Calculate the vector from the axis head to the given point
+		Vector headToPoint = point.subtract(axis.getHead());
+		// Calculate the projection of the head-to-point vector onto the axis direction
+		double t = headToPoint.dotProduct(axis.getDirection());
+		if (!isZero(t)) {
+			// Calculate the point on the axis closest to the given point
+			Point o = axis.getPoint(t);
+			if (o.equals(point)) {
+				throw new IllegalArgumentException("Point cannot lie on the axis.");
+			}
+			// Calculate the vector from the closest point on the axis to the given point and normalize it
+			return point.subtract(o).normalize();
+		} else {
+			// If t=0, the closest point on the axis is the axis head
+			return point.subtract(axis.getHead()).normalize();
+		}
 	}
 
 	@Override
-	protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray) {
-		// Auto-generated method stub
+	public List<GeoPoint> findGeoIntersectionsHelper(Ray ray, double maxDistance) {
 		return null;
 	}
-
-	/**
-	 *
-	 */
-	public Ray getAxisRay() {
-		return axisRay;
-	}
-
 }

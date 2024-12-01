@@ -1,5 +1,6 @@
 package geometries;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static primitives.Util.isZero;
@@ -9,77 +10,75 @@ import primitives.Ray;
 import primitives.Vector;
 
 /**
- * Polygon class represents two-dimensional polygon in 3D Cartesian coordinate
- * system
- * 
- * @author Dan
+ * Represents a two-dimensional polygon in a 3D Cartesian coordinate system.
  */
 public class Polygon extends Geometry {
-	/** List of polygon's vertices */
+	/**
+	 * List of the polygon's vertices.
+	 */
 	protected final List<Point> vertices;
-	/** Associated plane in which the polygon lays */
+
+	/**
+	 * Plane in which the polygon lies.
+	 */
 	protected final Plane plane;
-	/** The size of the polygon - the amount of the vertices in the polygon */
+
+	/**
+	 * Number of vertices in the polygon.
+	 */
 	private final int size;
 
 	/**
-	 * Polygon constructor based on vertices list. The list must be ordered by edge
-	 * path. The polygon must be convex.
-	 * 
-	 * @param vertices list of vertices according to their order by edge path
-	 * @throws IllegalArgumentException in any case of illegal combination of
-	 *                                  vertices:
+	 * Constructs a polygon using a list of vertices. The vertices must be ordered along the edge path,
+	 * and the polygon must be convex.
+	 *
+	 * @param vertices List of vertices ordered by edge path.
+	 * @throws IllegalArgumentException If:
 	 *                                  <ul>
-	 *                                  <li>Less than 3 vertices</li>
-	 *                                  <li>Consequent vertices are in the same
-	 *                                  point
-	 *                                  <li>The vertices are not in the same
-	 *                                  plane</li>
-	 *                                  <li>The order of vertices is not according
-	 *                                  to edge path</li>
-	 *                                  <li>Three consequent vertices lay in the
-	 *                                  same line (180&#176; angle between two
-	 *                                  consequent edges)
-	 *                                  <li>The polygon is concave (not convex)</li>
+	 *                                  <li>There are less than 3 vertices.</li>
+	 *                                  <li>Consecutive vertices are the same point.</li>
+	 *                                  <li>The vertices are not coplanar.</li>
+	 *                                  <li>The order of vertices does not match the edge path.</li>
+	 *                                  <li>The polygon is concave.</li>
 	 *                                  </ul>
 	 */
 	public Polygon(Point... vertices) {
-		if (vertices.length < 3)
-			throw new IllegalArgumentException("A polygon can't have less than 3 vertices");
+		if (vertices.length < 3) {
+			throw new IllegalArgumentException("A polygon must have at least 3 vertices.");
+		}
 		this.vertices = List.of(vertices);
-		size = vertices.length;
+		this.size = vertices.length;
 
-		// Generate the plane according to the first three vertices and associate the
-		// polygon with this plane.
-		// The plane holds the invariant normal (orthogonal unit) vector to the polygon
+		// Create the plane based on the first three vertices
 		plane = new Plane(vertices[0], vertices[1], vertices[2]);
-		if (size == 3)
-			return; // no need for more tests for a Triangle
+		if (size == 3) return; // No further checks needed for a triangle
 
 		Vector n = plane.getNormal();
-		// Subtracting any subsequent points will throw an IllegalArgumentException
-		// because of Zero Vector if they are in the same point
 		Vector edge1 = vertices[vertices.length - 1].subtract(vertices[vertices.length - 2]);
 		Vector edge2 = vertices[0].subtract(vertices[vertices.length - 1]);
 
-		// Cross Product of any subsequent edges will throw an IllegalArgumentException
-		// because of Zero Vector if they connect three vertices that lay in the same
-		// line.
-		// Generate the direction of the polygon according to the angle between last and
-		// first edge being less than 180 deg. It is hold by the sign of its dot product
-		// with the normal. If all the rest consequent edges will generate the same sign
-		// - the polygon is convex ("kamur" in Hebrew).
 		boolean positive = edge1.crossProduct(edge2).dotProduct(n) > 0;
-		for (var i = 1; i < vertices.length; ++i) {
-			// Test that the point is in the same plane as calculated originally
-			if (!isZero(vertices[i].subtract(vertices[0]).dotProduct(n)))
-				throw new IllegalArgumentException("All vertices of a polygon must lay in the same plane");
-			// Test the consequent edges have
+		for (int i = 1; i < vertices.length; i++) {
+			if (!isZero(vertices[i].subtract(vertices[0]).dotProduct(n))) {
+				throw new IllegalArgumentException("All vertices must lie in the same plane.");
+			}
 			edge1 = edge2;
 			edge2 = vertices[i].subtract(vertices[i - 1]);
-			if (positive != (edge1.crossProduct(edge2).dotProduct(n) > 0))
-				throw new IllegalArgumentException("All vertices must be ordered and the polygon must be convex");
+			if (positive != (edge1.crossProduct(edge2).dotProduct(n) > 0)) {
+				throw new IllegalArgumentException("Vertices must be ordered, and the polygon must be convex.");
+			}
 		}
+	}
+
+	/**
+	 * Constructs a polygon using a list of vertices. The vertices must be ordered along the edge path,
+	 * and the polygon must be convex.
+	 *
+	 * @param vertices List of vertices ordered by edge path.
+	 * @throws IllegalArgumentException If the vertices do not form a valid polygon.
+	 */
+	public Polygon(List<Point> vertices) {
+		this(vertices.toArray(new Point[0]));
 	}
 
 	@Override
@@ -88,9 +87,34 @@ public class Polygon extends Geometry {
 	}
 
 	@Override
-	protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray) {
-		// Auto-generated method stub
-		return null;
-	}
+	public List<GeoPoint> findGeoIntersectionsHelper(Ray ray, double maxDistance) {
+		var list = plane.findIntersections(ray, maxDistance);
+		if (list == null) return null;
 
+		List<Vector> vs = new ArrayList<>(size);
+		for (Point vertex : vertices) {
+			vs.add(vertex.subtract(ray.getHead()));
+		}
+
+		List<Double> ts = new ArrayList<>(size);
+		List<Vector> ns = new ArrayList<>(size);
+		for (int i = 0; i < size; i++) {
+			ns.add(vs.get(i).crossProduct(vs.get((i + 1) % size)));
+		}
+
+		for (Vector n : ns) {
+			ts.add(n.dotProduct(ray.getDirection()));
+		}
+
+		int flag;
+		if (isZero(ts.getFirst())) return null;
+		flag = ts.getFirst() > 0 ? 1 : -1;
+
+		for (Double t : ts) {
+			if (isZero(t)) return null;
+			if ((t > 0 && flag == -1) || (t < 0 && flag == 1)) return null;
+		}
+
+		return List.of(new GeoPoint(this, list.getFirst()));
+	}
 }
